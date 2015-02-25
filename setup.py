@@ -25,7 +25,7 @@ setup(
 	description="NTI DublinCore",
 	long_description=codecs.open('README.rst', encoding='utf-8').read(),
 	license='Proprietary',
-	keywords='Dublincore',
+	keywords='Datasever core',
 	classifiers=[
 		'Intended Audience :: Developers',
 		'Natural Language :: English',
@@ -41,7 +41,11 @@ setup(
 	install_requires=[
 		'setuptools',
 		'zope.component',
+		'zope.container',
 		'zope.interface',
+		'zope.location',
+		'zope.mimetype',
+		'zope.schema',
 		'zope.security',
 		'nti.schema',
 		'nti.nose_traceback_info'
