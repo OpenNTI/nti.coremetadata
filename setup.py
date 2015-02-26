@@ -48,6 +48,7 @@ setup(
 		'zope.mimetype',
 		'zope.schema',
 		'zope.security',
+		'nti.common',
 		'nti.schema'
 	],
 	extras_require={
