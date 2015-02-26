@@ -101,23 +101,6 @@ IContainer = IZContainer
 # __setitem__, __delitem__, __getitem__, keys()/values()/items()
 IContainerNamesContainer = IZContainerNamesContainer
 
-class IHomogeneousTypeContainer(IContainer):
-	"""
-	Things that only want to contain items of a certain type.
-	In some cases, an object of this type would be specified
-	in an interface as a :class:`zope.schema.List` with a single
-	`value_type`.
-	"""
-
-	contained_type = interface.Attribute(
-		"""
-		The type of objects in the container. May be an Interface type
-		or a class type. There should be a ZCA factory to create instances
-		of this type associated as tagged data on the type at :data:IHTC_NEW_FACTORY
-		""")
-
-IHTC_NEW_FACTORY = 'nti.dataserver.interfaces.IHTCNewFactory'
-
 class INamedContainer(IContainer):
 	"""
 	A container with a name.
@@ -135,10 +118,13 @@ class IContained(IZContained):
 	"""
 
 	# For BWC, these are not required
-	containerId = DecodingValidTextLine(title="The ID (name) of the container to which this object belongs. Should match the __parent__.__name__",
-										 required=False)
-	id = DecodingValidTextLine(title="The locally unique ID (name) of this object in the container it belongs. Should match the __name__",
-							   required=False)
+	containerId = DecodingValidTextLine(
+					title="The ID (name) of the container to which this object belongs. Should match the __parent__.__name__",
+					required=False)
+	
+	id = DecodingValidTextLine(
+					title="The locally unique ID (name) of this object in the container it belongs. Should match the __name__",
+					required=False)
 
 ### Time tracking
 
