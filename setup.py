@@ -14,7 +14,8 @@ TESTS_REQUIRE = [
 	'nose-pudb',
 	'nose-progressive',
 	'nose2[coverage_plugin]',
-	'pyhamcrest'
+	'pyhamcrest',
+	'nti.nose_traceback_info'
 ]
 
 setup(
@@ -47,8 +48,7 @@ setup(
 		'zope.mimetype',
 		'zope.schema',
 		'zope.security',
-		'nti.schema',
-		'nti.nose_traceback_info'
+		'nti.schema'
 	],
 	extras_require={
 		'test': TESTS_REQUIRE,
