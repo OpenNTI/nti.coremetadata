@@ -33,6 +33,8 @@ class IEnvironmentSettings(interface.Interface):
 class IDataserver(interface.Interface):
 	pass
 
+class IIdentity(interface.Interface):
+	pass
 
 ### Links
 
