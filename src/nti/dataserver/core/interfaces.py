@@ -172,3 +172,12 @@ class ICreated(interface.Interface):
 	Something created by an identified entity.
 	"""
 	creator = interface.Attribute("The creator of this object.")
+
+class IShouldHaveTraversablePath(interface.Interface):
+	"""
+	A marker interface for things that should have a resource
+	path that can be traversed. This is a temporary measure (everything
+	*should* eventually have a resource path) and a non-disruptive
+	way to start requiring ILink externalization to use resource paths
+	exclusively.
+	"""
