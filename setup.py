@@ -41,6 +41,7 @@ setup(
 	tests_require=TESTS_REQUIRE,
 	install_requires=[
 		'setuptools',
+		'zope.annotation',
 		'zope.component',
 		'zope.container',
 		'zope.interface',
