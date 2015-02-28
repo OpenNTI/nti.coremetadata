@@ -173,6 +173,8 @@ class ICreated(interface.Interface):
 	"""
 	creator = interface.Attribute("The creator of this object.")
 
+### markers
+
 class IShouldHaveTraversablePath(interface.Interface):
 	"""
 	A marker interface for things that should have a resource
@@ -180,4 +182,25 @@ class IShouldHaveTraversablePath(interface.Interface):
 	*should* eventually have a resource path) and a non-disruptive
 	way to start requiring ILink externalization to use resource paths
 	exclusively.
+	"""
+
+class INeverStoredInSharedStream(interface.Interface):
+	"""
+	A marker interface used when distributing changes to show that this
+	object should not be stored in shared streams.
+	"""
+
+class IMutedInStream(interface.Interface):
+	"""
+	A marker interface used when distributed changes to keep this
+	object out of the local stream cache.
+	"""
+
+class INotModifiedInStreamWhenContainerModified(interface.Interface):
+	"""
+	When applied to :class:`IContainer` instances, this is a marker
+	interface that says when a :class:`IContainerModifiedEvent` is fired,
+	as is done when children are added or removed from the container,
+	the stream is not updated. This prevents spurious changing of
+	shared/created events into (newer) modified events.
 	"""
