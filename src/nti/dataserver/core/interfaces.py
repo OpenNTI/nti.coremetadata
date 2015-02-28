@@ -119,11 +119,13 @@ class IContained(IZContained):
 
 	# For BWC, these are not required
 	containerId = DecodingValidTextLine(
-					title="The ID (name) of the container to which this object belongs. Should match the __parent__.__name__",
+					title="The ID (name) of the container to which this object belongs. "
+						  "Should match the __parent__.__name__",
 					required=False)
 	
 	id = DecodingValidTextLine(
-					title="The locally unique ID (name) of this object in the container it belongs. Should match the __name__",
+					title="The locally unique ID (name) of this object in the container "
+						  "it belongs. Should match the __name__",
 					required=False)
 
 ### Time tracking
@@ -203,4 +205,11 @@ class INotModifiedInStreamWhenContainerModified(interface.Interface):
 	as is done when children are added or removed from the container,
 	the stream is not updated. This prevents spurious changing of
 	shared/created events into (newer) modified events.
+	"""
+
+### content
+
+class IContent(ILastModified, ICreated):
+	"""
+	It's All Content.
 	"""
