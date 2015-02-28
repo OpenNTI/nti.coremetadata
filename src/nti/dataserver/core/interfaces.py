@@ -207,6 +207,11 @@ class INotModifiedInStreamWhenContainerModified(interface.Interface):
 	shared/created events into (newer) modified events.
 	"""
 
+class IContentTypeMarker(interface.Interface):
+	"""
+	Marker interface for deriving mimetypes from class names.
+	"""
+
 ### content
 
 class IContent(ILastModified, ICreated):
