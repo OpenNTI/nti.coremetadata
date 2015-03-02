@@ -53,3 +53,9 @@ class IContentTypeMarker(interface.Interface):
 	"""
 	Marker interface for deriving mimetypes from class names.
 	"""
+
+class ICreated(interface.Interface):
+	"""
+	Something created by an identified entity.
+	"""
+	creator = interface.Attribute("The creator of this object.")
