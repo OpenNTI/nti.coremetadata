@@ -19,14 +19,14 @@ TESTS_REQUIRE = [
 ]
 
 setup(
-	name='nti.dataserver.core',
+	name='nti.properties',
 	version=VERSION,
 	author='Jason Madden',
 	author_email='jason@nextthought.com',
-	description="NTI DublinCore",
+	description="NTI Metadata Properties",
 	long_description=codecs.open('README.rst', encoding='utf-8').read(),
 	license='Proprietary',
-	keywords='Datasever core',
+	keywords='Metadata Properties',
 	classifiers=[
 		'Intended Audience :: Developers',
 		'Natural Language :: English',
@@ -41,12 +41,8 @@ setup(
 	tests_require=TESTS_REQUIRE,
 	install_requires=[
 		'setuptools',
-		'zope.annotation',
 		'zope.component',
-		'zope.container',
 		'zope.interface',
-		'zope.location',
-		'zope.mimetype',
 		'zope.schema',
 		'zope.security',
 		'nti.common',
