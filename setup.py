@@ -19,7 +19,7 @@ TESTS_REQUIRE = [
 ]
 
 setup(
-	name='nti.properties',
+	name='nti.coremetadata',
 	version=VERSION,
 	author='Jason Madden',
 	author_email='jason@nextthought.com',
