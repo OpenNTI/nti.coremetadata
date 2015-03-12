@@ -59,3 +59,10 @@ class ICreated(interface.Interface):
 	Something created by an identified entity.
 	"""
 	creator = interface.Attribute("The creator of this object.")
+
+class ITitled(interface.Interface):
+	"""
+	A piece of content with a title, either human created or potentially
+	automatically generated. (This differs from, say, a person's honorrific title.
+	"""
+	title = interface.Attribute("The title of this object.")
