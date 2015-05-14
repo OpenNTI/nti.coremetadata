@@ -22,13 +22,13 @@ class DataURI(_ValidURI):
     """
 
     def _validate(self, value):
-        super(DataURI,self)._validate(value)
+        super(DataURI, self)._validate(value)
         if not value.startswith(b'data:'):
-            self._reraise_validation_error( InvalidURI(value),
-                                            value,
-                                            _raise=True )
+            self._reraise_validation_error(InvalidURI(value),
+                                           value,
+                                           _raise=True)
 
-    def fromUnicode( self, value ):
+    def fromUnicode(self, value):
         if isinstance(value, dataurl.DataURL):
             return value
 
