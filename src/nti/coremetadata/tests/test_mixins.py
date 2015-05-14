@@ -25,17 +25,17 @@ from nti.testing.matchers import verifiably_provides
 
 class TestMixins(unittest.TestCase):
 
-    layer = SharedConfiguringTestLayer
-    
-    def test_plus_extend( self ):
-        c = CreatedAndModifiedTimeMixin()
-        for iface in (ICreatedTime, ILastModified):
-            assert_that(c, validly_provides(iface))
-            assert_that(c, verifiably_provides(iface))
+	layer = SharedConfiguringTestLayer
 
-        t = time.time() + 100
-        c.updateLastMod(t)
-        assert_that(c, has_property('lastModified', is_(t)))
-        
-        c.updateLastModIfGreater(100)
-        assert_that(c, has_property('lastModified', is_(t)))
+	def test_plus_extend(self):
+		c = CreatedAndModifiedTimeMixin()
+		for iface in (ICreatedTime, ILastModified):
+			assert_that(c, validly_provides(iface))
+			assert_that(c, verifiably_provides(iface))
+
+		t = time.time() + 100
+		c.updateLastMod(t)
+		assert_that(c, has_property('lastModified', is_(t)))
+
+		c.updateLastModIfGreater(100)
+		assert_that(c, has_property('lastModified', is_(t)))
