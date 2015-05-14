@@ -14,8 +14,7 @@ TESTS_REQUIRE = [
 	'nose-pudb',
 	'nose-progressive',
 	'nose2[coverage_plugin]',
-	'pyhamcrest',
-	'nti.nose_traceback_info'
+	'pyhamcrest'
 ]
 
 setup(
@@ -51,9 +50,6 @@ setup(
 	extras_require={
 		'test': TESTS_REQUIRE,
 	},
-	dependency_links=[
-		'git+https://github.com/NextThought/nti.schema.git#egg=nti.schema',
-		'git+https://github.com/NextThought/nti.nose_traceback_info.git#egg=nti.nose_traceback_info'
-	],
+	dependency_links=[],
 	entry_points=entry_points
 )
