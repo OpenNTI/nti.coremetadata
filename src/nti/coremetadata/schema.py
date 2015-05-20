@@ -27,7 +27,7 @@ class DataURI(_ValidURI):
 
     def _validate(self, value):
         super(DataURI, self)._validate(value)
-        if not self.is_valid_data_uri(value)
+        if not self.is_valid_data_uri(value):
             self._reraise_validation_error(InvalidURI(value),
                                            value,
                                            _raise=True)
