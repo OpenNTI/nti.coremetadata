@@ -17,8 +17,9 @@ from .interfaces import ILastModified
 
 class CreatedTimeMixin(object):
 
-	createdTime = 0
 	_SET_CREATED_MODTIME_ON_INIT = True
+
+	createdTime = 0
 
 	def __init__(self, *args, **kwargs):
 		if self._SET_CREATED_MODTIME_ON_INIT and self.createdTime == 0:

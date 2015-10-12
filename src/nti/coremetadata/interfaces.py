@@ -66,3 +66,8 @@ class ITitled(interface.Interface):
 	automatically generated. (This differs from, say, a person's honorrific title.
 	"""
 	title = interface.Attribute("The title of this object.")
+
+class IRecordable(interface.Interface):
+	"""
+	A marker interface for objects whose changes are to be recorded
+	"""
