@@ -13,6 +13,7 @@ import time
 
 from zope import interface
 
+from .interfaces import IRecordable
 from .interfaces import ILastModified
 
 class CreatedTimeMixin(object):
@@ -54,3 +55,11 @@ class CreatedAndModifiedTimeMixin(CreatedTimeMixin, ModifiedTimeMixin):
 			self.createdTime = time.time()
 			self.updateLastModIfGreater(self.createdTime)
 		super(CreatedAndModifiedTimeMixin, self).__init__(*args, **kwargs)
+
+@interface.implementer(IRecordable)
+class RecordableMixin(object):
+
+	locked = False
+	
+	def __init__(self, *args, **kwargs):
+		super(RecordableMixin, self).__init__(*args, **kwargs)
