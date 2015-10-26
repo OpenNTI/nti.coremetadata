@@ -72,3 +72,4 @@ class IRecordable(interface.Interface):
 	A marker interface for objects whose changes are to be recorded
 	"""
 	locked = interface.Attribute("If this object is locked.")
+	locked.setTaggedValue('_ext_excluded_out', True)
