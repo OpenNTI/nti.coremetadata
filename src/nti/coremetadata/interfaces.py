@@ -9,7 +9,12 @@ __docformat__ = "restructuredtext en"
 
 from zope import interface
 
+from zope.security.management import system_user
+
 from nti.schema.field import Number
+
+SYSTEM_USER_ID = system_user.id
+SYSTEM_USER_NAME = getattr(system_user, 'title').lower()
 
 class ICreatedTime(interface.Interface):
 	"""
