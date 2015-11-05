@@ -78,3 +78,23 @@ class IRecordable(interface.Interface):
 	"""
 	locked = interface.Attribute("If this object is locked.")
 	locked.setTaggedValue('_ext_excluded_out', True)
+
+class IDefaultPublished(interface.Interface):
+	"""
+	A marker interface mixed in to an instance to specify
+	that it has been "published" by its creator, thus sharing
+	it with the default sharing applicable to its creator
+	(whatever that means).
+	"""
+
+class IPublishable(interface.Interface):
+
+	def publish():
+		"""
+		Cause this object to provide :class:`IDefaultPublished`
+		"""
+
+	def unpublish():
+		"""
+		Cause this object to no longer provide :class:`IDefaultPublished`
+		"""
