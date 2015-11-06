@@ -8,20 +8,26 @@ __docformat__ = "restructuredtext en"
 # pylint: disable=W0212,R0904
 
 from hamcrest import is_
+from hamcrest import is_not
 from hamcrest import assert_that
 from hamcrest import has_property
+does_not = is_not
+
+from nti.testing.matchers import validly_provides
+from nti.testing.matchers import verifiably_provides
 
 import time
 import unittest
 
 from nti.coremetadata.interfaces import ICreatedTime
+from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import ILastModified
+from nti.coremetadata.interfaces import IDefaultPublished
+
+from nti.coremetadata.mixins import PublishableMixin
 from nti.coremetadata.mixins import CreatedAndModifiedTimeMixin
 
 from nti.coremetadata.tests import SharedConfiguringTestLayer
-
-from nti.testing.matchers import validly_provides
-from nti.testing.matchers import verifiably_provides
 
 class TestMixins(unittest.TestCase):
 
@@ -39,3 +45,14 @@ class TestMixins(unittest.TestCase):
 
 		c.updateLastModIfGreater(100)
 		assert_that(c, has_property('lastModified', is_(t)))
+		
+	def test_plublishable(self):
+		c = PublishableMixin()
+		assert_that(c, validly_provides(IPublishable))
+		assert_that(c, verifiably_provides(IPublishable))
+
+		c.publish()
+		assert_that(c, verifiably_provides(IDefaultPublished))
+		
+		c.unpublish()
+		assert_that(c, does_not(verifiably_provides(IDefaultPublished)))
