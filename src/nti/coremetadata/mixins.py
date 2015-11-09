@@ -13,10 +13,15 @@ import time
 
 from zope import interface
 
+from zope.event import notify
+
 from .interfaces import IRecordable
 from .interfaces import IPublishable
 from .interfaces import ILastModified
 from .interfaces import IDefaultPublished
+
+from .interfaces import ObjectPublishedEvent
+from .interfaces import ObjectUnpublishedEvent
 
 class CreatedTimeMixin(object):
 
@@ -72,11 +77,21 @@ class PublishableMixin(object):
 	def __init__(self, *args, **kwargs):
 		super(PublishableMixin, self).__init__(*args, **kwargs)
 		
-	def publish(self):
+	def do_publish(self, event=True):
 		interface.alsoProvides(self, IDefaultPublished)
+		if event:
+			notify(ObjectPublishedEvent(self))
+		
+	def publish(self):
+		self.do_publish()
 
-	def unpublish(self):
+	def do_unpublish(self, event=True):
 		interface.noLongerProvides(self, IDefaultPublished)
+		if event:
+			notify(ObjectUnpublishedEvent(self))
+		
+	def unpublish(self):
+		self.do_unpublish()
 		
 	def is_published(self):
 		return IDefaultPublished.providedBy(self)

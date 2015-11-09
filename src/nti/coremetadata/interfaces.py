@@ -9,6 +9,9 @@ __docformat__ = "restructuredtext en"
 
 from zope import interface
 
+from zope.interface.interfaces import ObjectEvent
+from zope.interface.interfaces import IObjectEvent
+
 from zope.security.management import system_user
 
 from nti.schema.field import Number
@@ -86,6 +89,24 @@ class IDefaultPublished(interface.Interface):
 	it with the default sharing applicable to its creator
 	(whatever that means).
 	"""
+
+class IObjectPublishedEvent(IObjectEvent):
+	"""
+	An event that is sent, when an object has been published
+	"""
+
+class IObjectUnpublishedEvent(IObjectEvent):
+	"""
+	An event that is sent, when an object has been unpublished
+	"""
+	
+@interface.implementer(IObjectPublishedEvent)
+class ObjectPublishedEvent(ObjectEvent):
+	pass
+
+@interface.implementer(IObjectUnpublishedEvent)
+class ObjectUnpublishedEvent(ObjectEvent):
+	pass
 
 class IPublishable(interface.Interface):
 

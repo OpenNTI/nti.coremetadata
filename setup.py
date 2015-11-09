@@ -45,6 +45,7 @@ setup(
 	install_requires=[
 		'setuptools',
 		'zope.component',
+		'zope.event',
 		'zope.interface',
 		'zope.schema',
 		'zope.security',
