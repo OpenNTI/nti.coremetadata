@@ -99,7 +99,7 @@ class IObjectUnpublishedEvent(IObjectEvent):
 	"""
 	An event that is sent, when an object has been unpublished
 	"""
-	
+
 @interface.implementer(IObjectPublishedEvent)
 class ObjectPublishedEvent(ObjectEvent):
 	pass
@@ -124,4 +124,4 @@ class IPublishable(interface.Interface):
 		"""
 		Return if this object is published
 		"""
-
+	isPublished = is_published
