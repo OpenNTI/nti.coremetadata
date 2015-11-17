@@ -120,5 +120,8 @@ class IPublishable(interface.Interface):
 		Cause this object to no longer provide :class:`IDefaultPublished`
 		"""
 
-	is_published = interface.Attribute("If this object is published.")
-	is_published.setTaggedValue('_ext_excluded_out', True)
+	def is_published():
+		"""
+		Return if this object is published
+		"""
+
