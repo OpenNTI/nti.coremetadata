@@ -21,12 +21,12 @@ import unittest
 
 from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import ICreatedTime
-from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import ILastModified
 from nti.coremetadata.interfaces import IDefaultPublished
+from nti.coremetadata.interfaces import ICalendarPublishable
 
 from nti.coremetadata.mixins import RecordableMixin
-from nti.coremetadata.mixins import PublishableMixin
+from nti.coremetadata.mixins import CalendarPublishableMixin
 from nti.coremetadata.mixins import CreatedAndModifiedTimeMixin
 
 from nti.coremetadata.tests import SharedConfiguringTestLayer
@@ -47,19 +47,19 @@ class TestMixins(unittest.TestCase):
 
 		c.updateLastModIfGreater(100)
 		assert_that(c, has_property('lastModified', is_(t)))
-		
+
 	def test_recordable(self):
 		c = RecordableMixin()
 		assert_that(c, validly_provides(IRecordable))
 		assert_that(c, verifiably_provides(IRecordable))
 
 	def test_plublishable(self):
-		c = PublishableMixin()
-		assert_that(c, validly_provides(IPublishable))
-		assert_that(c, verifiably_provides(IPublishable))
+		c = CalendarPublishableMixin()
+		assert_that(c, validly_provides(ICalendarPublishable))
+		assert_that(c, verifiably_provides(ICalendarPublishable))
 
 		c.publish()
 		assert_that(c, verifiably_provides(IDefaultPublished))
-		
+
 		c.unpublish()
 		assert_that(c, does_not(verifiably_provides(IDefaultPublished)))

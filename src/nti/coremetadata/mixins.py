@@ -74,13 +74,13 @@ class RecordableMixin(object):
 		super(RecordableMixin, self).__init__(*args, **kwargs)
 
 @interface.implementer(ICalendarPublishable)
-class PublishableMixin(object):
+class CalendarPublishableMixin(object):
 
 	publishBeginning = None
 	publishEnding = None
 
 	def __init__(self, *args, **kwargs):
-		super(PublishableMixin, self).__init__(*args, **kwargs)
+		super(CalendarPublishableMixin, self).__init__(*args, **kwargs)
 
 	def do_publish(self, event=True):
 		interface.alsoProvides(self, IDefaultPublished)
