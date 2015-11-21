@@ -11,12 +11,14 @@ logger = __import__('logging').getLogger(__name__)
 
 import time
 
+from datetime import datetime
+
 from zope import interface
 
 from zope.event import notify
 
 from .interfaces import IRecordable
-from .interfaces import IPublishable
+from .interfaces import ICalendarPublishable
 from .interfaces import ILastModified
 from .interfaces import IDefaultPublished
 
@@ -67,32 +69,57 @@ class CreatedAndModifiedTimeMixin(CreatedTimeMixin, ModifiedTimeMixin):
 class RecordableMixin(object):
 
 	locked = False
-	
+
 	def __init__(self, *args, **kwargs):
 		super(RecordableMixin, self).__init__(*args, **kwargs)
 
-@interface.implementer(IPublishable)
+@interface.implementer(ICalendarPublishable)
 class PublishableMixin(object):
-	
+
+	publishBeginning = None
+	publishEnding = None
+
 	def __init__(self, *args, **kwargs):
 		super(PublishableMixin, self).__init__(*args, **kwargs)
-		
+
 	def do_publish(self, event=True):
 		interface.alsoProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectPublishedEvent(self))
-		
-	def publish(self):
-		self.do_publish()
+
+	def publish(self, start=None, end=None):
+		if start is not None:
+			# It wouldn't make sense to just send an
+			# ending date on a publish call.
+			self.publishBeginning = start
+			self.publishEnding = end
+		else:
+			# Explicit publish, reset any dates we have.
+			self.do_publish()
+			self.publishBeginning = None
+			self.publishEnding = None
 
 	def do_unpublish(self, event=True):
 		interface.noLongerProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectUnpublishedEvent(self))
-		
+
 	def unpublish(self):
 		self.do_unpublish()
-		
+		self.publishBeginning = None
+		self.publishEnding = None
+
 	def is_published(self):
-		return IDefaultPublished.providedBy(self)
+		"""
+		Published if either explicitly published or after
+		our start date and before our end date, if provided.
+		"""
+		now = datetime.utcnow()
+		start = self.publishBeginning
+		end = self.publishEnding
+		result = IDefaultPublished.providedBy(self) \
+				or ( 	( start is not None and now > start ) \
+					and ( end is None or now < end ))
+		return bool( result )
+
 	isPublished = is_published
