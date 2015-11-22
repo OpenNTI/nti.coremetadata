@@ -18,9 +18,10 @@ from zope import interface
 from zope.event import notify
 
 from .interfaces import IRecordable
-from .interfaces import ICalendarPublishable
+from .interfaces import IPublishable
 from .interfaces import ILastModified
 from .interfaces import IDefaultPublished
+from .interfaces import ICalendarPublishable
 
 from .interfaces import ObjectPublishedEvent
 from .interfaces import ObjectUnpublishedEvent
@@ -73,41 +74,56 @@ class RecordableMixin(object):
 	def __init__(self, *args, **kwargs):
 		super(RecordableMixin, self).__init__(*args, **kwargs)
 
-@interface.implementer(ICalendarPublishable)
-class CalendarPublishableMixin(object):
-
-	publishBeginning = None
-	publishEnding = None
-
+@interface.implementer(IPublishable)
+class PublishableMixin(object):
+	
 	def __init__(self, *args, **kwargs):
-		super(CalendarPublishableMixin, self).__init__(*args, **kwargs)
-
+		super(PublishableMixin, self).__init__(*args, **kwargs)
+		
 	def do_publish(self, event=True):
 		interface.alsoProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectPublishedEvent(self))
-
-	def publish(self, start=None, end=None):
-		if start is not None:
-			# It wouldn't make sense to just send an
-			# ending date on a publish call.
-			self.publishBeginning = start
-			self.publishEnding = end
-		else:
-			# Explicit publish, reset any dates we have.
+		
+	def publish(self, *args, **kwargs):
+		if not self.is_published():
 			self.do_publish()
-			self.publishBeginning = None
-			self.publishEnding = None
 
 	def do_unpublish(self, event=True):
 		interface.noLongerProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectUnpublishedEvent(self))
+		
+	def unpublish(self):
+		if self.is_published():
+			self.do_unpublish()
+		
+	def is_published(self):
+		return IDefaultPublished.providedBy(self)
+	isPublished = is_published
+
+@interface.implementer(ICalendarPublishable)
+class CalendarPublishableMixin(PublishableMixin):
+
+	publishEnding = None
+	publishBeginning = None
+
+	def publish(self, start=None, end=None):
+		if start is not None:
+			# It wouldn't make sense to just send an
+			# ending date on a publish call.
+			self.publishEnding = end
+			self.publishBeginning = start
+		else:
+			# Explicit publish, reset any dates we have.
+			self.do_publish()
+			self.publishEnding = None
+			self.publishBeginning = None
 
 	def unpublish(self):
 		self.do_unpublish()
-		self.publishBeginning = None
 		self.publishEnding = None
+		self.publishBeginning = None
 
 	def is_published(self):
 		"""
@@ -115,11 +131,9 @@ class CalendarPublishableMixin(object):
 		our start date and before our end date, if provided.
 		"""
 		now = datetime.utcnow()
-		start = self.publishBeginning
 		end = self.publishEnding
+		start = self.publishBeginning
 		result = IDefaultPublished.providedBy(self) \
 				or ( 	( start is not None and now > start ) \
 					and ( end is None or now < end ))
 		return bool( result )
-
-	isPublished = is_published
