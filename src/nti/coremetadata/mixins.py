@@ -76,15 +76,15 @@ class RecordableMixin(object):
 
 @interface.implementer(IPublishable)
 class PublishableMixin(object):
-	
+
 	def __init__(self, *args, **kwargs):
 		super(PublishableMixin, self).__init__(*args, **kwargs)
-		
+
 	def do_publish(self, event=True):
 		interface.alsoProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectPublishedEvent(self))
-		
+
 	def publish(self, *args, **kwargs):
 		if not self.is_published():
 			self.do_publish()
@@ -93,11 +93,11 @@ class PublishableMixin(object):
 		interface.noLongerProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectUnpublishedEvent(self))
-		
+
 	def unpublish(self):
 		if self.is_published():
 			self.do_unpublish()
-		
+
 	def is_published(self):
 		return IDefaultPublished.providedBy(self)
 	isPublished = is_published
@@ -109,16 +109,12 @@ class CalendarPublishableMixin(PublishableMixin):
 	publishBeginning = None
 
 	def publish(self, start=None, end=None):
-		if start is not None:
-			# It wouldn't make sense to just send an
-			# ending date on a publish call.
-			self.publishEnding = end
-			self.publishBeginning = start
-		else:
+		if start is None:
 			# Explicit publish, reset any dates we have.
+			# The user may publish but specify just an end date.
 			self.do_publish()
-			self.publishEnding = None
-			self.publishBeginning = None
+		self.publishEnding = end
+		self.publishBeginning = start
 
 	def unpublish(self):
 		self.do_unpublish()
@@ -128,12 +124,13 @@ class CalendarPublishableMixin(PublishableMixin):
 	def is_published(self):
 		"""
 		Published if either explicitly published or after
-		our start date and before our end date, if provided.
+		our start date, and before our end date, if provided.
 		"""
 		now = datetime.utcnow()
 		end = self.publishEnding
 		start = self.publishBeginning
-		result = IDefaultPublished.providedBy(self) \
-				or ( 	( start is not None and now > start ) \
-					and ( end is None or now < end ))
+		result = 		(IDefaultPublished.providedBy(self) \
+					or ( start is not None and now > start )) \
+				and ( end is None or now < end )
 		return bool( result )
+	isPublished = is_published
