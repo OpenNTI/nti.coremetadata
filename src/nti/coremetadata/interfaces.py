@@ -15,8 +15,7 @@ from zope.interface.interfaces import IObjectEvent
 from zope.security.management import system_user
 
 from nti.schema.field import Number
-
-from .schema import Datetime
+from nti.schema.field import ValidDatetime
 
 SYSTEM_USER_ID = system_user.id
 SYSTEM_USER_NAME = getattr(system_user, 'title').lower()
@@ -130,13 +129,13 @@ class IPublishable(interface.Interface):
 
 class ICalendarPublishable(IPublishable):
 
-	publishBeginning = Datetime(
+	publishBeginning = ValidDatetime(
 		title="This object is not available before this time",
 		description="""When present, this specifies the time instant at which
 		this obj is to be available.""",
 		required=False)
 
-	publishEnding = Datetime(
+	publishEnding = ValidDatetime(
 		title="This object is not available after this time",
 		description="""When present, this specifies the last instance at which
 		this obj is to be available.""",
