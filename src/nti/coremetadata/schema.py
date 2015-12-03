@@ -10,12 +10,16 @@ __docformat__ = "restructuredtext en"
 logger = __import__('logging').getLogger(__name__)
 
 import six
+from datetime import date
 from datetime import datetime
 
 import isodate
 from isodate import ISO8601Error
 
 from zope import interface
+
+from zope.interface.common.idatetime import IDate
+from zope.interface.common.idatetime import IDateTime
 
 from zope.schema.interfaces import InvalidURI
 from zope.schema.interfaces import IFromUnicode
@@ -56,11 +60,26 @@ def parse_datetime(value, default=None):
 	elif isinstance(value, (int, float)):
 		value = datetime.fromtimestamp(value)
 	elif isinstance(value, six.string_types):
-		try:
-			value = isodate.parse_datetime(value)
-		except (ISO8601Error, ValueError):
-			value = isodate.parse_date(value)
-			value = datetime.fromordinal(value.toordinal())
+		# check if there are any adapters in context
+		for schema in (IDateTime, IDate):
+			try:
+				adapted = schema(value, None)
+				if adapted is not None:
+					break
+			except Exception:
+				adapted = None # ignore
+
+		# try raw isodate
+		if adapted is None:
+			try:
+				value = isodate.parse_datetime(value)
+			except (ISO8601Error, ValueError):
+				value = isodate.parse_date(value)
+				value = datetime.fromordinal(value.toordinal())
+		elif isinstance(adapted, date):
+			value = datetime.fromordinal(adapted.toordinal())
+		else:
+			value = adapted
 	return value
 
 @interface.implementer(IFromUnicode)
