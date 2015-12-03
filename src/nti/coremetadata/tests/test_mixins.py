@@ -50,6 +50,7 @@ class TestMixins(unittest.TestCase):
 
 	def test_recordable(self):
 		c = RecordableMixin()
+		assert_that(c, has_property('locked', is_(False)))
 		assert_that(c, validly_provides(IRecordable))
 		assert_that(c, verifiably_provides(IRecordable))
 
