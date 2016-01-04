@@ -14,6 +14,7 @@ from zope.interface.interfaces import IObjectEvent
 
 from zope.security.management import system_user
 
+from nti.schema.field import Bool
 from nti.schema.field import Number
 from nti.schema.field import ValidDatetime
 
@@ -83,11 +84,12 @@ class IRecordable(interface.Interface):
 	locked = interface.Attribute("If this object is locked.")
 	locked.setTaggedValue('_ext_excluded_out', True)
 
-class IRecordableContainer( IRecordable ):
+class IRecordableContainer(IRecordable):
 	"""
 	A marker interface for `IRecordable` container objects.
 	"""
-	child_order_locked = interface.Attribute("If this children order/set of this container are locked.")
+	child_order_locked = Bool(title="If this children order/set of this container are locked.",
+							  default=False, required=False)
 	child_order_locked.setTaggedValue('_ext_excluded_out', True)
 
 class IDefaultPublished(interface.Interface):

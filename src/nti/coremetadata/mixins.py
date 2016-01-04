@@ -76,7 +76,7 @@ class RecordableMixin(object):
 		super(RecordableMixin, self).__init__(*args, **kwargs)
 
 @interface.implementer(IRecordableContainer)
-class RecordableContainerMixin( RecordableMixin ):
+class RecordableContainerMixin(RecordableMixin):
 
 	child_order_locked = False
 
@@ -139,7 +139,7 @@ class CalendarPublishableMixin(PublishableMixin):
 		end = self.publishEnding
 		start = self.publishBeginning
 		result = 		(IDefaultPublished.providedBy(self) \
-					or ( start is not None and now > start )) \
-				and ( end is None or now < end )
-		return bool( result )
+					or (start is not None and now > start)) \
+				and (end is None or now < end)
+		return bool(result)
 	isPublished = is_published
