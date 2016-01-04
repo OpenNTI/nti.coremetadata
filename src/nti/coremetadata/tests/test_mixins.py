@@ -19,6 +19,9 @@ from nti.testing.matchers import verifiably_provides
 import time
 import unittest
 
+from datetime import datetime
+from datetime import timedelta
+
 from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import ICreatedTime
 from nti.coremetadata.interfaces import ILastModified
@@ -72,3 +75,36 @@ class TestMixins(unittest.TestCase):
 
 		c.unpublish()
 		assert_that(c, does_not(verifiably_provides(IDefaultPublished)))
+
+	def test_publish_status(self):
+		obj = CalendarPublishableMixin()
+		assert_that( obj.is_published(), is_( False ))
+		yesterday = datetime.utcnow() - timedelta( days=1 )
+		tomorrow = yesterday + timedelta( days=2 )
+
+		obj.publish( start=yesterday )
+		assert_that( obj.is_published(), is_( True ))
+
+		obj.publish( start=tomorrow )
+		assert_that( obj.is_published(), is_( False ))
+
+		obj.publish()
+		assert_that( obj.is_published(), is_( True ))
+
+		obj.publish( start=yesterday )
+		assert_that( obj.is_published(), is_( True ))
+
+		obj.publish( start=tomorrow )
+		assert_that( obj.is_published(), is_( False ))
+
+		obj.publish( start=tomorrow, end=tomorrow )
+		assert_that( obj.is_published(), is_( False ))
+
+		obj.publish( start=yesterday, end=tomorrow )
+		assert_that( obj.is_published(), is_( True ))
+
+		obj.publish( start=yesterday, end=yesterday )
+		assert_that( obj.is_published(), is_( False ))
+
+		obj.publish()
+		assert_that( obj.is_published(), is_( True ))

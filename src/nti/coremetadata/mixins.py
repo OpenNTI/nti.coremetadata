@@ -122,6 +122,8 @@ class CalendarPublishableMixin(PublishableMixin):
 			# Explicit publish, reset any dates we have.
 			# The user may publish but specify just an end date.
 			self.do_publish()
+		else:
+			interface.noLongerProvides(self, IDefaultPublished)
 		self.publishEnding = end
 		self.publishBeginning = start
 
@@ -133,13 +135,13 @@ class CalendarPublishableMixin(PublishableMixin):
 	def is_published(self):
 		"""
 		Published if either explicitly published or after
-		our start date, and before our end date, if provided.
+		our start date and before our end date, if provided.
 		"""
 		now = datetime.utcnow()
 		end = self.publishEnding
 		start = self.publishBeginning
 		result = 		(IDefaultPublished.providedBy(self) \
-					or (start is not None and now > start)) \
+					or 	(start is not None and now > start)) \
 				and (end is None or now < end)
 		return bool(result)
 	isPublished = is_published
