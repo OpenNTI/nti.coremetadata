@@ -22,6 +22,7 @@ from .interfaces import IPublishable
 from .interfaces import ILastModified
 from .interfaces import IDefaultPublished
 from .interfaces import ICalendarPublishable
+from .interfaces import IRecordableContainer
 
 from .interfaces import ObjectPublishedEvent
 from .interfaces import ObjectUnpublishedEvent
@@ -73,6 +74,14 @@ class RecordableMixin(object):
 
 	def __init__(self, *args, **kwargs):
 		super(RecordableMixin, self).__init__(*args, **kwargs)
+
+@interface.implementer(IRecordableContainer)
+class RecordableContainerMixin( RecordableMixin ):
+
+	child_order_locked = False
+
+	def __init__(self, *args, **kwargs):
+		super(RecordableContainerMixin, self).__init__(*args, **kwargs)
 
 @interface.implementer(IPublishable)
 class PublishableMixin(object):

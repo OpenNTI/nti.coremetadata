@@ -83,6 +83,13 @@ class IRecordable(interface.Interface):
 	locked = interface.Attribute("If this object is locked.")
 	locked.setTaggedValue('_ext_excluded_out', True)
 
+class IRecordableContainer( IRecordable ):
+	"""
+	A marker interface for `IRecordable` container objects.
+	"""
+	child_order_locked = interface.Attribute("If this children order/set of this container are locked.")
+	child_order_locked.setTaggedValue('_ext_excluded_out', True)
+
 class IDefaultPublished(interface.Interface):
 	"""
 	A marker interface mixed in to an instance to specify

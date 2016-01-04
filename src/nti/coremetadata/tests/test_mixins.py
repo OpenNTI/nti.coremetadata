@@ -24,9 +24,11 @@ from nti.coremetadata.interfaces import ICreatedTime
 from nti.coremetadata.interfaces import ILastModified
 from nti.coremetadata.interfaces import IDefaultPublished
 from nti.coremetadata.interfaces import ICalendarPublishable
+from nti.coremetadata.interfaces import IRecordableContainer
 
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
+from nti.coremetadata.mixins import RecordableContainerMixin
 from nti.coremetadata.mixins import CreatedAndModifiedTimeMixin
 
 from nti.coremetadata.tests import SharedConfiguringTestLayer
@@ -53,6 +55,12 @@ class TestMixins(unittest.TestCase):
 		assert_that(c, has_property('locked', is_(False)))
 		assert_that(c, validly_provides(IRecordable))
 		assert_that(c, verifiably_provides(IRecordable))
+
+	def test_recordable_container(self):
+		c = RecordableContainerMixin()
+		assert_that(c, has_property('child_order_locked', is_(False)))
+		assert_that(c, validly_provides(IRecordableContainer))
+		assert_that(c, verifiably_provides(IRecordableContainer))
 
 	def test_plublishable(self):
 		c = CalendarPublishableMixin()
