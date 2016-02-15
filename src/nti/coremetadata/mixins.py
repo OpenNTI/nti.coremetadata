@@ -17,15 +17,15 @@ from zope import interface
 
 from zope.event import notify
 
-from .interfaces import IRecordable
-from .interfaces import IPublishable
-from .interfaces import ILastModified
-from .interfaces import IDefaultPublished
-from .interfaces import ICalendarPublishable
-from .interfaces import IRecordableContainer
+from nti.coremetadata.interfaces import IRecordable
+from nti.coremetadata.interfaces import IPublishable
+from nti.coremetadata.interfaces import ILastModified
+from nti.coremetadata.interfaces import IDefaultPublished
+from nti.coremetadata.interfaces import ICalendarPublishable
+from nti.coremetadata.interfaces import IRecordableContainer
 
-from .interfaces import ObjectPublishedEvent
-from .interfaces import ObjectUnpublishedEvent
+from nti.coremetadata.interfaces import ObjectPublishedEvent
+from nti.coremetadata.interfaces import ObjectUnpublishedEvent
 
 class CreatedTimeMixin(object):
 
