@@ -75,6 +75,16 @@ class RecordableMixin(object):
 	def __init__(self, *args, **kwargs):
 		super(RecordableMixin, self).__init__(*args, **kwargs)
 
+	def lock(self):
+		self.locked = True
+
+	def unlock(self):
+		self.locked = False
+
+	def isLocked(self):
+		return self.locked
+	is_locked = isLocked
+
 @interface.implementer(IRecordableContainer)
 class RecordableContainerMixin(RecordableMixin):
 
