@@ -84,17 +84,17 @@ class IRecordable(interface.Interface):
 	locked = Bool("If this object is locked.", default=False, required=False)
 	locked.setTaggedValue('_ext_excluded_out', True)
 	
-	def lock(self):
+	def lock():
 		"""
 		lock this object
 		"""
 		
-	def unlock(self):
+	def unlock():
 		"""
 		unlock this object
 		"""
 
-	def isLocked(self):
+	def isLocked():
 		"""
 		return if this object is locked
 		"""
