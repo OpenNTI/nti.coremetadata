@@ -98,6 +98,7 @@ class IRecordable(interface.Interface):
 		"""
 		return if this object is locked
 		"""
+	is_locked = isLocked
 
 class IRecordableContainer(IRecordable):
 	"""
