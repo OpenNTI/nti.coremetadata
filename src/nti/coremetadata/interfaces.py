@@ -165,3 +165,8 @@ class ICalendarPublishable(IPublishable):
 		description="""When present, this specifies the last instance at which
 		this obj is to be available.""",
 		required=False)
+
+class IContent(ILastModified, ICreated):
+	"""
+	It's All Content.
+	"""
