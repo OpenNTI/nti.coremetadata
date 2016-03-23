@@ -150,8 +150,8 @@ class CalendarPublishableMixin(PublishableMixin):
 		now = datetime.utcnow()
 		end = self.publishEnding
 		start = self.publishBeginning
-		result = 		(IDefaultPublished.providedBy(self) \
-					or 	(start is not None and now > start)) \
+		result =  	(	IDefaultPublished.providedBy(self) 
+					 or (start is not None and now > start) ) \
 				and (end is None or now < end)
 		return bool(result)
 	isPublished = is_published
