@@ -166,6 +166,13 @@ class ICalendarPublishable(IPublishable):
 		this obj is to be available.""",
 		required=False)
 
+class INoPublishLink(interface.Interface):
+	"""
+	Marker interface for objects that are publishable but no links to 
+	publish operations should be provided
+	"""
+INoPublishLink.setTaggedValue('_ext_is_marker_interface', True)
+
 class IContent(ILastModified, ICreated):
 	"""
 	It's All Content.
