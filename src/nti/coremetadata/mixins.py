@@ -93,6 +93,18 @@ class RecordableContainerMixin(RecordableMixin):
 	def __init__(self, *args, **kwargs):
 		super(RecordableContainerMixin, self).__init__(*args, **kwargs)
 
+	def child_order_lock(self):
+		self.child_order_locked = True
+	childOrderLock = child_order_lock
+	
+	def child_order_unlock(self):
+		self.child_order_locked = False
+	childOrderUnlock = child_order_unlock
+	
+	def is_child_order_locked(self):
+		return self.child_order_locked
+	isChildOrderLocked = is_child_order_locked
+
 @interface.implementer(IPublishable)
 class PublishableMixin(object):
 

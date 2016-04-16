@@ -108,6 +108,24 @@ class IRecordableContainer(IRecordable):
 							  default=False, required=False)
 	child_order_locked.setTaggedValue('_ext_excluded_out', True)
 
+	def child_order_lock():
+		"""
+		child order lock this object
+		"""
+	childOrderLock = child_order_lock
+	
+	def child_order_unlock():
+		"""
+		child order unlock this object
+		"""
+	childOrderUnlock = child_order_unlock
+	
+	def is_child_order_locked():
+		"""
+		return if this object is child order locked
+		"""
+	isChildOrderLocked = is_child_order_locked
+	
 class IDefaultPublished(interface.Interface):
 	"""
 	A marker interface mixed in to an instance to specify
