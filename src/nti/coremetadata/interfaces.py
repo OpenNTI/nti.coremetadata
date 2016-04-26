@@ -12,6 +12,8 @@ from zope import interface
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
+from zope.schema import Iterable
+
 from zope.security.management import system_user
 
 from nti.schema.field import Bool
@@ -195,3 +197,10 @@ class IContent(ILastModified, ICreated):
 	"""
 	It's All Content.
 	"""
+
+class IModeledContentBody(interface.Interface):
+	"""
+	Marker interface for objects that have a iterable `body` attrbute
+	with content
+	"""
+	body = Iterable(title="Content elements")
