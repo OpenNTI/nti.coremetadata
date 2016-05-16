@@ -204,3 +204,15 @@ class IModeledContentBody(interface.Interface):
 	with content
 	"""
 	body = Iterable(title="Content elements")
+
+class IObjectJsonSchemaMaker(interface.Interface):
+	"""
+	Marker interface for an object Json Schema maker utility
+	"""
+
+	def make_schema(schema):
+		"""
+		Create the JSON schema.
+
+		param: schema: The zope schema to use.
+		"""
