@@ -35,7 +35,7 @@ class CoreJsonSchemafier(JsonSchemafier):
 						 ILastModified, IRecordableContainer)
 
 	def allow_field(self, name, field):
-		result = name.startswith('_') 
+		result = name.startswith('_') or field.queryTaggedValue('_ext_excluded_out')
 		if not result:
 			for iface in self.IGNORE_INTERFACES:
 				result = name in iface
