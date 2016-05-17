@@ -101,11 +101,11 @@ class TestMixins(unittest.TestCase):
 		obj.publish()
 		assert_that( obj.is_published(), is_( True ))
 
-		obj.publish( start=yesterday )
-		assert_that( obj.is_published(), is_( True ))
-
 		obj.publish( start=tomorrow )
 		assert_that( obj.is_published(), is_( False ))
+
+		obj.publish( start=yesterday )
+		assert_that( obj.is_published(), is_( True ))
 
 		obj.publish( start=tomorrow, end=tomorrow )
 		assert_that( obj.is_published(), is_( False ))
