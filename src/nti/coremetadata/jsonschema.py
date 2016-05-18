@@ -31,11 +31,11 @@ from nti.schema.jsonschema import JsonSchemafier
 
 class CoreJsonSchemafier(JsonSchemafier):
 
-	IGNORE_INTERFACES = (ICreated, IRecordable, ICreatedTime,
-						 ILastModified, IRecordableContainer)
+	IGNORE_INTERFACES = (ICreated, ILastModified, ICreatedTime,
+						 IRecordable, IRecordableContainer)
 
 	def allow_field(self, name, field):
-		result = not( name.startswith('_') or field.queryTaggedValue('_ext_excluded_out') )
+		result = not(name.startswith('_') or field.queryTaggedValue('_ext_excluded_out'))
 		if result:
 			for iface in self.IGNORE_INTERFACES:
 				if name in iface:
@@ -46,7 +46,7 @@ class CoreJsonSchemafier(JsonSchemafier):
 	def _process_object(self, field):
 		if	  IObject.providedBy(field) \
 			and field.schema is not interface.Interface:
-			base =      field.schema.queryTaggedValue('_ext_mime_type') \
+			base = field.schema.queryTaggedValue('_ext_mime_type') \
 					or  get_ui_type_from_field_interface(field.schema) \
 					or  get_ui_type_from_interface(field.schema)
 			return base
