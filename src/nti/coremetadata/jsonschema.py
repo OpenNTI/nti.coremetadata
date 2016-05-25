@@ -9,6 +9,7 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+from zope import component
 from zope import interface
 
 from zope.schema.interfaces import IList
@@ -20,6 +21,7 @@ from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import ICreatedTime
 from nti.coremetadata.interfaces import ILastModified
 from nti.coremetadata.interfaces import IRecordableContainer
+from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 
 from nti.schema.interfaces import IVariant
 
@@ -85,3 +87,9 @@ class CoreJsonSchemafier(JsonSchemafier):
 
 	def post_process_field(self, name, field, item_schema):
 		super(CoreJsonSchemafier, self).post_process_field(name, field, item_schema)
+		
+def make_schema(schema, maker=IObjectJsonSchemaMaker):
+	name = schema.queryTaggedValue('_ext_jsonschema') or u''
+	schemafier = component.getUtility(maker, name=name)
+	result = schemafier.make_schema(schema=schema)
+	return result
