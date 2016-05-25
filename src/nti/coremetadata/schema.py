@@ -21,9 +21,11 @@ class DataURI(_ValidURI):
 	a data URI. The field value is a :class:`.DataURL`.
 	"""
 
+	DATA = b'data:'
+
 	@classmethod
 	def is_valid_data_uri(cls, value):
-		return value and value.startswith(b'data:')
+		return value and value.startswith(cls.DATA)
 
 	def _validate(self, value):
 		super(DataURI, self)._validate(value)

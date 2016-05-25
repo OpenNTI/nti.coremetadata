@@ -9,7 +9,6 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from zope import component
 from zope import interface
 
 from zope.schema.interfaces import IList
@@ -21,21 +20,15 @@ from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import ICreatedTime
 from nti.coremetadata.interfaces import ILastModified
 from nti.coremetadata.interfaces import IRecordableContainer
-from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 
 from nti.schema.interfaces import IVariant
+from nti.schema.interfaces import IListOrTuple
 
 from nti.schema.jsonschema import get_ui_types_from_field
 from nti.schema.jsonschema import get_ui_type_from_interface
 from nti.schema.jsonschema import get_ui_type_from_field_interface
 
 from nti.schema.jsonschema import JsonSchemafier
-
-def make_schema(schema, user=None, maker=IObjectJsonSchemaMaker):
-	name = schema.queryTaggedValue('_ext_jsonschema') or u''
-	schemafier = component.getUtility(maker, name=name)
-	result = schemafier.make_schema(schema=schema, user=user)
-	return result
 
 class CoreJsonSchemafier(JsonSchemafier):
 
@@ -82,7 +75,7 @@ class CoreJsonSchemafier(JsonSchemafier):
 		ui_type, ui_base_type = super(CoreJsonSchemafier, self).get_ui_types_from_field(field)
 		if IVariant.providedBy(field) and not ui_base_type:
 			ui_base_type = self._process_variant(field, ui_type)
-		elif IList.providedBy(field) and not ui_base_type:
+		elif (IListOrTuple.providedBy(field) or IList.providedBy(field)) and not ui_base_type:
 			if IObject.providedBy(field.value_type):
 				ui_base_type = self._process_object(field.value_type)
 			elif IChoice.providedBy(field.value_type):
