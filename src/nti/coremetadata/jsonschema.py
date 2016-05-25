@@ -31,6 +31,12 @@ from nti.schema.jsonschema import get_ui_type_from_field_interface
 
 from nti.schema.jsonschema import JsonSchemafier
 
+def make_schema(schema, maker=IObjectJsonSchemaMaker):
+	name = schema.queryTaggedValue('_ext_jsonschema') or u''
+	schemafier = component.getUtility(maker, name=name)
+	result = schemafier.make_schema(schema=schema)
+	return result
+
 class CoreJsonSchemafier(JsonSchemafier):
 
 	IGNORE_INTERFACES = (ICreated, ILastModified, ICreatedTime,
@@ -48,7 +54,7 @@ class CoreJsonSchemafier(JsonSchemafier):
 	def _process_object(self, field):
 		if	  IObject.providedBy(field) \
 			and field.schema is not interface.Interface:
-			base = field.schema.queryTaggedValue('_ext_mime_type') \
+			base = 		field.schema.queryTaggedValue('_ext_mime_type') \
 					or  get_ui_type_from_field_interface(field.schema) \
 					or  get_ui_type_from_interface(field.schema)
 			return base
@@ -83,13 +89,10 @@ class CoreJsonSchemafier(JsonSchemafier):
 				_, ui_base_type = self.get_data_from_choice_field(field.value_type)
 			elif IVariant.providedBy(field.value_type):
 				ui_base_type = self._process_variant(field.value_type, ui_type)
+		elif IObject.providedBy(field) and not ui_base_type:
+			ui_base_type = self._process_object(field)
+			ui_type = ui_type or 'Object'
 		return ui_type, ui_base_type
 
 	def post_process_field(self, name, field, item_schema):
 		super(CoreJsonSchemafier, self).post_process_field(name, field, item_schema)
-		
-def make_schema(schema, maker=IObjectJsonSchemaMaker):
-	name = schema.queryTaggedValue('_ext_jsonschema') or u''
-	schemafier = component.getUtility(maker, name=name)
-	result = schemafier.make_schema(schema=schema)
-	return result
