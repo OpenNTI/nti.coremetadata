@@ -210,9 +210,10 @@ class IObjectJsonSchemaMaker(interface.Interface):
 	Marker interface for an object Json Schema maker utility
 	"""
 
-	def make_schema(schema):
+	def make_schema(schema, user=None):
 		"""
 		Create the JSON schema.
 
-		param: schema: The zope schema to use.
+		:param schema The zope schema to use.
+		:param user The user (optional)
 		"""

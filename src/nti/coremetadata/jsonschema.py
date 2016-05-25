@@ -31,10 +31,10 @@ from nti.schema.jsonschema import get_ui_type_from_field_interface
 
 from nti.schema.jsonschema import JsonSchemafier
 
-def make_schema(schema, maker=IObjectJsonSchemaMaker):
+def make_schema(schema, user=None, maker=IObjectJsonSchemaMaker):
 	name = schema.queryTaggedValue('_ext_jsonschema') or u''
 	schemafier = component.getUtility(maker, name=name)
-	result = schemafier.make_schema(schema=schema)
+	result = schemafier.make_schema(schema=schema, user=user)
 	return result
 
 class CoreJsonSchemafier(JsonSchemafier):
