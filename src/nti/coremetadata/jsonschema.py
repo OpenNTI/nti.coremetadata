@@ -45,8 +45,7 @@ class CoreJsonSchemafier(JsonSchemafier):
 		return result
 
 	def _process_object(self, field):
-		if	  IObject.providedBy(field) \
-			and field.schema is not interface.Interface:
+		if IObject.providedBy(field) and field.schema is not interface.Interface:
 			base = 		field.schema.queryTaggedValue('_ext_mime_type') \
 					or  get_ui_type_from_field_interface(field.schema) \
 					or  get_ui_type_from_interface(field.schema)
