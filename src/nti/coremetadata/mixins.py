@@ -96,11 +96,11 @@ class RecordableContainerMixin(RecordableMixin):
 	def child_order_lock(self):
 		self.child_order_locked = True
 	childOrderLock = child_order_lock
-	
+
 	def child_order_unlock(self):
 		self.child_order_locked = False
 	childOrderUnlock = child_order_unlock
-	
+
 	def is_child_order_locked(self):
 		return self.child_order_locked
 	isChildOrderLocked = is_child_order_locked
@@ -118,16 +118,16 @@ class PublishableMixin(object):
 
 	def publish(self, *args, **kwargs):
 		if not self.is_published():
-			self.do_publish()
+			self.do_publish( **kwargs )
 
 	def do_unpublish(self, event=True):
 		interface.noLongerProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectUnpublishedEvent(self))
 
-	def unpublish(self):
+	def unpublish(self, **kwargs):
 		if self.is_published():
-			self.do_unpublish()
+			self.do_unpublish( **kwargs )
 
 	def is_published(self):
 		return IDefaultPublished.providedBy(self)
@@ -139,18 +139,18 @@ class CalendarPublishableMixin(PublishableMixin):
 	publishEnding = None
 	publishBeginning = None
 
-	def publish(self, start=None, end=None):
+	def publish(self, start=None, end=None, **kwargs):
 		if start is None:
 			# Explicit publish, reset any dates we have.
 			# The user may publish but specify just an end date.
-			self.do_publish()
+			self.do_publish( **kwargs )
 		else:
 			interface.noLongerProvides(self, IDefaultPublished)
 		self.publishEnding = end
 		self.publishBeginning = start
 
-	def unpublish(self):
-		self.do_unpublish()
+	def unpublish(self, **kwargs):
+		self.do_unpublish( **kwargs )
 		self.publishEnding = None
 		self.publishBeginning = None
 
@@ -162,7 +162,7 @@ class CalendarPublishableMixin(PublishableMixin):
 		now = datetime.utcnow()
 		end = self.publishEnding
 		start = self.publishBeginning
-		result =  	(	IDefaultPublished.providedBy(self) 
+		result =  	(	IDefaultPublished.providedBy(self)
 					 or (start is not None and now > start) ) \
 				and (end is None or now < end)
 		return bool(result)
