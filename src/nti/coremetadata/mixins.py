@@ -111,7 +111,7 @@ class PublishableMixin(object):
 	def __init__(self, *args, **kwargs):
 		super(PublishableMixin, self).__init__(*args, **kwargs)
 
-	def do_publish(self, event=True):
+	def do_publish(self, event=True, **kwargs):
 		interface.alsoProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectPublishedEvent(self))
@@ -120,7 +120,7 @@ class PublishableMixin(object):
 		if not self.is_published():
 			self.do_publish( **kwargs )
 
-	def do_unpublish(self, event=True):
+	def do_unpublish(self, event=True, **kwargs):
 		interface.noLongerProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectUnpublishedEvent(self))
