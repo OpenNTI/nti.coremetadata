@@ -5,6 +5,7 @@
 """
 
 from __future__ import print_function, unicode_literals, absolute_import, division
+from zope.schema._bootstrapinterfaces import IFromUnicode
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -81,6 +82,9 @@ class CoreJsonSchemafier(JsonSchemafier):
 				_, ui_base_type = self.get_data_from_choice_field(field.value_type)
 			elif IVariant.providedBy(field.value_type):
 				ui_base_type = self._process_variant(field.value_type, ui_type)
+			elif IFromUnicode.providedBy(field.value_type):
+				ui_base_type = 'string'
+			ui_type = ui_type or 'List'
 		elif IObject.providedBy(field) and not ui_base_type:
 			ui_base_type = self._process_object(field)
 			ui_type = ui_type or 'Object'
