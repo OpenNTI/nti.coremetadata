@@ -5,7 +5,6 @@
 """
 
 from __future__ import print_function, unicode_literals, absolute_import, division
-from zope.schema._bootstrapinterfaces import IFromUnicode
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -15,6 +14,7 @@ from zope import interface
 from zope.schema.interfaces import IList
 from zope.schema.interfaces import IChoice
 from zope.schema.interfaces import IObject
+from zope.schema.interfaces import IFromUnicode
 
 from nti.coremetadata.interfaces import ICreated
 from nti.coremetadata.interfaces import IRecordable
