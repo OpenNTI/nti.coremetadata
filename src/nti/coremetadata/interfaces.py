@@ -154,6 +154,42 @@ class ObjectPublishedEvent(ObjectEvent):
 class ObjectUnpublishedEvent(ObjectEvent):
 	pass
 
+class IObjectLockedEvent(IObjectEvent):
+	"""
+	An event that is sent, when an object has been locked
+	"""
+
+class IObjectUnlockedEvent(IObjectEvent):
+	"""
+	An event that is sent, when an object has been unlocked
+	"""
+
+@interface.implementer(IObjectLockedEvent)
+class ObjectLockedEvent(ObjectEvent):
+	pass
+
+@interface.implementer(IObjectUnlockedEvent)
+class ObjectUnlockedEvent(ObjectEvent):
+	pass
+
+class IObjectChildOrderLockedEvent(IObjectEvent):
+	"""
+	An event that is sent, when an object has been child-order-locked
+	"""
+
+class IObjectChildOrderUnlockedEvent(IObjectEvent):
+	"""
+	An event that is sent, when an object has been child-order-unlocked
+	"""
+
+@interface.implementer(IObjectChildOrderLockedEvent)
+class ObjectChildOrderLockedEvent(ObjectEvent):
+	pass
+
+@interface.implementer(IObjectChildOrderUnlockedEvent)
+class ObjectChildOrderUnlockedEvent(ObjectEvent):
+	pass
+
 class IPublishable(interface.Interface):
 
 	def publish():

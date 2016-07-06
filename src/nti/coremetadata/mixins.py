@@ -24,8 +24,12 @@ from nti.coremetadata.interfaces import IDefaultPublished
 from nti.coremetadata.interfaces import ICalendarPublishable
 from nti.coremetadata.interfaces import IRecordableContainer
 
+from nti.coremetadata.interfaces import ObjectLockedEvent
+from nti.coremetadata.interfaces import ObjectUnlockedEvent
 from nti.coremetadata.interfaces import ObjectPublishedEvent
 from nti.coremetadata.interfaces import ObjectUnpublishedEvent
+from nti.coremetadata.interfaces import ObjectChildOrderLockedEvent
+from nti.coremetadata.interfaces import ObjectChildOrderUnlockedEvent
 
 class CreatedTimeMixin(object):
 
@@ -77,9 +81,11 @@ class RecordableMixin(object):
 
 	def lock(self):
 		self.locked = True
+		notify(ObjectLockedEvent(self))
 
 	def unlock(self):
 		self.locked = False
+		notify(ObjectUnlockedEvent(self))
 
 	def isLocked(self):
 		return self.locked
@@ -95,10 +101,12 @@ class RecordableContainerMixin(RecordableMixin):
 
 	def child_order_lock(self):
 		self.child_order_locked = True
+		notify(ObjectChildOrderLockedEvent(self))
 	childOrderLock = child_order_lock
 
 	def child_order_unlock(self):
 		self.child_order_locked = False
+		notify(ObjectChildOrderUnlockedEvent(self))
 	childOrderUnlock = child_order_unlock
 
 	def is_child_order_locked(self):
