@@ -79,12 +79,12 @@ class RecordableMixin(object):
 	def __init__(self, *args, **kwargs):
 		super(RecordableMixin, self).__init__(*args, **kwargs)
 
-	def lock(self, event=True):
+	def lock(self, event=True, **kwargs):
 		self.locked = True
 		if event:
 			notify(ObjectLockedEvent(self))
 
-	def unlock(self, event=True):
+	def unlock(self, event=True, **kwargs):
 		self.locked = False
 		if event:
 			notify(ObjectUnlockedEvent(self))
@@ -101,13 +101,13 @@ class RecordableContainerMixin(RecordableMixin):
 	def __init__(self, *args, **kwargs):
 		super(RecordableContainerMixin, self).__init__(*args, **kwargs)
 
-	def child_order_lock(self, event=True):
+	def child_order_lock(self, event=True, **kwargs):
 		self.child_order_locked = True
 		if event:
 			notify(ObjectChildOrderLockedEvent(self))
 	childOrderLock = child_order_lock
 
-	def child_order_unlock(self, event=True):
+	def child_order_unlock(self, event=True, **kwargs):
 		self.child_order_locked = False
 		if event:
 			notify(ObjectChildOrderUnlockedEvent(self))
