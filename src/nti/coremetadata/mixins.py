@@ -31,6 +31,8 @@ from nti.coremetadata.interfaces import ObjectUnpublishedEvent
 from nti.coremetadata.interfaces import ObjectChildOrderLockedEvent
 from nti.coremetadata.interfaces import ObjectChildOrderUnlockedEvent
 
+from nti.externalization.internalization import notifyModified
+
 class CreatedTimeMixin(object):
 
 	_SET_CREATED_MODTIME_ON_INIT = True
@@ -167,7 +169,10 @@ class CalendarPublishableMixin(PublishableMixin):
 			# The user may publish but specify just an end date.
 			self.do_publish( **kwargs )
 		else:
+			# Update mod time and notify our object is changing.
 			self._update_publish_last_mod()
+			notifyModified( self, {'publishBeginning': start,
+								   'publishEnding': end })
 			interface.noLongerProvides(self, IDefaultPublished)
 		self.publishEnding = end
 		self.publishBeginning = start
