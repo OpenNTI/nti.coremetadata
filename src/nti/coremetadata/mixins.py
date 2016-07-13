@@ -120,10 +120,19 @@ class RecordableContainerMixin(RecordableMixin):
 @interface.implementer(IPublishable)
 class PublishableMixin(object):
 
+	publishLastModified = None
+
 	def __init__(self, *args, **kwargs):
 		super(PublishableMixin, self).__init__(*args, **kwargs)
 
+	def _update_publish_last_mod(self):
+		"""
+		Update the publish last modification time.
+		"""
+		self.publishLastModified = time.time()
+
 	def do_publish(self, event=True, **kwargs):
+		self._update_publish_last_mod()
 		interface.alsoProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectPublishedEvent(self))
@@ -133,6 +142,7 @@ class PublishableMixin(object):
 			self.do_publish( **kwargs )
 
 	def do_unpublish(self, event=True, **kwargs):
+		self._update_publish_last_mod()
 		interface.noLongerProvides(self, IDefaultPublished)
 		if event:
 			notify(ObjectUnpublishedEvent(self))
@@ -157,6 +167,7 @@ class CalendarPublishableMixin(PublishableMixin):
 			# The user may publish but specify just an end date.
 			self.do_publish( **kwargs )
 		else:
+			self._update_publish_last_mod()
 			interface.noLongerProvides(self, IDefaultPublished)
 		self.publishEnding = end
 		self.publishBeginning = start

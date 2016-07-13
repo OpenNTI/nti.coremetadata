@@ -10,6 +10,7 @@ __docformat__ = "restructuredtext en"
 from hamcrest import is_
 from hamcrest import is_not
 from hamcrest import assert_that
+from hamcrest import greater_than
 from hamcrest import has_property
 does_not = is_not
 
@@ -35,6 +36,8 @@ from nti.coremetadata.mixins import RecordableContainerMixin
 from nti.coremetadata.mixins import CreatedAndModifiedTimeMixin
 
 from nti.coremetadata.tests import SharedConfiguringTestLayer
+
+from nti.testing.time import time_monotonically_increases
 
 class TestMixins(unittest.TestCase):
 
@@ -86,35 +89,55 @@ class TestMixins(unittest.TestCase):
 		c.unpublish()
 		assert_that(c, does_not(verifiably_provides(IDefaultPublished)))
 
+	@time_monotonically_increases
 	def test_publish_status(self):
 		obj = CalendarPublishableMixin()
 		assert_that( obj.is_published(), is_( False ))
 		yesterday = datetime.utcnow() - timedelta( days=1 )
 		tomorrow = yesterday + timedelta( days=2 )
+		last_mod = 0
 
 		obj.publish( start=yesterday )
 		assert_that( obj.is_published(), is_( True ))
+		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		last_mod = obj.publishLastModified
 
 		obj.publish( start=tomorrow )
 		assert_that( obj.is_published(), is_( False ))
+		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		last_mod = obj.publishLastModified
 
 		obj.publish()
 		assert_that( obj.is_published(), is_( True ))
+		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		last_mod = obj.publishLastModified
 
 		obj.publish( start=tomorrow )
 		assert_that( obj.is_published(), is_( False ))
+		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		last_mod = obj.publishLastModified
 
 		obj.publish( start=yesterday )
 		assert_that( obj.is_published(), is_( True ))
+		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		last_mod = obj.publishLastModified
 
 		obj.publish( start=tomorrow, end=tomorrow )
 		assert_that( obj.is_published(), is_( False ))
+		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		last_mod = obj.publishLastModified
 
 		obj.publish( start=yesterday, end=tomorrow )
 		assert_that( obj.is_published(), is_( True ))
+		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		last_mod = obj.publishLastModified
 
 		obj.publish( start=yesterday, end=yesterday )
 		assert_that( obj.is_published(), is_( False ))
+		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		last_mod = obj.publishLastModified
 
 		obj.publish()
 		assert_that( obj.is_published(), is_( True ))
+		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		last_mod = obj.publishLastModified

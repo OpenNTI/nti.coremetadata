@@ -85,12 +85,12 @@ class IRecordable(interface.Interface):
 	"""
 	locked = Bool("If this object is locked.", default=False, required=False)
 	locked.setTaggedValue('_ext_excluded_out', True)
-	
+
 	def lock():
 		"""
 		lock this object
 		"""
-		
+
 	def unlock():
 		"""
 		unlock this object
@@ -115,19 +115,19 @@ class IRecordableContainer(IRecordable):
 		child order lock this object
 		"""
 	childOrderLock = child_order_lock
-	
+
 	def child_order_unlock():
 		"""
 		child order unlock this object
 		"""
 	childOrderUnlock = child_order_unlock
-	
+
 	def is_child_order_locked():
 		"""
 		return if this object is child order locked
 		"""
 	isChildOrderLocked = is_child_order_locked
-	
+
 class IDefaultPublished(interface.Interface):
 	"""
 	A marker interface mixed in to an instance to specify
@@ -192,6 +192,10 @@ class ObjectChildOrderUnlockedEvent(ObjectEvent):
 
 class IPublishable(interface.Interface):
 
+	publishLastModified = Number(title=u"The timestamp at which this object updated its publication state.",
+						  		 default=0.0,
+						  		 required=False)
+
 	def publish():
 		"""
 		Cause this object to provide :class:`IDefaultPublished`
@@ -213,18 +217,18 @@ class ICalendarPublishable(IPublishable):
 	publishBeginning = ValidDatetime(
 		title="This object is not available before this time",
 		description="""When present, this specifies the time instant at which
-		this obj is to be available.""",
+					   this obj is to be available.""",
 		required=False)
 
 	publishEnding = ValidDatetime(
 		title="This object is not available after this time",
 		description="""When present, this specifies the last instance at which
-		this obj is to be available.""",
+					   this obj is to be available.""",
 		required=False)
 
 class INoPublishLink(interface.Interface):
 	"""
-	Marker interface for objects that are publishable but no links to 
+	Marker interface for objects that are publishable but no links to
 	publish operations should be provided
 	"""
 INoPublishLink.setTaggedValue('_ext_is_marker_interface', True)
