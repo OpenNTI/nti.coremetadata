@@ -12,6 +12,9 @@ from zope import interface
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+
 from zope.schema import Iterable
 
 from zope.security.management import system_user
@@ -212,7 +215,7 @@ class IPublishable(interface.Interface):
 		"""
 	isPublished = is_published
 
-class ICalendarPublishable(IPublishable):
+class ICalendarPublishableMixin(interface.Interface):
 
 	publishBeginning = ValidDatetime(
 		title="This object is not available before this time",
@@ -225,6 +228,22 @@ class ICalendarPublishable(IPublishable):
 		description="""When present, this specifies the last instance at which
 					   this obj is to be available.""",
 		required=False)
+
+class ICalendarPublishable(IPublishable, ICalendarPublishableMixin):
+	pass
+
+class ICalendarPublishableModifiedEvent(IObjectModifiedEvent, ICalendarPublishableMixin):
+	"""
+	An event that is sent, when an calendar publishable object is modified
+	"""
+
+@interface.implementer(ICalendarPublishableModifiedEvent)
+class CalendarPublishableModifiedEvent(ObjectModifiedEvent):
+
+	def __init__(self, obj, publishBeginning=None, publishEnding=None, *descriptions):
+		super(CalendarPublishableModifiedEvent, self).__init__(obj, *descriptions)
+		self.publishEnding = publishEnding
+		self.publishBeginning = publishBeginning
 
 class INoPublishLink(interface.Interface):
 	"""

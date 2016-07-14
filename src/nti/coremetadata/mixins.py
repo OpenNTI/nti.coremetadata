@@ -30,8 +30,7 @@ from nti.coremetadata.interfaces import ObjectPublishedEvent
 from nti.coremetadata.interfaces import ObjectUnpublishedEvent
 from nti.coremetadata.interfaces import ObjectChildOrderLockedEvent
 from nti.coremetadata.interfaces import ObjectChildOrderUnlockedEvent
-
-from nti.externalization.internalization import notifyModified
+from nti.coremetadata.interfaces import CalendarPublishableModifiedEvent
 
 class CreatedTimeMixin(object):
 
@@ -132,7 +131,8 @@ class PublishableMixin(object):
 		Update the publish last modification time.
 		"""
 		self.publishLastModified = time.time()
-
+	updatePublishLastModified = _update_publish_last_mod
+	
 	def do_publish(self, event=True, **kwargs):
 		self._update_publish_last_mod()
 		interface.alsoProvides(self, IDefaultPublished)
@@ -171,8 +171,7 @@ class CalendarPublishableMixin(PublishableMixin):
 		else:
 			# Update mod time and notify our object is changing.
 			self._update_publish_last_mod()
-			notifyModified( self, {'publishBeginning': start,
-								   'publishEnding': end })
+			notify(CalendarPublishableModifiedEvent(self, start, end))
 			interface.noLongerProvides(self, IDefaultPublished)
 		self.publishEnding = end
 		self.publishBeginning = start
