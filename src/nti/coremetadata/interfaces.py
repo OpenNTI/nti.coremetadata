@@ -276,3 +276,13 @@ class IObjectJsonSchemaMaker(interface.Interface):
 		:param schema The zope schema to use.
 		:param user The user (optional)
 		"""
+
+class IIdentity(interface.Interface):
+	"""
+	Base interface for Identity base objects
+	"""
+
+class IExternalService(interface.Interface):
+	"""
+	Base interface for external services
+	"""
