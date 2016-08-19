@@ -47,9 +47,10 @@ setup(
 		'zope.component',
 		'zope.event',
 		'zope.interface',
+		'zope.lifecycleevent',
 		'zope.schema',
 		'zope.security',
-		'nti.common',
+		'nti.property',
 		'nti.schema'
 	],
 	extras_require={
