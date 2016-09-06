@@ -89,14 +89,18 @@ class IRecordable(interface.Interface):
 	locked = Bool("If this object is locked.", default=False, required=False)
 	locked.setTaggedValue('_ext_excluded_out', True)
 
-	def lock():
+	def lock(event=True):
 		"""
 		lock this object
+		
+		:param event: Notify lock event
 		"""
 
-	def unlock():
+	def unlock(event=True):
 		"""
 		unlock this object
+		
+		:param event: Notify unlock event
 		"""
 
 	def isLocked():
@@ -113,15 +117,19 @@ class IRecordableContainer(IRecordable):
 							  default=False, required=False)
 	child_order_locked.setTaggedValue('_ext_excluded_out', True)
 
-	def child_order_lock():
+	def child_order_lock(event=True):
 		"""
 		child order lock this object
+		
+		:param event: Notify lock event
 		"""
 	childOrderLock = child_order_lock
 
-	def child_order_unlock():
+	def child_order_unlock(event=True):
 		"""
 		child order unlock this object
+		
+		:param event: Notify unlock event
 		"""
 	childOrderUnlock = child_order_unlock
 
