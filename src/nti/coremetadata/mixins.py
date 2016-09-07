@@ -132,7 +132,7 @@ class PublishableMixin(object):
 		"""
 		self.publishLastModified = time.time()
 	updatePublishLastModified = _update_publish_last_mod
-	
+
 	def do_publish(self, event=True, **kwargs):
 		self._update_publish_last_mod()
 		interface.alsoProvides(self, IDefaultPublished)
@@ -141,7 +141,7 @@ class PublishableMixin(object):
 
 	def publish(self, *args, **kwargs):
 		if not self.is_published():
-			self.do_publish( **kwargs )
+			self.do_publish(**kwargs)
 
 	def do_unpublish(self, event=True, **kwargs):
 		self._update_publish_last_mod()
@@ -151,7 +151,7 @@ class PublishableMixin(object):
 
 	def unpublish(self, **kwargs):
 		if self.is_published():
-			self.do_unpublish( **kwargs )
+			self.do_unpublish(**kwargs)
 
 	def is_published(self):
 		return IDefaultPublished.providedBy(self)
@@ -167,7 +167,7 @@ class CalendarPublishableMixin(PublishableMixin):
 		if start is None:
 			# Explicit publish, reset any dates we have.
 			# The user may publish but specify just an end date.
-			self.do_publish( **kwargs )
+			self.do_publish(**kwargs)
 		else:
 			# Update mod time and notify our object is changing.
 			self._update_publish_last_mod()
@@ -177,7 +177,7 @@ class CalendarPublishableMixin(PublishableMixin):
 		self.publishBeginning = start
 
 	def unpublish(self, **kwargs):
-		self.do_unpublish( **kwargs )
+		self.do_unpublish(**kwargs)
 		self.publishEnding = None
 		self.publishBeginning = None
 
@@ -189,8 +189,8 @@ class CalendarPublishableMixin(PublishableMixin):
 		now = datetime.utcnow()
 		end = self.publishEnding
 		start = self.publishBeginning
-		result =  	(	IDefaultPublished.providedBy(self)
-					 or (start is not None and now > start) ) \
+		result = 	(IDefaultPublished.providedBy(self)
+					 or (start is not None and now > start)) \
 				and (end is None or now < end)
 		return bool(result)
 	isPublished = is_published

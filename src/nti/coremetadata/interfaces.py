@@ -207,14 +207,18 @@ class IPublishable(interface.Interface):
 						  		 default=0.0,
 						  		 required=False)
 
-	def publish():
+	def publish(event=True):
 		"""
 		Cause this object to provide :class:`IDefaultPublished`
+		
+		:param event: Notify unlock event
 		"""
 
-	def unpublish():
+	def unpublish(event=True):
 		"""
 		Cause this object to no longer provide :class:`IDefaultPublished`
+		
+		:param event: Notify unlock event
 		"""
 
 	def is_published():
