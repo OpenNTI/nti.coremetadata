@@ -149,7 +149,7 @@ class PublishableMixin(object):
 		if event:
 			notify(ObjectUnpublishedEvent(self))
 
-	def unpublish(self, **kwargs):
+	def unpublish(self, *args, **kwargs):
 		if self.is_published():
 			self.do_unpublish(**kwargs)
 
@@ -176,7 +176,7 @@ class CalendarPublishableMixin(PublishableMixin):
 		self.publishEnding = end
 		self.publishBeginning = start
 
-	def unpublish(self, **kwargs):
+	def unpublish(self, *args, **kwargs):
 		self.do_unpublish(**kwargs)
 		self.publishEnding = None
 		self.publishBeginning = None
