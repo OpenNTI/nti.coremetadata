@@ -8,5 +8,11 @@
 	<include package="zope.security" file="meta.zcml" />
 	<include package="zope.component" />
 	<include package="zope.security" />
+	
+	<subscriber	factory=".predicates.DefaultPublishablePredicate"
+				provides=".interfaces.IPublishablePredicate"/>
+	
+	<subscriber	factory=".predicates.DefaultCalendarPublishablePredicate"
+				provides=".interfaces.ICalendarPublishablePredicate"/>
 
 </configure>

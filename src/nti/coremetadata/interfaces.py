@@ -7,6 +7,7 @@
 from __future__ import print_function, unicode_literals, absolute_import, division
 __docformat__ = "restructuredtext en"
 
+from zope import component
 from zope import interface
 
 from zope.interface.interfaces import ObjectEvent
@@ -221,7 +222,7 @@ class IPublishable(interface.Interface):
 		:param event: Notify unlock event
 		"""
 
-	def is_published():
+	def is_published(*args, **kwargs):
 		"""
 		Return if this object is published
 		"""
@@ -264,6 +265,32 @@ class INoPublishLink(interface.Interface):
 	"""
 INoPublishLink.setTaggedValue('_ext_is_marker_interface', True)
 
+class IPublishablePredicate(interface.Interface):
+	"""
+	Subscriber for publishable objects to determiend if an object
+	is published
+	"""
+	
+	def is_published(publishable, principal=None, context=None, *args, **kwargs):
+		"""
+		return if the specified publishable is published for the given 
+		principal and context
+		"""
+	isPublished = is_published
+
+class ICalendarPublishablePredicate(interface.Interface):
+	"""
+	Subscriber for calendar-publishable objects to determiend if an object
+	is published
+	"""
+	
+	def is_published(publishable, principal=None, context=None, *args, **kwargs):
+		"""
+		return if the specified calendar publishable is published for the given 
+		principal and context
+		"""
+	isPublished = is_published
+
 class IContent(ILastModified, ICreated):
 	"""
 	It's All Content.
@@ -298,3 +325,15 @@ class IExternalService(interface.Interface):
 	"""
 	Base interface for external services
 	"""
+
+def get_publishable_predicate(publishable):
+	predicates = list(component.subscribers((publishable,), IPublishablePredicate))
+	def uber_filter(publishable, *args, **kwargs):
+		return all((f.is_published(publishable, *args, **kwargs) for f in predicates))
+	return uber_filter
+
+def get_calendar_publishable_predicate(publishable):
+	predicates = list(component.subscribers((publishable,), ICalendarPublishablePredicate))
+	def uber_filter(publishable, *args, **kwargs):
+		return all((f.is_published(publishable, *args, **kwargs) for f in predicates))
+	return uber_filter

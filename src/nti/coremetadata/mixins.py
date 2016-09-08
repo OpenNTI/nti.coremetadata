@@ -17,6 +17,11 @@ from zope import interface
 
 from zope.event import notify
 
+from zope.security.interfaces import NoInteraction 
+from zope.security.management import getInteraction
+
+from zope.security.management import system_user
+
 from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import ILastModified
@@ -31,6 +36,14 @@ from nti.coremetadata.interfaces import ObjectUnpublishedEvent
 from nti.coremetadata.interfaces import ObjectChildOrderLockedEvent
 from nti.coremetadata.interfaces import ObjectChildOrderUnlockedEvent
 from nti.coremetadata.interfaces import CalendarPublishableModifiedEvent
+
+def current_principal(self):
+	try:
+		result = getInteraction().participations[0].principal
+	except (NoInteraction, IndexError, AttributeError):
+		result = system_user
+	return result
+currentPrincipal = current_principal
 
 class CreatedTimeMixin(object):
 
@@ -153,7 +166,7 @@ class PublishableMixin(object):
 		if self.is_published():
 			self.do_unpublish(**kwargs)
 
-	def is_published(self):
+	def is_published(self, *args, **kwargs):
 		return IDefaultPublished.providedBy(self)
 	isPublished = is_published
 
@@ -181,7 +194,7 @@ class CalendarPublishableMixin(PublishableMixin):
 		self.publishEnding = None
 		self.publishBeginning = None
 
-	def is_published(self):
+	def is_published(self, *args, **kwargs):
 		"""
 		Published if either explicitly published or after
 		our start date and before our end date, if provided.
