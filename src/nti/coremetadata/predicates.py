@@ -46,7 +46,7 @@ class DefaultCalendarPublishablePredicate(object):
         now = datetime.utcnow()
         end = publishable.publishEnding
         start = publishable.publishBeginning
-        result =     (   IDefaultPublished.providedBy(self)
+        result =     (   IDefaultPublished.providedBy(publishable)
                       or (start is not None and now > start)) \
                 and (end is None or now < end)
         return bool(result)

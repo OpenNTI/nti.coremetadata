@@ -11,8 +11,6 @@ logger = __import__('logging').getLogger(__name__)
 
 import time
 
-from datetime import datetime
-
 from zope import interface
 
 from zope.event import notify
@@ -37,7 +35,10 @@ from nti.coremetadata.interfaces import ObjectChildOrderLockedEvent
 from nti.coremetadata.interfaces import ObjectChildOrderUnlockedEvent
 from nti.coremetadata.interfaces import CalendarPublishableModifiedEvent
 
-def current_principal(self):
+from nti.coremetadata.interfaces import get_publishable_predicate
+from nti.coremetadata.interfaces import get_calendar_publishable_predicate
+
+def current_principal():
 	try:
 		result = getInteraction().participations[0].principal
 	except (NoInteraction, IndexError, AttributeError):
@@ -167,7 +168,9 @@ class PublishableMixin(object):
 			self.do_unpublish(**kwargs)
 
 	def is_published(self, *args, **kwargs):
-		return IDefaultPublished.providedBy(self)
+		kwargs['principal'] = kwargs.get('principal') or current_principal()
+		predicate = get_publishable_predicate(self)
+		return predicate(self, *args, **kwargs)
 	isPublished = is_published
 
 @interface.implementer(ICalendarPublishable)
@@ -199,11 +202,7 @@ class CalendarPublishableMixin(PublishableMixin):
 		Published if either explicitly published or after
 		our start date and before our end date, if provided.
 		"""
-		now = datetime.utcnow()
-		end = self.publishEnding
-		start = self.publishBeginning
-		result = 	(IDefaultPublished.providedBy(self)
-					 or (start is not None and now > start)) \
-				and (end is None or now < end)
-		return bool(result)
+		kwargs['principal'] = kwargs.get('principal') or current_principal()
+		predicate = get_calendar_publishable_predicate(self)
+		return predicate(self, *args, **kwargs)
 	isPublished = is_published

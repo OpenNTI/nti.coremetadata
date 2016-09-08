@@ -329,11 +329,11 @@ class IExternalService(interface.Interface):
 def get_publishable_predicate(publishable):
 	predicates = list(component.subscribers((publishable,), IPublishablePredicate))
 	def uber_filter(publishable, *args, **kwargs):
-		return all((f.is_published(publishable, *args, **kwargs) for f in predicates))
+		return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
 	return uber_filter
 
 def get_calendar_publishable_predicate(publishable):
 	predicates = list(component.subscribers((publishable,), ICalendarPublishablePredicate))
 	def uber_filter(publishable, *args, **kwargs):
-		return all((f.is_published(publishable, *args, **kwargs) for f in predicates))
+		return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
 	return uber_filter

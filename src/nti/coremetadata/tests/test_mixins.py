@@ -85,9 +85,11 @@ class TestMixins(unittest.TestCase):
 
 		c.publish()
 		assert_that(c, verifiably_provides(IDefaultPublished))
+		assert_that(c.isPublished(), is_(True))
 
 		c.unpublish()
 		assert_that(c, does_not(verifiably_provides(IDefaultPublished)))
+		assert_that(c.isPublished(), is_(False))
 
 	@time_monotonically_increases
 	def test_publish_status(self):
