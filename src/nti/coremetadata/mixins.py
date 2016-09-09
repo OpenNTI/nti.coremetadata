@@ -15,11 +15,6 @@ from zope import interface
 
 from zope.event import notify
 
-from zope.security.interfaces import NoInteraction 
-from zope.security.management import getInteraction
-
-from zope.security.management import system_user
-
 from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import ILastModified
@@ -35,16 +30,8 @@ from nti.coremetadata.interfaces import ObjectChildOrderLockedEvent
 from nti.coremetadata.interfaces import ObjectChildOrderUnlockedEvent
 from nti.coremetadata.interfaces import CalendarPublishableModifiedEvent
 
-from nti.coremetadata.interfaces import get_publishable_predicate
-from nti.coremetadata.interfaces import get_calendar_publishable_predicate
-
-def current_principal():
-	try:
-		result = getInteraction().participations[0].principal
-	except (NoInteraction, IndexError, AttributeError):
-		result = system_user
-	return result
-currentPrincipal = current_principal
+from nti.coremetadata.utils import is_published
+from nti.coremetadata.utils import is_calendar_published
 
 class CreatedTimeMixin(object):
 
@@ -168,9 +155,7 @@ class PublishableMixin(object):
 			self.do_unpublish(**kwargs)
 
 	def is_published(self, *args, **kwargs):
-		kwargs['principal'] = kwargs.get('principal') or current_principal()
-		predicate = get_publishable_predicate(self)
-		return predicate(self, *args, **kwargs)
+		return is_published(self, *args, **kwargs)
 	isPublished = is_published
 
 @interface.implementer(ICalendarPublishable)
@@ -198,11 +183,5 @@ class CalendarPublishableMixin(PublishableMixin):
 		self.publishBeginning = None
 
 	def is_published(self, *args, **kwargs):
-		"""
-		Published if either explicitly published or after
-		our start date and before our end date, if provided.
-		"""
-		kwargs['principal'] = kwargs.get('principal') or current_principal()
-		predicate = get_calendar_publishable_predicate(self)
-		return predicate(self, *args, **kwargs)
+		return is_calendar_published(self, *args, **kwargs)
 	isPublished = is_published

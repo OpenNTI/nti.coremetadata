@@ -43,6 +43,10 @@ class DefaultCalendarPublishablePredicate(object):
         pass
 
     def is_published(self, publishable, *args, **kwargs):
+        """
+        Published if either explicitly published or after
+        our start date and before our end date, if provided.
+        """
         now = datetime.utcnow()
         end = publishable.publishEnding
         start = publishable.publishBeginning
