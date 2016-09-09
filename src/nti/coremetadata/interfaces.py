@@ -326,14 +326,16 @@ class IExternalService(interface.Interface):
 	Base interface for external services
 	"""
 
-def get_publishable_predicate(publishable):
-	predicates = list(component.subscribers((publishable,), IPublishablePredicate))
+def get_publishable_predicate(publishable, interface=None):
+	interface = IPublishablePredicate if interface is None else interface
+	predicates = list(component.subscribers((publishable,), interface))
 	def uber_filter(publishable, *args, **kwargs):
 		return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
 	return uber_filter
 
-def get_calendar_publishable_predicate(publishable):
-	predicates = list(component.subscribers((publishable,), ICalendarPublishablePredicate))
+def get_calendar_publishable_predicate(publishable, interface=None):
+	interface = ICalendarPublishablePredicate if interface is None else interface
+	predicates = list(component.subscribers((publishable,), interface))
 	def uber_filter(publishable, *args, **kwargs):
 		return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
 	return uber_filter

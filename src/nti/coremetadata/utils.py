@@ -34,14 +34,14 @@ def make_schema(schema, user=None, maker=IObjectJsonSchemaMaker):
 	result = schemafier.make_schema(schema=schema, user=user)
 	return result
 
-def is_published(self, *args, **kwargs):
+def is_published(self, interface=None, *args, **kwargs):
 	kwargs['principal'] = kwargs.get('principal') or current_principal()
-	predicate = get_publishable_predicate(self)
+	predicate = get_publishable_predicate(self, interface)
 	return predicate(self, *args, **kwargs)
 isPublished = is_published
 
-def is_calendar_published(self, *args, **kwargs):
+def is_calendar_published(self, interface=None, *args, **kwargs):
 	kwargs['principal'] = kwargs.get('principal') or current_principal()
-	predicate = get_calendar_publishable_predicate(self)
+	predicate = get_calendar_publishable_predicate(self, interface)
 	return predicate(self, *args, **kwargs)
 isCalendarPublished = is_calendar_published
