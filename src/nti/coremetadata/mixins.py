@@ -124,6 +124,8 @@ class PublishableMixin(object):
 
 	publishLastModified = None
 
+	__publication_predicate_interface__ = None
+	
 	def __init__(self, *args, **kwargs):
 		super(PublishableMixin, self).__init__(*args, **kwargs)
 
@@ -155,6 +157,10 @@ class PublishableMixin(object):
 			self.do_unpublish(**kwargs)
 
 	def is_published(self, *args, **kwargs):
+		interface = 	kwargs.get('interface', None) \
+					or	getattr(self, '__publication_predicate_interface__', None)
+		if interface is not None:
+			kwargs['interface'] = interface
 		return is_published(self, *args, **kwargs)
 	isPublished = is_published
 
@@ -183,5 +189,9 @@ class CalendarPublishableMixin(PublishableMixin):
 		self.publishBeginning = None
 
 	def is_published(self, *args, **kwargs):
+		interface = 	kwargs.get('interface', None) \
+					or	getattr(self, '__publication_predicate_interface__', None)
+		if interface is not None:
+			kwargs['interface'] = interface
 		return is_calendar_published(self, *args, **kwargs)
 	isPublished = is_published
