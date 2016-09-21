@@ -20,11 +20,11 @@ from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 from nti.coremetadata.interfaces import get_publishable_predicate
 from nti.coremetadata.interfaces import get_calendar_publishable_predicate
 
-def current_principal():
+def current_principal(system=True):
 	try:
 		result = getInteraction().participations[0].principal
 	except (NoInteraction, IndexError, AttributeError):
-		result = system_user
+		result = system_user if system else None
 	return result
 currentPrincipal = current_principal
 
