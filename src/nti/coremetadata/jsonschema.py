@@ -21,6 +21,7 @@ from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import ICreatedTime
 from nti.coremetadata.interfaces import ILastModified
 from nti.coremetadata.interfaces import IRecordableContainer
+from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 
 from nti.schema.interfaces import IVariant
 from nti.schema.interfaces import IListOrTuple
@@ -30,6 +31,9 @@ from nti.schema.jsonschema import get_ui_type_from_interface
 from nti.schema.jsonschema import get_ui_type_from_field_interface
 
 from nti.schema.jsonschema import JsonSchemafier
+
+#: Fields attribute
+FIELDS = 'Fields'
 
 class CoreJsonSchemafier(JsonSchemafier):
 
@@ -92,3 +96,14 @@ class CoreJsonSchemafier(JsonSchemafier):
 
 	def post_process_field(self, name, field, item_schema):
 		super(CoreJsonSchemafier, self).post_process_field(name, field, item_schema)
+
+@interface.implementer(IObjectJsonSchemaMaker)
+class DefaultObjectJsonSchemaMaker(object):
+
+	maker = CoreJsonSchemafier
+
+	def make_schema(self, schema, user=None):
+		result = dict()
+		maker = self.maker(schema)
+		result[FIELDS] = maker.make_schema()
+		return result

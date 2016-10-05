@@ -15,4 +15,6 @@
 	<subscriber	factory=".predicates.DefaultCalendarPublishablePredicate"
 				provides=".interfaces.ICalendarPublishablePredicate"/>
 
+	<utility factory=".jsonschema.DefaultObjectJsonSchemaMaker" />
+
 </configure>
