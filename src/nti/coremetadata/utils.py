@@ -28,8 +28,8 @@ def current_principal(system=True):
 	return result
 currentPrincipal = current_principal
 
-def make_schema(schema, user=None, maker=IObjectJsonSchemaMaker):
-	name = schema.queryTaggedValue('_ext_jsonschema') or u''
+def make_schema(schema, user=None, maker=IObjectJsonSchemaMaker, name=u''):
+	name = schema.queryTaggedValue('_ext_jsonschema') or name
 	schemafier = component.getUtility(maker, name=name)
 	result = schemafier.make_schema(schema=schema, user=user)
 	return result
