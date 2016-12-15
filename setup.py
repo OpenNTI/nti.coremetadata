@@ -53,6 +53,7 @@ setup(
 		'zope.lifecycleevent',
 		'zope.schema',
 		'zope.security',
+		'nti.base',
 		'nti.property',
 		'nti.schema'
 	],
