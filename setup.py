@@ -54,6 +54,7 @@ setup(
 		'zope.schema',
 		'zope.security',
 		'nti.base',
+		'nti.contentfragments',
 		'nti.property',
 		'nti.schema'
 	],
