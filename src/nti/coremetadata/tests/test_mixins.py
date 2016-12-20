@@ -23,8 +23,10 @@ import unittest
 from datetime import datetime
 from datetime import timedelta
 
+from nti.base.interfaces import ICreatedTime
+from nti.base.mixins import CreatedAndModifiedTimeMixin
+
 from nti.coremetadata.interfaces import IRecordable
-from nti.coremetadata.interfaces import ICreatedTime
 from nti.coremetadata.interfaces import ILastModified
 from nti.coremetadata.interfaces import IDefaultPublished
 from nti.coremetadata.interfaces import ICalendarPublishable
@@ -33,7 +35,6 @@ from nti.coremetadata.interfaces import IRecordableContainer
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
 from nti.coremetadata.mixins import RecordableContainerMixin
-from nti.coremetadata.mixins import CreatedAndModifiedTimeMixin
 
 from nti.coremetadata.tests import SharedConfiguringTestLayer
 
@@ -94,52 +95,52 @@ class TestMixins(unittest.TestCase):
 	@time_monotonically_increases
 	def test_publish_status(self):
 		obj = CalendarPublishableMixin()
-		assert_that( obj.is_published(), is_( False ))
-		yesterday = datetime.utcnow() - timedelta( days=1 )
-		tomorrow = yesterday + timedelta( days=2 )
+		assert_that(obj.is_published(), is_(False))
+		yesterday = datetime.utcnow() - timedelta(days=1)
+		tomorrow = yesterday + timedelta(days=2)
 		last_mod = 0
 
-		obj.publish( start=yesterday )
-		assert_that( obj.is_published(), is_( True ))
-		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		obj.publish(start=yesterday)
+		assert_that(obj.is_published(), is_(True))
+		assert_that(obj.publishLastModified, greater_than(last_mod))
 		last_mod = obj.publishLastModified
 
-		obj.publish( start=tomorrow )
-		assert_that( obj.is_published(), is_( False ))
-		assert_that( obj.publishLastModified, greater_than( last_mod ))
-		last_mod = obj.publishLastModified
-
-		obj.publish()
-		assert_that( obj.is_published(), is_( True ))
-		assert_that( obj.publishLastModified, greater_than( last_mod ))
-		last_mod = obj.publishLastModified
-
-		obj.publish( start=tomorrow )
-		assert_that( obj.is_published(), is_( False ))
-		assert_that( obj.publishLastModified, greater_than( last_mod ))
-		last_mod = obj.publishLastModified
-
-		obj.publish( start=yesterday )
-		assert_that( obj.is_published(), is_( True ))
-		assert_that( obj.publishLastModified, greater_than( last_mod ))
-		last_mod = obj.publishLastModified
-
-		obj.publish( start=tomorrow, end=tomorrow )
-		assert_that( obj.is_published(), is_( False ))
-		assert_that( obj.publishLastModified, greater_than( last_mod ))
-		last_mod = obj.publishLastModified
-
-		obj.publish( start=yesterday, end=tomorrow )
-		assert_that( obj.is_published(), is_( True ))
-		assert_that( obj.publishLastModified, greater_than( last_mod ))
-		last_mod = obj.publishLastModified
-
-		obj.publish( start=yesterday, end=yesterday )
-		assert_that( obj.is_published(), is_( False ))
-		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		obj.publish(start=tomorrow)
+		assert_that(obj.is_published(), is_(False))
+		assert_that(obj.publishLastModified, greater_than(last_mod))
 		last_mod = obj.publishLastModified
 
 		obj.publish()
-		assert_that( obj.is_published(), is_( True ))
-		assert_that( obj.publishLastModified, greater_than( last_mod ))
+		assert_that(obj.is_published(), is_(True))
+		assert_that(obj.publishLastModified, greater_than(last_mod))
+		last_mod = obj.publishLastModified
+
+		obj.publish(start=tomorrow)
+		assert_that(obj.is_published(), is_(False))
+		assert_that(obj.publishLastModified, greater_than(last_mod))
+		last_mod = obj.publishLastModified
+
+		obj.publish(start=yesterday)
+		assert_that(obj.is_published(), is_(True))
+		assert_that(obj.publishLastModified, greater_than(last_mod))
+		last_mod = obj.publishLastModified
+
+		obj.publish(start=tomorrow, end=tomorrow)
+		assert_that(obj.is_published(), is_(False))
+		assert_that(obj.publishLastModified, greater_than(last_mod))
+		last_mod = obj.publishLastModified
+
+		obj.publish(start=yesterday, end=tomorrow)
+		assert_that(obj.is_published(), is_(True))
+		assert_that(obj.publishLastModified, greater_than(last_mod))
+		last_mod = obj.publishLastModified
+
+		obj.publish(start=yesterday, end=yesterday)
+		assert_that(obj.is_published(), is_(False))
+		assert_that(obj.publishLastModified, greater_than(last_mod))
+		last_mod = obj.publishLastModified
+
+		obj.publish()
+		assert_that(obj.is_published(), is_(True))
+		assert_that(obj.publishLastModified, greater_than(last_mod))
 		last_mod = obj.publishLastModified
