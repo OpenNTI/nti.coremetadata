@@ -16,10 +16,11 @@ from zope.schema.interfaces import IChoice
 from zope.schema.interfaces import IObject
 from zope.schema.interfaces import IFromUnicode
 
-from nti.coremetadata.interfaces import ICreated
+from nti.base.interfaces import ICreated
+from nti.base.interfaces import ICreatedTime
+from nti.base.interfaces import ILastModified
+
 from nti.coremetadata.interfaces import IRecordable
-from nti.coremetadata.interfaces import ICreatedTime
-from nti.coremetadata.interfaces import ILastModified
 from nti.coremetadata.interfaces import IRecordableContainer
 from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 
