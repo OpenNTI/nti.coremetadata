@@ -21,12 +21,17 @@ from zope.schema import Iterable
 
 from zope.security.management import system_user
 
+from nti.base.interfaces import ITitled
 from nti.base.interfaces import ICreated
 from nti.base.interfaces import ILastModified
+
+from nti.contentfragments.schema import Tag
+from nti.contentfragments.schema import Title
 
 from nti.schema.field import Bool
 from nti.schema.field import Number
 from nti.schema.field import ValidDatetime
+from nti.schema.field import TupleFromObject
 
 SYSTEM_USER_ID = system_user.id
 SYSTEM_USER_NAME = getattr(system_user, 'title').lower()
@@ -35,7 +40,6 @@ import zope.deferredimport
 zope.deferredimport.initialize()
 zope.deferredimport.deprecated(
 	"Import from nti.base.interfaces instead",
-	ITitled='nti.base.interfaces:ITitled',
 	ILastViewed='nti.base.interfaces:ILastViewed',
 	ICreatedTime='nti.base.interfaces:ICreatedTime',)
 
@@ -286,6 +290,24 @@ class IExternalService(interface.Interface):
 	"""
 	Base interface for external services
 	"""
+
+class ITitledContent(ITitled):
+	"""
+	A piece of content with a title, either human created or potentially
+	automatically generated. (This differs from, say, a person's honorrific title.
+	"""
+	title = Title()
+
+class ITaggedContent(interface.Interface):
+	"""
+	Something that can contain tags.
+	"""
+
+	tags = TupleFromObject(title="Applied Tags",
+						   value_type=Tag(min_length=1, title="A single tag",
+										  description=Tag.__doc__, __name__='tags'),
+						   unique=True,
+						   default=())
 
 def get_publishable_predicate(publishable, interface=None):
 	interface = IPublishablePredicate if interface is None else interface
