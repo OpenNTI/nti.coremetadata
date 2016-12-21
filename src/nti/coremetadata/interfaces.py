@@ -27,6 +27,8 @@ from zope.schema import Iterable
 
 from zope.security.management import system_user
 
+from nti.base.interfaces import IFile
+from nti.base.interfaces import INamed
 from nti.base.interfaces import ITitled
 from nti.base.interfaces import ICreated
 from nti.base.interfaces import ILastModified
@@ -38,6 +40,7 @@ from nti.schema.field import Bool
 from nti.schema.field import Number
 from nti.schema.field import Object
 from nti.schema.field import ListOrTuple
+from nti.schema.field import ValidTextLine
 from nti.schema.field import ValidDatetime
 from nti.schema.field import UniqueIterable
 from nti.schema.field import TupleFromObject
@@ -521,6 +524,62 @@ class IShareableModeledContent(IWritableShared, IModeledContent):
 		value_type=DecodingValidTextLine(title="The username or NTIID"),
 		required=False,
 		default=frozenset())
+
+class IModeledContentFile(IFile,
+						  INamed, 
+						  IThreadable,
+						  ILastModified,
+						  IShareableModeledContent):
+	name = ValidTextLine(title="Identifier for the file", required=False, default=None)
+IContentFile = IModeledContentFile # BWC
+
+# media types
+
+class ICanvas(IShareableModeledContent, IThreadable):
+	"""
+	A drawing or whiteboard that maintains a Z-ordered list of figures/shapes.
+	"""
+
+	def __getitem__(i):
+		"""
+		Retrieve the figure/shape at index `i`.
+		"""
+
+	def append(shape):
+		"""
+		Adds the shape to the top of the list of shapes.
+		"""
+
+class ICanvasShape(IZContained):
+	"""
+	Marker interface for a canvas shape
+	"""
+
+class ICanvasURLShape(ICanvasShape):
+	"""
+	Marker interface for a URL canvas shape
+	"""
+	url = interface.Attribute("Shape url")
+
+class IMedia(IShareableModeledContent, IThreadable):
+	"""
+	A media object
+	"""
+
+class IEmbeddedMedia(IMedia):
+	embedURL = ValidTextLine(title=u'media URL', required=True)
+	type = ValidTextLine(title=u'media type', required=False)
+
+class IEmbeddedVideo(IEmbeddedMedia):
+	"""
+	A video source object
+	"""
+	VideoId = ValidTextLine(title=u'the video identifier', required=False)
+
+class IEmbeddedAudio(IEmbeddedMedia):
+	"""
+	A audio source object
+	"""
 
 # schema maker
 
