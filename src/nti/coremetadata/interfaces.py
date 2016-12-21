@@ -13,7 +13,7 @@ from zope import interface
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
-from zope.container.interfaces import IContainer as IZContainer
+from zope.container.interfaces import IContainer
 
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -258,6 +258,22 @@ class ICalendarPublishablePredicate(interface.Interface):
 		"""
 	isPublished = is_published
 
+def get_publishable_predicate(publishable, interface=None):
+	interface = IPublishablePredicate if interface is None else interface
+	predicates = list(component.subscribers((publishable,), interface))
+	def uber_filter(publishable, *args, **kwargs):
+		return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
+	return uber_filter
+
+def get_calendar_publishable_predicate(publishable, interface=None):
+	interface = ICalendarPublishablePredicate if interface is None else interface
+	predicates = list(component.subscribers((publishable,), interface))
+	def uber_filter(publishable, *args, **kwargs):
+		return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
+	return uber_filter
+
+# content
+
 class IContent(ILastModified, ICreated):
 	"""
 	It's All Content.
@@ -269,29 +285,6 @@ class IModeledContentBody(interface.Interface):
 	with content
 	"""
 	body = Iterable(title="Content elements")
-
-class IObjectJsonSchemaMaker(interface.Interface):
-	"""
-	Marker interface for an object Json Schema maker utility
-	"""
-
-	def make_schema(schema, user=None):
-		"""
-		Create the JSON schema.
-
-		:param schema The zope schema to use.
-		:param user The user (optional)
-		"""
-
-class IIdentity(interface.Interface):
-	"""
-	Base interface for Identity base objects
-	"""
-
-class IExternalService(interface.Interface):
-	"""
-	Base interface for external services
-	"""
 
 class ITitledContent(ITitled):
 	"""
@@ -311,20 +304,41 @@ class ITaggedContent(interface.Interface):
 						   unique=True,
 						   default=())
 
+# schema maker
+
+class IObjectJsonSchemaMaker(interface.Interface):
+	"""
+	Marker interface for an object Json Schema maker utility
+	"""
+
+	def make_schema(schema, user=None):
+		"""
+		Create the JSON schema.
+
+		:param schema The zope schema to use.
+		:param user The user (optional)
+		"""
+
+# aux interfaces
+
+class IIdentity(interface.Interface):
+	"""
+	Base interface for Identity base objects
+	"""
+
+class IExternalService(interface.Interface):
+	"""
+	Base interface for external services
+	"""
+
 # Containers
 
-IContainer = IZContainer
+zope.deferredimport.deprecated(
+	"Import from zope.container.interfaces instead",
+	IZContainer='zope.container.interfaces:IContainer')
 
-def get_publishable_predicate(publishable, interface=None):
-	interface = IPublishablePredicate if interface is None else interface
-	predicates = list(component.subscribers((publishable,), interface))
-	def uber_filter(publishable, *args, **kwargs):
-		return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
-	return uber_filter
-
-def get_calendar_publishable_predicate(publishable, interface=None):
-	interface = ICalendarPublishablePredicate if interface is None else interface
-	predicates = list(component.subscribers((publishable,), interface))
-	def uber_filter(publishable, *args, **kwargs):
-		return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
-	return uber_filter
+class INamedContainer(IContainer):
+	"""
+	A container with a name.
+	"""
+	container_name = interface.Attribute("The human-readable nome of this container.")
