@@ -19,6 +19,10 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
+from zope.location.interfaces import IContained as IZContained
+
+from zope.mimetype.interfaces import IContentTypeAware
+
 from zope.schema import Iterable
 
 from zope.security.management import system_user
@@ -44,6 +48,7 @@ SYSTEM_USER_NAME = getattr(system_user, 'title').lower()
 
 import zope.deferredimport
 zope.deferredimport.initialize()
+
 zope.deferredimport.deprecated(
 	"Import from nti.base.interfaces instead",
 	ILastViewed='nti.base.interfaces:ILastViewed',
@@ -275,6 +280,45 @@ def get_calendar_publishable_predicate(publishable, interface=None):
 	def uber_filter(publishable, *args, **kwargs):
 		return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
 	return uber_filter
+	
+# containers
+
+class IShouldHaveTraversablePath(interface.Interface):
+	"""
+	A marker interface for things that should have a resource
+	path that can be traversed. This is a temporary measure (everything
+	*should* eventually have a resource path) and a non-disruptive
+	way to start requiring ILink externalization to use resource paths
+	exclusively.
+	"""
+	
+class IContained(IZContained):
+	"""
+	Something logically contained inside exactly one (named) :class:`IContainer`.
+	Most uses of this should now use :class:`zope.container.interfaces.IContained`.
+	(This class previously did not extend that interface; it does now.)
+	"""
+
+	# For BWC, these are not required
+	containerId = DecodingValidTextLine(
+					title="The ID (name) of the container to which this object belongs. "
+						  "Should match the __parent__.__name__",
+					required=False)
+
+	id = DecodingValidTextLine(
+					title="The locally unique ID (name) of this object in the container "
+						  "it belongs. Should match the __name__",
+					required=False)
+
+class INamedContainer(IContainer):
+	"""
+	A container with a name.
+	"""
+	container_name = interface.Attribute("The human-readable nome of this container.")
+
+zope.deferredimport.deprecated(
+	"Import from zope.container.interfaces instead",
+	IZContainer='zope.container.interfaces:IContainer')
 
 # content
 
@@ -282,6 +326,24 @@ class IContent(ILastModified, ICreated):
 	"""
 	It's All Content.
 	"""
+
+class IModeledContent(IContent, IContained, IContentTypeMarker):
+	"""
+	Content accessible as objects.
+	Interfaces that extend this MUST directly provide IContentTypeAware.
+	"""
+
+class IEnclosedContent(IContent, IContained, IContentTypeAware,
+					   IShouldHaveTraversablePath):
+	"""
+	Content accessible logically within another object.
+	This typically serves as a wrapper around another object, whether
+	modeled content or unmodeled content. In the case of modeled content,
+	its `__parent__` should be this object, and the `creator` should be the same
+	as this object's creator.
+	"""
+	name = interface.Attribute("The human-readable name of this content.")
+	data = interface.Attribute("The actual enclosed content.")
 
 class IModeledContentBody(interface.Interface):
 	"""
@@ -449,6 +511,17 @@ class IWritableShared(IReadableShared):
 		to reflect these changes.
 		"""
 
+class IShareableModeledContent(IWritableShared, IModeledContent):
+	"""
+	Modeled content that can be shared.
+	"""
+
+	sharedWith = UniqueIterable(
+		title="The ids of the entities we are shared directly with, taking externalization of local ids into account",
+		value_type=DecodingValidTextLine(title="The username or NTIID"),
+		required=False,
+		default=frozenset())
+
 # schema maker
 
 class IObjectJsonSchemaMaker(interface.Interface):
@@ -470,15 +543,3 @@ class IExternalService(interface.Interface):
 	"""
 	Base interface for external services
 	"""
-
-# Containers
-
-zope.deferredimport.deprecated(
-	"Import from zope.container.interfaces instead",
-	IZContainer='zope.container.interfaces:IContainer')
-
-class INamedContainer(IContainer):
-	"""
-	A container with a name.
-	"""
-	container_name = interface.Attribute("The human-readable nome of this container.")
