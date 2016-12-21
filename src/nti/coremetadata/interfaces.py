@@ -13,6 +13,8 @@ from zope import interface
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
+from zope.container.interfaces import IContainer as IZContainer
+
 from zope.lifecycleevent import ObjectModifiedEvent
 
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
@@ -308,6 +310,10 @@ class ITaggedContent(interface.Interface):
 										  description=Tag.__doc__, __name__='tags'),
 						   unique=True,
 						   default=())
+
+# Containers
+
+IContainer = IZContainer
 
 def get_publishable_predicate(publishable, interface=None):
 	interface = IPublishablePredicate if interface is None else interface
