@@ -10,6 +10,8 @@ __docformat__ = "restructuredtext en"
 from zope import component
 from zope import interface
 
+from zope.annotation.interfaces import IAttributeAnnotatable
+
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
@@ -627,4 +629,27 @@ class IObjectJsonSchemaMaker(interface.Interface):
 class IExternalService(interface.Interface):
 	"""
 	Base interface for external services
+	"""
+
+# Context objects
+
+class IContainerContext(interface.Interface):
+	"""
+	An object that represents the context of the given container.
+	"""
+	context_id = ValidTextLine(title="The ntiid of the context.", default='')
+
+class IContextAnnotatable(IAttributeAnnotatable):
+	"""
+	Marker interface that the given object may have a root
+	'context' object, represented by ``IContainerContext``.
+	"""
+
+# Deleted objects
+
+class IDeletedObjectPlaceholder(interface.Interface):
+	"""
+	Marker interface to be applied to things that have actually
+	been deleted, but, for whatever reason, some trace object
+	has to be left behind. These will typically be rendered specially.
 	"""
