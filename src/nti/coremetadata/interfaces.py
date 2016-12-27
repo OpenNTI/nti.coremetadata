@@ -295,6 +295,27 @@ class IShouldHaveTraversablePath(interface.Interface):
 	exclusively.
 	"""
 	
+class INeverStoredInSharedStream(interface.Interface):
+	"""
+	A marker interface used when distributing changes to show that this
+	object should not be stored in shared streams.
+	"""
+
+class IMutedInStream(interface.Interface):
+	"""
+	A marker interface used when distributed changes to keep this
+	object out of the local stream cache.
+	"""
+
+class INotModifiedInStreamWhenContainerModified(interface.Interface):
+	"""
+	When applied to :class:`IContainer` instances, this is a marker
+	interface that says when a :class:`IContainerModifiedEvent` is fired,
+	as is done when children are added or removed from the container,
+	the stream is not updated. This prevents spurious changing of
+	shared/created events into (newer) modified events.
+	"""
+
 class IContained(IZContained):
 	"""
 	Something logically contained inside exactly one (named) :class:`IContainer`.
@@ -524,6 +545,11 @@ class IShareableModeledContent(IWritableShared, IModeledContent):
 		value_type=DecodingValidTextLine(title="The username or NTIID"),
 		required=False,
 		default=frozenset())
+
+class IUserGeneratedData(interface.Interface):
+	"""
+	marker interface for user generated data
+	"""
 
 class IModeledContentFile(IFile,
 						  INamed, 
