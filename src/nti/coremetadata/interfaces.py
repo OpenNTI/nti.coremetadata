@@ -60,10 +60,14 @@ zope.deferredimport.deprecated(
 	ILastViewed='nti.base.interfaces:ILastViewed',
 	ICreatedTime='nti.base.interfaces:ICreatedTime',)
 
+# mime types
+
 class IContentTypeMarker(interface.Interface):
 	"""
 	Marker interface for deriving mimetypes from class names.
 	"""
+
+# recordables
 
 class IRecordable(interface.Interface):
 	"""
@@ -121,6 +125,8 @@ class IRecordableContainer(IRecordable):
 		return if this object is child order locked
 		"""
 	isChildOrderLocked = is_child_order_locked
+
+# published objects
 
 class IDefaultPublished(interface.Interface):
 	"""
@@ -659,14 +665,7 @@ class IObjectJsonSchemaMaker(interface.Interface):
 		:param user The user (optional)
 		"""
 
-# aux interfaces
-
-class IExternalService(interface.Interface):
-	"""
-	Base interface for external services
-	"""
-
-# Context objects
+# context objects
 
 class IContainerContext(interface.Interface):
 	"""
@@ -680,11 +679,18 @@ class IContextAnnotatable(IAttributeAnnotatable):
 	'context' object, represented by ``IContainerContext``.
 	"""
 
-# Deleted objects
+# deleted objects
 
 class IDeletedObjectPlaceholder(interface.Interface):
 	"""
 	Marker interface to be applied to things that have actually
 	been deleted, but, for whatever reason, some trace object
 	has to be left behind. These will typically be rendered specially.
+	"""
+
+# aux interfaces
+
+class IExternalService(interface.Interface):
+	"""
+	Base interface for external services
 	"""
