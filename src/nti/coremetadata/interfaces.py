@@ -12,6 +12,9 @@ from zope import interface
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 
+from zope.container.interfaces import IContainer as IZContainer
+from zope.container.interfaces import IContainerNamesContainer as IZContainerNamesContainer
+
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
@@ -342,9 +345,43 @@ class INamedContainer(IContainer):
 	"""
 	container_name = interface.Attribute("The human-readable nome of this container.")
 
-zope.deferredimport.deprecated(
-	"Import from zope.container.interfaces instead",
-	IZContainer='zope.container.interfaces:IContainer')
+class IHomogeneousTypeContainer(IContainer):
+	"""
+	Things that only want to contain items of a certain type.
+	In some cases, an object of this type would be specified
+	in an interface as a :class:`zope.schema.List` with a single
+	`value_type`.
+	"""
+
+	contained_type = interface.Attribute(
+		"""
+		The type of objects in the container. May be an Interface type
+		or a class type. There should be a ZCA factory to create instances
+		of this type associated as tagged data on the type at :data:IHTC_NEW_FACTORY
+		""")
+
+IHTC_NEW_FACTORY = 'nti.dataserver.interfaces.IHTCNewFactory' # BWC
+
+class IContainerIterable(interface.Interface):
+	"""
+	Something that can enumerate the containers (collections)
+	it contains.
+	"""
+
+	# FIXME: This is ill-defined. One would expect it to be all containers,
+	# but the only implementation (users.User) actually limits it to named containers
+	def itercontainers():
+		"""
+		:return: An iteration across the containers held in this object.
+		"""
+
+# Very much of our home-grown container
+# stuff can be replaced by zope.container
+IContainer = IZContainer
+
+# Recall that IContainer is an IReadContainer and IWriteContainer, providing:
+# __setitem__, __delitem__, __getitem__, keys()/values()/items()
+IContainerNamesContainer = IZContainerNamesContainer
 
 # content
 
