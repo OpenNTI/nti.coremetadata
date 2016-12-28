@@ -18,8 +18,6 @@ from zope.container.interfaces import IContainerNamesContainer as IZContainerNam
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
-from zope.container.interfaces import IContainer
-
 from zope.lifecycleevent import ObjectModifiedEvent
 
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
@@ -291,6 +289,14 @@ def get_calendar_publishable_predicate(publishable, interface=None):
 	
 # containers
 
+# Very much of our home-grown container
+# stuff can be replaced by zope.container
+IContainer = IZContainer
+
+# Recall that IContainer is an IReadContainer and IWriteContainer, providing:
+# __setitem__, __delitem__, __getitem__, keys()/values()/items()
+IContainerNamesContainer = IZContainerNamesContainer
+
 class IShouldHaveTraversablePath(interface.Interface):
 	"""
 	A marker interface for things that should have a resource
@@ -374,14 +380,6 @@ class IContainerIterable(interface.Interface):
 		"""
 		:return: An iteration across the containers held in this object.
 		"""
-
-# Very much of our home-grown container
-# stuff can be replaced by zope.container
-IContainer = IZContainer
-
-# Recall that IContainer is an IReadContainer and IWriteContainer, providing:
-# __setitem__, __delitem__, __getitem__, keys()/values()/items()
-IContainerNamesContainer = IZContainerNamesContainer
 
 # content
 
