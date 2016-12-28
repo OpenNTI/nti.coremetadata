@@ -9,6 +9,8 @@
 	<include package="zope.component" />
 	<include package="zope.security" />
 	
+	<include package="nti.base" />
+	
 	<subscriber	factory=".predicates.DefaultPublishablePredicate"
 				provides=".interfaces.IPublishablePredicate"/>
 	

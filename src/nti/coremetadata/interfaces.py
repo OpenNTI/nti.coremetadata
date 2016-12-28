@@ -15,6 +15,8 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container.interfaces import IContainer as IZContainer
 from zope.container.interfaces import IContainerNamesContainer as IZContainerNamesContainer
 
+from zope.i18n import translate
+
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
@@ -39,6 +41,8 @@ from nti.base.interfaces import ILastModified
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import Title
 
+from nti.coremetadata import MessageFactory as _
+
 from nti.schema.field import Bool
 from nti.schema.field import Number
 from nti.schema.field import Object
@@ -48,6 +52,8 @@ from nti.schema.field import ValidDatetime
 from nti.schema.field import UniqueIterable
 from nti.schema.field import TupleFromObject
 from nti.schema.field import DecodingValidTextLine
+
+from nti.schema.interfaces import InvalidValue
 
 SYSTEM_USER_ID = system_user.id
 SYSTEM_USER_NAME = getattr(system_user, 'title').lower()
@@ -59,6 +65,41 @@ zope.deferredimport.deprecated(
 	"Import from nti.base.interfaces instead",
 	ILastViewed='nti.base.interfaces:ILastViewed',
 	ICreatedTime='nti.base.interfaces:ICreatedTime',)
+
+# pylint: disable=E0213,E0211
+
+class InvalidData(InvalidValue):
+	"""
+	Invalid Value
+	"""
+
+	i18n_message = None
+
+	def __str__(self):
+		if self.i18n_message:
+			return translate(self.i18n_message)
+		return super(InvalidData, self).__str__()
+
+	def doc(self):
+		if self.i18n_message:
+			return self.i18n_message
+		return self.__class__.__doc__
+_InvalidData = InvalidData
+
+class FieldCannotBeOnlyWhitespace(InvalidData):
+
+	i18n_message = _("The field cannot be blank.")
+
+	def __init__( self, field_name, value, field_external=None ):
+		super(FieldCannotBeOnlyWhitespace,self).__init__(self.i18n_message,
+														 field_external or (field_name and field_name.capitalize()),
+														 value,
+														 value=value)
+
+def checkCannotBeBlank(value):
+	if not value or not value.strip():
+		raise FieldCannotBeOnlyWhitespace( None, value )
+	return True
 
 # mime types
 
@@ -382,11 +423,12 @@ class IContainerIterable(interface.Interface):
 
 	# FIXME: This is ill-defined. One would expect it to be all containers,
 	# but the only implementation (users.User) actually limits it to named containers
-	def itercontainers():
+	def iter_containers():
 		"""
 		:return: An iteration across the containers held in this object.
 		"""
-
+	itercontainers = iter_containers
+	
 # content
 
 class IContent(ILastModified, ICreated):
@@ -694,3 +736,9 @@ class IExternalService(interface.Interface):
 	"""
 	Base interface for external services
 	"""
+
+class IEnvironmentSettings(interface.Interface):
+	pass
+
+class IDataserver(interface.Interface):
+	pass
