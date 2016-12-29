@@ -10,6 +10,7 @@ __docformat__ = "restructuredtext en"
 from zope import component
 from zope import interface
 
+from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAttributeAnnotatable
 
 from zope.container.interfaces import IContainer as IZContainer
@@ -691,6 +692,160 @@ class IEmbeddedAudio(IEmbeddedMedia):
 	"""
 	A audio source object
 	"""
+
+# entity
+
+ME_USER_ID = 'me'
+EVERYONE_GROUP_NAME = 'system.Everyone'
+AUTHENTICATED_GROUP_NAME = 'system.Authenticated'
+UNAUTHENTICATED_PRINCIPAL_NAME = 'system.Unknown'
+
+RESERVED_USER_IDS = (SYSTEM_USER_ID, SYSTEM_USER_NAME, EVERYONE_GROUP_NAME,
+					 AUTHENTICATED_GROUP_NAME, ME_USER_ID)
+
+LOWER_RESERVED_USER_IDS = tuple((x.lower() for x in RESERVED_USER_IDS))
+
+def username_is_reserved(username):
+	return username and (	username.lower() in LOWER_RESERVED_USER_IDS
+						 or username.lower().startswith('system.'))
+
+def valid_entity_username(entity_name):
+	return not username_is_reserved(entity_name)
+
+class ICreatedUsername(interface.Interface):
+	"""
+	Something created by an identified entity, expressed
+	as a (globally unique) username.
+	"""
+	creator_username = DecodingValidTextLine(
+		title=u'The username',
+		constraint=valid_entity_username,
+		readonly=True
+		)
+
+class IEntity(IIdentity, IZContained, IAnnotatable, IShouldHaveTraversablePath,
+			  INeverStoredInSharedStream):
+
+	username = DecodingValidTextLine(title=u'The username',
+									 constraint=valid_entity_username)
+
+class IMissingEntity(IEntity):
+	"""
+	A proxy object for a missing, unresolved or unresolvable
+	entity.
+	"""
+
+class IDynamicSharingTarget(IEntity):
+	"""
+	These objects reverse the normal sharing; instead of being
+	pushed at sharing time to all the named targets, shared data
+	is instead *pulled* at read time by an individual member of this
+	entity. As such, these objects represent collections of members,
+	but not necessarily enumerable collections (e.g., communities
+	are not enumerable).
+	"""
+
+class ICommunity(IDynamicSharingTarget):
+
+	public = Bool(title=u'Public flag', required=False, default=True)
+
+	joinable = Bool(title=u'Joinable flag', required=False, default=True)
+
+	username = DecodingValidTextLine(
+		title=u'The username',
+		constraint=valid_entity_username
+		)
+
+	def iter_members():
+		"""
+		Return an iterable of the entity objects that are a member
+		of this community.
+		"""
+
+	def iter_member_usernames():
+		"""
+		Return an iterable of the usernames of members of this community.
+		"""
+
+class IUnscopedGlobalCommunity(ICommunity):
+	"""
+	A community that is visible across the entire "world". One special case of this
+	is the ``Everyone`` or :const:`EVERYONE_USER_NAME` community. These
+	are generally not considered when computing relationships or visibility between users.
+	"""
+
+class IUser(IEntity, IContainerIterable):
+	"""
+	A user of the system. Notice this is not an IPrincipal.
+	This interface needs finished and fleshed out.
+	"""
+
+	username = DecodingValidTextLine(title=u'The username', min_length=5)
+
+	# Note: z3c.password provides a PasswordField we could use here
+	# when we're sure what it does and that validation works out
+	password = interface.Attribute("The password")
+
+class IUsernameSubstitutionPolicy(interface.Interface):
+	"""
+	Marker interface to register an utility that replaces
+	the username value for another
+	"""
+
+	def replace(username):
+		pass
+
+class IFriendsList(IModeledContent, IEntity,
+				   INotModifiedInStreamWhenContainerModified):
+	"""
+	Define a list of users.
+
+	.. note:: The inheritance from :class:`IEntity` is probably a mistake to be changed;
+		these are not globally named.
+	"""
+
+	def __iter__():
+		"""
+		Iterating over a FriendsList iterates over its friends
+		(as Entity objects), resolving weak refs.
+		"""
+
+	def __contains__(friend):
+		"""
+		Is the given entity a member of this friends list?
+		"""
+
+	def addFriend(friend):
+		"""
+		Adding friends causes our creator to follow them.
+
+		:param friend: 	May be another friends list, an entity, a
+						string naming a user, or even a dictionary containing
+						a 'Username' property.
+		"""
+
+class IUseNTIIDAsExternalUsername(interface.Interface):
+	"""
+	A marker interface for IEntity objects that are not globally resolvable
+	by their 'username'; instead, everywhere we would write out
+	a username we must instead write the NTIID.
+	"""
+
+class IDynamicSharingTargetFriendsList(IDynamicSharingTarget,
+									   IFriendsList,
+									   IUseNTIIDAsExternalUsername):
+	"""
+	A type of :class:`IDynamicSharingTarget` that is a list of members.
+	"""
+
+	About = ValidTextLine(
+				title='About',
+				description="A short description of a grouo",
+				max_length=500,
+				required=False,
+				constraint=checkCannotBeBlank)
+
+	Locked = Bool(title='Locked flag. No group code, no removal', required=False, default=False)
 
 # schema maker
 
