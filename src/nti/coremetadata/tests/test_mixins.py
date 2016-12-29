@@ -24,14 +24,17 @@ from datetime import datetime
 from datetime import timedelta
 
 from nti.base.interfaces import ICreatedTime
+from nti.base.interfaces import ILastModified
 from nti.base.mixins import CreatedAndModifiedTimeMixin
 
+from nti.coremetadata.interfaces import IContained
 from nti.coremetadata.interfaces import IRecordable
-from nti.coremetadata.interfaces import ILastModified
+from nti.coremetadata.interfaces import IZContained
 from nti.coremetadata.interfaces import IDefaultPublished
 from nti.coremetadata.interfaces import ICalendarPublishable
 from nti.coremetadata.interfaces import IRecordableContainer
 
+from nti.coremetadata.mixins import ContainedMixin
 from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
 from nti.coremetadata.mixins import RecordableContainerMixin
@@ -144,3 +147,11 @@ class TestMixins(unittest.TestCase):
 		assert_that(obj.is_published(), is_(True))
 		assert_that(obj.publishLastModified, greater_than(last_mod))
 		last_mod = obj.publishLastModified
+
+	def test_contained(self):
+		c = ContainedMixin(containerId="100", containedId="200")
+		assert_that(c, validly_provides(IContained))
+		assert_that(c, verifiably_provides(IContained))
+		assert_that(c, verifiably_provides(IZContained))
+		assert_that(c, has_property('containerId', is_("100")))
+		assert_that(c, has_property('id', is_("200")))
