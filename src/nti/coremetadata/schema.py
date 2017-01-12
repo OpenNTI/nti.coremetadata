@@ -29,90 +29,99 @@ from nti.schema.field import Variant
 from nti.schema.field import ListOrTupleFromObject
 from nti.schema.field import ValidURI as _ValidURI
 
-class DataURI(_ValidURI, ProDataURI): # order matters
 
-	def _validate(self, value):
-		super(DataURI, self)._validate(value)
-		if not self.is_valid_data_uri(value):
-			self._reraise_validation_error(InvalidURI(value),
-										   value,
-										   _raise=True)
+class DataURI(_ValidURI, ProDataURI):  # order matters
+
+    def _validate(self, value):
+        super(DataURI, self)._validate(value)
+        if not self.is_valid_data_uri(value):
+            self._reraise_validation_error(InvalidURI(value),
+                                           value,
+                                           _raise=True)
+
 
 class AbstractFieldProperty(FieldProperty):
 
-	def __init__(self, field, name=None):
-		super(AbstractFieldProperty, self).__init__(field, name=name)
-		self._field = field
+    def __init__(self, field, name=None):
+        super(AbstractFieldProperty, self).__init__(field, name=name)
+        self._field = field
 
-	def _to_tuple(self, value):
-		if value and isinstance(value, (set, list)):
-			value = tuple(value)
-		return value
+    def _to_tuple(self, value):
+        if value and isinstance(value, (set, list)):
+            value = tuple(value)
+        return value
 
-	def _adapt(self, value):
-		return self._field.fromObject(value)
+    def _adapt(self, value):
+        return self._field.fromObject(value)
 
-	def __set__(self, inst, value):
-		value = self._to_tuple(value)
-		try:
-			super(AbstractFieldProperty, self).__set__(inst, value)
-		except ValidationError:
-			# Hmm. try to adapt
-			value = self._adapt(value)
-			super(AbstractFieldProperty, self).__set__(inst, value)
+    def __set__(self, inst, value):
+        value = self._to_tuple(value)
+        try:
+            super(AbstractFieldProperty, self).__set__(inst, value)
+        except ValidationError:
+            # Hmm. try to adapt
+            value = self._adapt(value)
+            super(AbstractFieldProperty, self).__set__(inst, value)
+
 
 class BodyFieldProperty(AbstractFieldProperty):
 
-	def _adapt(self, value):
-		# Allow ascii strings for old app tests
-		value = [x.decode('utf-8') if isinstance(x, str) else x for x in value]
-		value = tuple((self._field.value_type.fromObject(x) for x in value))
-		return value
+    def _adapt(self, value):
+        # Allow ascii strings for old app tests
+        value = [x.decode('utf-8') if isinstance(x, str) else x for x in value]
+        value = tuple((self._field.value_type.fromObject(x) for x in value))
+        return value
 NoteBodyFieldProperty = BodyFieldProperty
+
 
 class MessageInfoBodyFieldProperty(AbstractFieldProperty):
 
-	def _to_tuple(self, value):
-		# Turn bytes into text
-		if isinstance(value, str):
-			value = value.decode('utf-8')
-		# Wrap single strings automatically
-		if isinstance(value, unicode):
-			value = (value,)
-		# Make immutable
-		if value and isinstance(value, (set, list)):
-			value = tuple(value)
-		return value
+    def _to_tuple(self, value):
+        # Turn bytes into text
+        if isinstance(value, str):
+            value = value.decode('utf-8')
+        # Wrap single strings automatically
+        if isinstance(value, unicode):
+            value = (value,)
+        # Make immutable
+        if value and isinstance(value, (set, list)):
+            value = tuple(value)
+        return value
+
 
 def legacyModeledContentBodyTypes():
-	return [SanitizedHTMLContentFragment(min_length=1,
-										 description="HTML content that is sanitized and non-empty"),
-			PlainText(min_length=1, description="Plain text that is sanitized and non-empty"),
-			Object(ICanvas, description="A :class:`.ICanvas`"),
-			Object(IMedia, description="A :class:`.IMedia`")]
+    return [SanitizedHTMLContentFragment(min_length=1,
+                                         description="HTML content that is sanitized and non-empty"),
+            PlainText(
+                min_length=1, description="Plain text that is sanitized and non-empty"),
+            Object(ICanvas, description="A :class:`.ICanvas`"),
+            Object(IMedia, description="A :class:`.IMedia`")]
+
 
 def bodySchemaField(fields, required=False):
-	value_type = Variant(fields=fields, title="A body part", __name__='body')
-	return ListOrTupleFromObject(title="The body of this object",
-								 description="""
+    value_type = Variant(fields=fields, title="A body part", __name__='body')
+    return ListOrTupleFromObject(title="The body of this object",
+                                 description="""
 								 An ordered sequence of body parts
 								 (:class:`nti.contentfragments.interfaces.IUnicodeContentFragment`
 								 or some kinds of :class:`.IModeledContent` such as :class:`.ICanvas`.)
 								 """,
-								 value_type=value_type,
-								 min_length=1,
-								 required=required,
-								 __name__='body')
+                                 value_type=value_type,
+                                 min_length=1,
+                                 required=required,
+                                 __name__='body')
+
 
 def CompoundModeledContentBody(required=False, fields=()):
-	"""
-	Returns a :class:`zope.schema.interfaces.IField` representing
-	the way that a compound body of user-generated content is modeled.
-	"""
-	fields = legacyModeledContentBodyTypes() if not fields else fields
-	return bodySchemaField(fields, required)
+    """
+    Returns a :class:`zope.schema.interfaces.IField` representing
+    the way that a compound body of user-generated content is modeled.
+    """
+    fields = legacyModeledContentBodyTypes() if not fields else fields
+    return bodySchemaField(fields, required)
+
 
 def ExtendedCompoundModeledContentBody(required=False):
-	fields = legacyModeledContentBodyTypes()
-	fields.append(Object(INamed, description="A :class:`.IPloneNamed`"))
-	return bodySchemaField(fields, required)
+    fields = legacyModeledContentBodyTypes()
+    fields.append(Object(INamed, description="A :class:`.INamed`"))
+    return bodySchemaField(fields, required)
