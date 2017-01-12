@@ -20,6 +20,7 @@ from nti.coremetadata.interfaces import ICalendarPublishable
 from nti.coremetadata.interfaces import IPublishablePredicate
 from nti.coremetadata.interfaces import ICalendarPublishablePredicate
 
+
 @component.adapter(IPublishable)
 @interface.implementer(IPublishablePredicate)
 class DefaultPublishablePredicate(object):
@@ -32,6 +33,7 @@ class DefaultPublishablePredicate(object):
     def is_published(self, publishable, *args, **kwargs):
         return IDefaultPublished.providedBy(publishable)
     isPublished = is_published
+
 
 @component.adapter(ICalendarPublishable)
 @interface.implementer(ICalendarPublishablePredicate)
@@ -50,8 +52,8 @@ class DefaultCalendarPublishablePredicate(object):
         now = datetime.utcnow()
         end = publishable.publishEnding
         start = publishable.publishBeginning
-        result =     (   IDefaultPublished.providedBy(publishable)
-                      or (start is not None and now > start)) \
-                and (end is None or now < end)
+        result = (IDefaultPublished.providedBy(publishable)
+                  or (start is not None and now > start)) \
+            and (end is None or now < end)
         return bool(result)
     isPublished = is_published

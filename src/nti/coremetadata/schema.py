@@ -92,8 +92,8 @@ class MessageInfoBodyFieldProperty(AbstractFieldProperty):
 def legacyModeledContentBodyTypes():
     return [SanitizedHTMLContentFragment(min_length=1,
                                          description="HTML content that is sanitized and non-empty"),
-            PlainText(
-                min_length=1, description="Plain text that is sanitized and non-empty"),
+            PlainText(min_length=1, 
+					  description="Plain text that is sanitized and non-empty"),
             Object(ICanvas, description="A :class:`.ICanvas`"),
             Object(IMedia, description="A :class:`.IMedia`")]
 

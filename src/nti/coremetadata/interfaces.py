@@ -285,13 +285,13 @@ class ICalendarPublishableMixin(interface.Interface):
     publishBeginning = ValidDatetime(
         title="This object is not available before this time",
         description="""When present, this specifies the time instant at which
-					   this obj is to be available.""",
+                       this obj is to be available.""",
         required=False)
 
     publishEnding = ValidDatetime(
         title="This object is not available after this time",
         description="""When present, this specifies the last instance at which
-					   this obj is to be available.""",
+                       this obj is to be available.""",
         required=False)
 
 
@@ -450,10 +450,10 @@ class IHomogeneousTypeContainer(IContainer):
 
     contained_type = interface.Attribute(
             """
-		The type of objects in the container. May be an Interface type
-		or a class type. There should be a ZCA factory to create instances
-		of this type associated as tagged data on the type at :data:IHTC_NEW_FACTORY
-		""")
+        The type of objects in the container. May be an Interface type
+        or a class type. There should be a ZCA factory to create instances
+        of this type associated as tagged data on the type at :data:IHTC_NEW_FACTORY
+        """)
 
 IHTC_NEW_FACTORY = 'nti.dataserver.interfaces.IHTCNewFactory'  # BWC
 
@@ -701,8 +701,9 @@ class IModeledContentFile(IFile,
                           IThreadable,
                           ILastModified,
                           IShareableModeledContent):
-    name = ValidTextLine(
-        title="Identifier for the file", required=False, default=None)
+    name = ValidTextLine(title="Identifier for the file",
+                         required=False,
+                         default=None)
 IContentFile = IModeledContentFile  # BWC
 
 # media types
@@ -774,7 +775,7 @@ LOWER_RESERVED_USER_IDS = tuple((x.lower() for x in RESERVED_USER_IDS))
 
 
 def username_is_reserved(username):
-    return username and (	username.lower() in LOWER_RESERVED_USER_IDS
+    return username and (    username.lower() in LOWER_RESERVED_USER_IDS
                           or username.lower().startswith('system.'))
 
 
@@ -897,7 +898,7 @@ class IFriendsList(IModeledContent, IEntity,
         """
         Adding friends causes our creator to follow them.
 
-        :param friend: 	May be another friends list, an entity, a
+        :param friend:     May be another friends list, an entity, a
                                         string naming a user, or even a dictionary containing
                                         a 'Username' property.
         """
