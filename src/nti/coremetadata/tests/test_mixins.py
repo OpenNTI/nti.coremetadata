@@ -43,115 +43,116 @@ from nti.coremetadata.tests import SharedConfiguringTestLayer
 
 from nti.testing.time import time_monotonically_increases
 
+
 class TestMixins(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
-	def test_plus_extend(self):
-		c = CreatedAndModifiedTimeMixin()
-		for iface in (ICreatedTime, ILastModified):
-			assert_that(c, validly_provides(iface))
-			assert_that(c, verifiably_provides(iface))
+    def test_plus_extend(self):
+        c = CreatedAndModifiedTimeMixin()
+        for iface in (ICreatedTime, ILastModified):
+            assert_that(c, validly_provides(iface))
+            assert_that(c, verifiably_provides(iface))
 
-		t = time.time() + 100
-		c.updateLastMod(t)
-		assert_that(c, has_property('lastModified', is_(t)))
+        t = time.time() + 100
+        c.updateLastMod(t)
+        assert_that(c, has_property('lastModified', is_(t)))
 
-		c.updateLastModIfGreater(100)
-		assert_that(c, has_property('lastModified', is_(t)))
+        c.updateLastModIfGreater(100)
+        assert_that(c, has_property('lastModified', is_(t)))
 
-	def test_recordable(self):
-		c = RecordableMixin()
-		assert_that(c, has_property('locked', is_(False)))
-		assert_that(c, validly_provides(IRecordable))
-		assert_that(c, verifiably_provides(IRecordable))
-		c.lock()
-		assert_that(c, has_property('locked', is_(True)))
-		assert_that(c.is_locked(), is_(True))
-		c.unlock()
-		assert_that(c, has_property('locked', is_(False)))
+    def test_recordable(self):
+        c = RecordableMixin()
+        assert_that(c, has_property('locked', is_(False)))
+        assert_that(c, validly_provides(IRecordable))
+        assert_that(c, verifiably_provides(IRecordable))
+        c.lock()
+        assert_that(c, has_property('locked', is_(True)))
+        assert_that(c.is_locked(), is_(True))
+        c.unlock()
+        assert_that(c, has_property('locked', is_(False)))
 
-	def test_recordable_container(self):
-		c = RecordableContainerMixin()
-		assert_that(c, has_property('child_order_locked', is_(False)))
-		assert_that(c, validly_provides(IRecordableContainer))
-		assert_that(c, verifiably_provides(IRecordableContainer))
-		c.child_order_lock()
-		assert_that(c, has_property('child_order_locked', is_(True)))
-		assert_that(c.is_child_order_locked(), is_(True))
-		c.child_order_unlock()
-		assert_that(c, has_property('child_order_locked', is_(False)))
+    def test_recordable_container(self):
+        c = RecordableContainerMixin()
+        assert_that(c, has_property('child_order_locked', is_(False)))
+        assert_that(c, validly_provides(IRecordableContainer))
+        assert_that(c, verifiably_provides(IRecordableContainer))
+        c.child_order_lock()
+        assert_that(c, has_property('child_order_locked', is_(True)))
+        assert_that(c.is_child_order_locked(), is_(True))
+        c.child_order_unlock()
+        assert_that(c, has_property('child_order_locked', is_(False)))
 
-	def test_plublishable(self):
-		c = CalendarPublishableMixin()
-		assert_that(c, validly_provides(ICalendarPublishable))
-		assert_that(c, verifiably_provides(ICalendarPublishable))
+    def test_plublishable(self):
+        c = CalendarPublishableMixin()
+        assert_that(c, validly_provides(ICalendarPublishable))
+        assert_that(c, verifiably_provides(ICalendarPublishable))
 
-		c.publish()
-		assert_that(c, verifiably_provides(IDefaultPublished))
-		assert_that(c.isPublished(), is_(True))
+        c.publish()
+        assert_that(c, verifiably_provides(IDefaultPublished))
+        assert_that(c.isPublished(), is_(True))
 
-		c.unpublish()
-		assert_that(c, does_not(verifiably_provides(IDefaultPublished)))
-		assert_that(c.isPublished(), is_(False))
+        c.unpublish()
+        assert_that(c, does_not(verifiably_provides(IDefaultPublished)))
+        assert_that(c.isPublished(), is_(False))
 
-	@time_monotonically_increases
-	def test_publish_status(self):
-		obj = CalendarPublishableMixin()
-		assert_that(obj.is_published(), is_(False))
-		yesterday = datetime.utcnow() - timedelta(days=1)
-		tomorrow = yesterday + timedelta(days=2)
-		last_mod = 0
+    @time_monotonically_increases
+    def test_publish_status(self):
+        obj = CalendarPublishableMixin()
+        assert_that(obj.is_published(), is_(False))
+        yesterday = datetime.utcnow() - timedelta(days=1)
+        tomorrow = yesterday + timedelta(days=2)
+        last_mod = 0
 
-		obj.publish(start=yesterday)
-		assert_that(obj.is_published(), is_(True))
-		assert_that(obj.publishLastModified, greater_than(last_mod))
-		last_mod = obj.publishLastModified
+        obj.publish(start=yesterday)
+        assert_that(obj.is_published(), is_(True))
+        assert_that(obj.publishLastModified, greater_than(last_mod))
+        last_mod = obj.publishLastModified
 
-		obj.publish(start=tomorrow)
-		assert_that(obj.is_published(), is_(False))
-		assert_that(obj.publishLastModified, greater_than(last_mod))
-		last_mod = obj.publishLastModified
+        obj.publish(start=tomorrow)
+        assert_that(obj.is_published(), is_(False))
+        assert_that(obj.publishLastModified, greater_than(last_mod))
+        last_mod = obj.publishLastModified
 
-		obj.publish()
-		assert_that(obj.is_published(), is_(True))
-		assert_that(obj.publishLastModified, greater_than(last_mod))
-		last_mod = obj.publishLastModified
+        obj.publish()
+        assert_that(obj.is_published(), is_(True))
+        assert_that(obj.publishLastModified, greater_than(last_mod))
+        last_mod = obj.publishLastModified
 
-		obj.publish(start=tomorrow)
-		assert_that(obj.is_published(), is_(False))
-		assert_that(obj.publishLastModified, greater_than(last_mod))
-		last_mod = obj.publishLastModified
+        obj.publish(start=tomorrow)
+        assert_that(obj.is_published(), is_(False))
+        assert_that(obj.publishLastModified, greater_than(last_mod))
+        last_mod = obj.publishLastModified
 
-		obj.publish(start=yesterday)
-		assert_that(obj.is_published(), is_(True))
-		assert_that(obj.publishLastModified, greater_than(last_mod))
-		last_mod = obj.publishLastModified
+        obj.publish(start=yesterday)
+        assert_that(obj.is_published(), is_(True))
+        assert_that(obj.publishLastModified, greater_than(last_mod))
+        last_mod = obj.publishLastModified
 
-		obj.publish(start=tomorrow, end=tomorrow)
-		assert_that(obj.is_published(), is_(False))
-		assert_that(obj.publishLastModified, greater_than(last_mod))
-		last_mod = obj.publishLastModified
+        obj.publish(start=tomorrow, end=tomorrow)
+        assert_that(obj.is_published(), is_(False))
+        assert_that(obj.publishLastModified, greater_than(last_mod))
+        last_mod = obj.publishLastModified
 
-		obj.publish(start=yesterday, end=tomorrow)
-		assert_that(obj.is_published(), is_(True))
-		assert_that(obj.publishLastModified, greater_than(last_mod))
-		last_mod = obj.publishLastModified
+        obj.publish(start=yesterday, end=tomorrow)
+        assert_that(obj.is_published(), is_(True))
+        assert_that(obj.publishLastModified, greater_than(last_mod))
+        last_mod = obj.publishLastModified
 
-		obj.publish(start=yesterday, end=yesterday)
-		assert_that(obj.is_published(), is_(False))
-		assert_that(obj.publishLastModified, greater_than(last_mod))
-		last_mod = obj.publishLastModified
+        obj.publish(start=yesterday, end=yesterday)
+        assert_that(obj.is_published(), is_(False))
+        assert_that(obj.publishLastModified, greater_than(last_mod))
+        last_mod = obj.publishLastModified
 
-		obj.publish()
-		assert_that(obj.is_published(), is_(True))
-		assert_that(obj.publishLastModified, greater_than(last_mod))
-		last_mod = obj.publishLastModified
+        obj.publish()
+        assert_that(obj.is_published(), is_(True))
+        assert_that(obj.publishLastModified, greater_than(last_mod))
+        last_mod = obj.publishLastModified
 
-	def test_contained(self):
-		c = ContainedMixin(containerId="100", containedId="200")
-		assert_that(c, validly_provides(IContained))
-		assert_that(c, verifiably_provides(IContained))
-		assert_that(c, verifiably_provides(IZContained))
-		assert_that(c, has_property('containerId', is_("100")))
-		assert_that(c, has_property('id', is_("200")))
+    def test_contained(self):
+        c = ContainedMixin(containerId="100", containedId="200")
+        assert_that(c, validly_provides(IContained))
+        assert_that(c, verifiably_provides(IContained))
+        assert_that(c, verifiably_provides(IZContained))
+        assert_that(c, has_property('containerId', is_("100")))
+        assert_that(c, has_property('id', is_("200")))
