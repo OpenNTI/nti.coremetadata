@@ -38,6 +38,7 @@ from nti.base.interfaces import INamed
 from nti.base.interfaces import ITitled
 from nti.base.interfaces import ICreated
 from nti.base.interfaces import ILastModified
+from nti.base.interfaces import IContentTypeMarker
 
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import Title
@@ -106,13 +107,6 @@ def checkCannotBeBlank(value):
         raise FieldCannotBeOnlyWhitespace(None, value)
     return True
 
-# mime types
-
-
-class IContentTypeMarker(interface.Interface):
-    """
-    Marker interface for deriving mimetypes from class names.
-    """
 
 # recordables
 
@@ -449,7 +443,7 @@ class IHomogeneousTypeContainer(IContainer):
     """
 
     contained_type = interface.Attribute(
-            """
+        """
         The type of objects in the container. May be an Interface type
         or a class type. There should be a ZCA factory to create instances
         of this type associated as tagged data on the type at :data:IHTC_NEW_FACTORY
@@ -775,8 +769,8 @@ LOWER_RESERVED_USER_IDS = tuple((x.lower() for x in RESERVED_USER_IDS))
 
 
 def username_is_reserved(username):
-    return username and (    username.lower() in LOWER_RESERVED_USER_IDS
-                          or username.lower().startswith('system.'))
+    return username and (username.lower() in LOWER_RESERVED_USER_IDS
+                         or username.lower().startswith('system.'))
 
 
 def valid_entity_username(entity_name):
