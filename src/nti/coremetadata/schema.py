@@ -93,7 +93,7 @@ def legacyModeledContentBodyTypes():
     return [SanitizedHTMLContentFragment(min_length=1,
                                          description="HTML content that is sanitized and non-empty"),
             PlainText(min_length=1, 
-					  description="Plain text that is sanitized and non-empty"),
+                      description="Plain text that is sanitized and non-empty"),
             Object(ICanvas, description="A :class:`.ICanvas`"),
             Object(IMedia, description="A :class:`.IMedia`")]
 
@@ -102,10 +102,10 @@ def bodySchemaField(fields, required=False):
     value_type = Variant(fields=fields, title="A body part", __name__='body')
     return ListOrTupleFromObject(title="The body of this object",
                                  description="""
-								 An ordered sequence of body parts
-								 (:class:`nti.contentfragments.interfaces.IUnicodeContentFragment`
-								 or some kinds of :class:`.IModeledContent` such as :class:`.ICanvas`.)
-								 """,
+                                 An ordered sequence of body parts
+                                 (:class:`nti.contentfragments.interfaces.IUnicodeContentFragment`
+                                 or some kinds of :class:`.IModeledContent` such as :class:`.ICanvas`.)
+                                 """,
                                  value_type=value_type,
                                  min_length=1,
                                  required=required,

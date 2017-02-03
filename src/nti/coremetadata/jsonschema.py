@@ -43,8 +43,8 @@ class CoreJsonSchemafier(JsonSchemafier):
                          IRecordable, IRecordableContainer)
 
     def allow_field(self, name, field):
-        result = not(name.startswith('_') 
-					 or field.queryTaggedValue('_ext_excluded_out'))
+        result = not(name.startswith('_')
+                     or field.queryTaggedValue('_ext_excluded_out'))
         if result:
             for iface in self.IGNORE_INTERFACES:
                 if name in iface:
@@ -53,10 +53,11 @@ class CoreJsonSchemafier(JsonSchemafier):
         return result
 
     def _process_object(self, field):
-        if IObject.providedBy(field) and field.schema is not interface.Interface:
+        if      IObject.providedBy(field) \
+            and field.schema is not interface.Interface:
             base =  field.schema.queryTaggedValue('_ext_mime_type') \
                 or  get_ui_type_from_field_interface(field.schema) \
-                or  get_ui_type_from_interface(field.schema)
+                or get_ui_type_from_interface(field.schema)
             return base
         return None
 
@@ -80,15 +81,16 @@ class CoreJsonSchemafier(JsonSchemafier):
         return ui_base_type
 
     def get_ui_types_from_field(self, field):
-        ui_type, ui_base_type = super(
-            CoreJsonSchemafier, self).get_ui_types_from_field(field)
+        result = super(CoreJsonSchemafier, self).get_ui_types_from_field(field)
+        ui_type, ui_base_type = result
         if IVariant.providedBy(field) and not ui_base_type:
             ui_base_type = self._process_variant(field, ui_type)
         elif (IListOrTuple.providedBy(field) or IList.providedBy(field)) and not ui_base_type:
             if IObject.providedBy(field.value_type):
                 ui_base_type = self._process_object(field.value_type)
             elif IChoice.providedBy(field.value_type):
-                _, ui_base_type = self.get_data_from_choice_field(field.value_type)
+                value_type = field.value_type
+                _, ui_base_type = self.get_data_from_choice_field(value_type)
             elif IVariant.providedBy(field.value_type):
                 ui_base_type = self._process_variant(field.value_type, ui_type)
             elif IFromUnicode.providedBy(field.value_type):
@@ -100,8 +102,9 @@ class CoreJsonSchemafier(JsonSchemafier):
         return ui_type, ui_base_type
 
     def post_process_field(self, name, field, item_schema):
-        super(CoreJsonSchemafier, self).post_process_field(
-            name, field, item_schema)
+        super(CoreJsonSchemafier, self).post_process_field(name,
+                                                           field,
+                                                           item_schema)
 
 
 @interface.implementer(IObjectJsonSchemaMaker)
