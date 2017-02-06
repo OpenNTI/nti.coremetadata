@@ -104,28 +104,28 @@ class PublishableMixin(object):
     def __init__(self, *args, **kwargs):
         super(PublishableMixin, self).__init__(*args, **kwargs)
 
-    def _update_publish_last_mod(self):
+    def update_publish_last_mod(self):
         """
         Update the publish last modification time.
         """
         self.publishLastModified = time.time()
-    updatePublishLastModified = _update_publish_last_mod
+    updatePublishLastModified = _update_publish_last_mod = update_publish_last_mod
 
     def do_publish(self, event=True, **kwargs):
-        self._update_publish_last_mod()
         interface.alsoProvides(self, IDefaultPublished)
         if event:
             notify(ObjectPublishedEvent(self))
+        self.update_publish_last_mod()
 
     def publish(self, *args, **kwargs):
         if not self.is_published():
             self.do_publish(**kwargs)
 
     def do_unpublish(self, event=True, **kwargs):
-        self._update_publish_last_mod()
         interface.noLongerProvides(self, IDefaultPublished)
         if event:
             notify(ObjectUnpublishedEvent(self))
+        self.update_publish_last_mod()
 
     def unpublish(self, *args, **kwargs):
         if self.is_published():
