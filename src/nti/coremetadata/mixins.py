@@ -152,10 +152,10 @@ class CalendarPublishableMixin(PublishableMixin):
             # The user may publish but specify just an end date.
             self.do_publish(**kwargs)
         else:
-            # Update mod time and notify our object is changing.
-            self._update_publish_last_mod()
             notify(CalendarPublishableModifiedEvent(self, start, end))
             interface.noLongerProvides(self, IDefaultPublished)
+            # Update mod time and notify our object is changing.
+            self.update_publish_last_mod()
         self.publishEnding = end
         self.publishBeginning = start
 
