@@ -31,6 +31,8 @@ from zope.mimetype.interfaces import IContentTypeAware
 
 from zope.schema import Iterable
 
+from zope.security.interfaces import IPrincipal
+
 from zope.security.management import system_user
 
 from nti.base.interfaces import IFile
@@ -106,6 +108,13 @@ def checkCannotBeBlank(value):
         raise FieldCannotBeOnlyWhitespace(None, value)
     return True
 
+
+# principals
+
+class ISystemUserPrincipal(IPrincipal):
+    """
+    Marker for a system user principal
+    """
 
 # recordables
 
