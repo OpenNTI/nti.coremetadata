@@ -20,8 +20,10 @@ from zope.container.contained import Contained
 
 from zope.event import notify
 
-from nti.coremetadata.interfaces import IVersioned
+from nti.base._compat import unicode_
+
 from nti.coremetadata.interfaces import IContained
+from nti.coremetadata.interfaces import IVersioned
 from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import IDefaultPublished
@@ -219,7 +221,7 @@ class VersionedMixin(object):
 
     def _get_version_timestamp(self):
         value = datetime.fromtimestamp(time.time())
-        return unicode(isodate.datetime_isoformat(value))
+        return unicode_(isodate.datetime_isoformat(value))
 
     def update_version(self, version=None):
         self.version = version if version else self._get_version_timestamp()
