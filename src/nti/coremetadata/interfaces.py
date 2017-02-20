@@ -58,6 +58,10 @@ from nti.schema.field import DecodingValidTextLine
 
 from nti.schema.interfaces import InvalidValue
 
+from nti.schema.jsonschema import TAG_HIDDEN_IN_UI
+from nti.schema.jsonschema import TAG_REQUIRED_IN_UI
+from nti.schema.jsonschema import TAG_READONLY_IN_UI
+
 SYSTEM_USER_ID = system_user.id
 SYSTEM_USER_NAME = getattr(system_user, 'title').lower()
 
@@ -333,7 +337,7 @@ class IPublishablePredicate(interface.Interface):
 
     def is_published(publishable, principal=None, context=None, *args, **kwargs):
         """
-        return if the specified publishable is published for the given 
+        return if the specified publishable is published for the given
         principal and context
         """
     isPublished = is_published
@@ -347,7 +351,7 @@ class ICalendarPublishablePredicate(interface.Interface):
 
     def is_published(publishable, principal=None, context=None, *args, **kwargs):
         """
-        return if the specified calendar publishable is published for the given 
+        return if the specified calendar publishable is published for the given
         principal and context
         """
     isPublished = is_published
@@ -940,3 +944,26 @@ class IEnvironmentSettings(interface.Interface):
 
 class IDataserver(interface.Interface):
     pass
+
+
+class IVersioned(interface.Interface):
+    """
+    An interface containing version information. Useful when guarding
+    against overwrites when editing an object.
+    """
+
+    version = ValidTextLine(
+            title="The structural version of this object.",
+            description="""An artificial string signifying the 'structural version'
+                of this object.""",
+            required=False)
+
+    def update_version( version=None ):
+        """
+        Update the version for this object. If no arg given, the
+        default algorithm will be used.
+        """
+
+IVersioned['version'].setTaggedValue(TAG_HIDDEN_IN_UI, True)
+IVersioned['version'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
+IVersioned['version'].setTaggedValue(TAG_READONLY_IN_UI, True)
