@@ -10,6 +10,9 @@ __docformat__ = "restructuredtext en"
 logger = __import__('logging').getLogger(__name__)
 
 import time
+import isodate
+
+from datetime import datetime
 
 from zope import interface
 
@@ -17,6 +20,7 @@ from zope.container.contained import Contained
 
 from zope.event import notify
 
+from nti.coremetadata.interfaces import IVersioned
 from nti.coremetadata.interfaces import IContained
 from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
@@ -34,6 +38,8 @@ from nti.coremetadata.interfaces import CalendarPublishableModifiedEvent
 
 from nti.coremetadata.utils import is_published
 from nti.coremetadata.utils import is_calendar_published
+
+from nti.property.property import alias
 
 from nti.schema.fieldproperty import UnicodeConvertingFieldProperty
 
@@ -200,3 +206,21 @@ class ContainedMixin(Contained):
         if containedId is not None:
             self.id = containedId
 _ContainedMixin = ZContainedMixin = ContainedMixin
+
+
+@interface.implementer(IVersioned)
+class VersionedMixin(object):
+
+    version = None  # Default to None
+    Version = alias('version')
+
+    def __init__(self, *args, **kwargs):
+        super(VersionedMixin, self).__init__(*args, **kwargs)
+
+    def _get_version_timestamp(self):
+        value = datetime.fromtimestamp(time.time())
+        return unicode(isodate.datetime_isoformat(value))
+
+    def update_version(self, version=None):
+        self.version = version if version else self._get_version_timestamp()
+        return self.version
