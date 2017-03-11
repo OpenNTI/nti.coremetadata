@@ -100,9 +100,9 @@ class FieldCannotBeOnlyWhitespace(InvalidData):
     i18n_message = _("The field cannot be blank.")
 
     def __init__(self, field_name, value, field_external=None):
+        external = field_external or (field_name and field_name.capitalize())
         super(FieldCannotBeOnlyWhitespace, self).__init__(self.i18n_message,
-                                                          field_external or (
-                                                              field_name and field_name.capitalize()),
+                                                          external,
                                                           value,
                                                           value=value)
 
@@ -315,8 +315,7 @@ class ICalendarPublishableModifiedEvent(IObjectModifiedEvent, ICalendarPublishab
 class CalendarPublishableModifiedEvent(ObjectModifiedEvent):
 
     def __init__(self, obj, publishBeginning=None, publishEnding=None, *descriptions):
-        super(CalendarPublishableModifiedEvent, self).__init__(
-            obj, *descriptions)
+        super(CalendarPublishableModifiedEvent, self).__init__(obj, *descriptions)
         self.publishEnding = publishEnding
         self.publishBeginning = publishBeginning
 
@@ -442,8 +441,7 @@ class INamedContainer(IContainer):
     """
     A container with a name.
     """
-    container_name = interface.Attribute(
-        "The human-readable nome of this container.")
+    container_name = interface.Attribute("The human-readable nome of this container.")
 
 
 class IHomogeneousTypeContainer(IContainer):
@@ -531,7 +529,7 @@ class ITaggedContent(interface.Interface):
 
     tags = TupleFromObject(title="Applied Tags",
                            value_type=Tag(min_length=1, title="A single tag",
-                                                              description=Tag.__doc__, __name__='tags'),
+                                          description=Tag.__doc__, __name__='tags'),
                            unique=True,
                            default=())
 
@@ -589,7 +587,7 @@ class IReadableShared(interface.Interface):
         title="The ids of all the entities (e.g. communities, etc) this obj is shared with.",
         description=" This is a convenience property for reporting the ids of all "
         " entities this object is shared with, directly or indirectly. Note that the ids reported "
-                    " here are not necessarily globally unique and may not be resolvable as such.",
+        " here are not necessarily globally unique and may not be resolvable as such.",
         value_type=DecodingValidTextLine(title="The entity identifier"),
         required=False,
         default=frozenset(),
@@ -643,7 +641,8 @@ class IShareableModeledContent(IWritableShared, IModeledContent):
     """
 
     sharedWith = UniqueIterable(
-        title="The ids of the entities we are shared directly with, taking externalization of local ids into account",
+        title="The ids of the entities we are shared directly with, "
+              "taking externalization of local ids into account",
         value_type=DecodingValidTextLine(title="The username or NTIID"),
         required=False,
         default=frozenset())
@@ -749,8 +748,7 @@ class ICreatedUsername(interface.Interface):
     creator_username = DecodingValidTextLine(
         title=u'The username',
         constraint=valid_entity_username,
-        readonly=True
-    )
+        readonly=True)
 
 
 class IEntity(IIdentity, IZContained, IAnnotatable, IShouldHaveTraversablePath,
@@ -784,10 +782,8 @@ class ICommunity(IDynamicSharingTarget):
 
     joinable = Bool(title=u'Joinable flag', required=False, default=True)
 
-    username = DecodingValidTextLine(
-        title=u'The username',
-        constraint=valid_entity_username
-    )
+    username = DecodingValidTextLine(title=u'The username',
+                                     constraint=valid_entity_username)
 
     def iter_members():
         """
@@ -856,9 +852,9 @@ class IFriendsList(IModeledContent, IEntity,
         """
         Adding friends causes our creator to follow them.
 
-        :param friend:     May be another friends list, an entity, a
-                                        string naming a user, or even a dictionary containing
-                                        a 'Username' property.
+        :param friend: May be another friends list, an entity, a
+                       string naming a user, or even a dictionary containing
+                       a 'Username' property.
         """
 
 
@@ -884,8 +880,9 @@ class IDynamicSharingTargetFriendsList(IDynamicSharingTarget,
         required=False,
         constraint=checkCannotBeBlank)
 
-    Locked = Bool(
-        title='Locked flag. No group code, no removal', required=False, default=False)
+    Locked = Bool(title='Locked flag. No group code, no removal', 
+                  required=False,
+                  default=False)
 
 # schema maker
 
