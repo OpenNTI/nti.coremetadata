@@ -315,7 +315,8 @@ class ICalendarPublishableModifiedEvent(IObjectModifiedEvent, ICalendarPublishab
 class CalendarPublishableModifiedEvent(ObjectModifiedEvent):
 
     def __init__(self, obj, publishBeginning=None, publishEnding=None, *descriptions):
-        super(CalendarPublishableModifiedEvent, self).__init__(obj, *descriptions)
+        super(CalendarPublishableModifiedEvent, self).__init__(
+            obj, *descriptions)
         self.publishEnding = publishEnding
         self.publishBeginning = publishBeginning
 
@@ -441,7 +442,8 @@ class INamedContainer(IContainer):
     """
     A container with a name.
     """
-    container_name = interface.Attribute("The human-readable nome of this container.")
+    container_name = interface.Attribute(
+        "The human-readable nome of this container.")
 
 
 class IHomogeneousTypeContainer(IContainer):
@@ -880,7 +882,7 @@ class IDynamicSharingTargetFriendsList(IDynamicSharingTarget,
         required=False,
         constraint=checkCannotBeBlank)
 
-    Locked = Bool(title='Locked flag. No group code, no removal', 
+    Locked = Bool(title='Locked flag. No group code, no removal',
                   required=False,
                   default=False)
 
@@ -935,6 +937,47 @@ class IExternalService(interface.Interface):
     """
 
 
+class IRedisClient(IExternalService):
+    """
+    A very poor abstraction of a :class:`redis.StrictRedis` client.
+    In general, this should only be used in the lowest low level code and
+    abstractions should be built on top of this.
+
+    When creating keys to use in the client, try to use traversal-friendly
+    keys, the same sorts of keys that can be found in the ZODB: unicode names
+    separated by the ``/`` character.
+    """
+
+
+class IMemcachedClient(IExternalService):
+    """
+    A very poor abstraction of a :class:`memcache.Client` client.
+    In general, this should only be used in the lowest low level code and
+    abstractions should be built on top of this.
+
+    When creating keys to use in the client, try to use traversal-friendly
+    keys, the same sorts of keys that can be found in the ZODB: unicode names
+    separated by the ``/`` character.
+
+    The values you set must be picklable.
+    """
+
+    def get(key):
+        """
+        Return the unpickled value, or None
+        """
+
+    def set(key, value, time=0):
+        """
+        Pickle the value and store it, returning True on success.
+        """
+
+    def delete(key):
+        """
+        Remove the key from the cache.
+        """
+
+
 class IEnvironmentSettings(interface.Interface):
     pass
 
@@ -950,12 +993,12 @@ class IVersioned(interface.Interface):
     """
 
     version = ValidTextLine(
-            title="The structural version of this object.",
-            description="""An artificial string signifying the 'structural version'
+        title="The structural version of this object.",
+        description="""An artificial string signifying the 'structural version'
                 of this object.""",
-            required=False)
+        required=False)
 
-    def update_version( version=None ):
+    def update_version(version=None):
         """
         Update the version for this object. If no arg given, the
         default algorithm will be used.
