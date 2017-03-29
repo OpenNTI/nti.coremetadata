@@ -20,8 +20,6 @@ from nti.base.interfaces import ICreated
 from nti.base.interfaces import ICreatedTime
 from nti.base.interfaces import ILastModified
 
-from nti.coremetadata.interfaces import IRecordable
-from nti.coremetadata.interfaces import IRecordableContainer
 from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
 
 from nti.schema.interfaces import IVariant
@@ -39,8 +37,7 @@ FIELDS = 'Fields'
 
 class CoreJsonSchemafier(JsonSchemafier):
 
-    IGNORE_INTERFACES = (ICreated, ILastModified, ICreatedTime,
-                         IRecordable, IRecordableContainer)
+    IGNORE_INTERFACES = (ICreated, ILastModified, ICreatedTime)
 
     def allow_field(self, name, field):
         result = not(   name.startswith('_')
