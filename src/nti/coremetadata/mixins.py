@@ -24,18 +24,12 @@ from nti.base._compat import unicode_
 
 from nti.coremetadata.interfaces import IContained
 from nti.coremetadata.interfaces import IVersioned
-from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IPublishable
 from nti.coremetadata.interfaces import IDefaultPublished
 from nti.coremetadata.interfaces import ICalendarPublishable
-from nti.coremetadata.interfaces import IRecordableContainer
 
-from nti.coremetadata.interfaces import ObjectLockedEvent
-from nti.coremetadata.interfaces import ObjectUnlockedEvent
 from nti.coremetadata.interfaces import ObjectPublishedEvent
 from nti.coremetadata.interfaces import ObjectUnpublishedEvent
-from nti.coremetadata.interfaces import ObjectChildOrderLockedEvent
-from nti.coremetadata.interfaces import ObjectChildOrderUnlockedEvent
 from nti.coremetadata.interfaces import CalendarPublishableModifiedEvent
 
 from nti.coremetadata.utils import is_published
@@ -47,59 +41,17 @@ from nti.schema.fieldproperty import UnicodeConvertingFieldProperty
 
 import zope.deferredimport
 zope.deferredimport.initialize()
+
 zope.deferredimport.deprecated(
     "Import from nti.base.mixins instead",
     CreatedTimeMixin='nti.base.mixins:CreatedTimeMixin',
     ModifiedTimeMixin='nti.base.mixins:ModifiedTimeMixin',
     CreatedAndModifiedTimeMixin='nti.base.mixins:ModifiedTimeMixin',)
 
-
-@interface.implementer(IRecordable)
-class RecordableMixin(object):
-
-    locked = False
-
-    def __init__(self, *args, **kwargs):
-        super(RecordableMixin, self).__init__(*args, **kwargs)
-
-    def lock(self, event=True, **kwargs):
-        self.locked = True
-        if event:
-            notify(ObjectLockedEvent(self))
-
-    def unlock(self, event=True, **kwargs):
-        self.locked = False
-        if event:
-            notify(ObjectUnlockedEvent(self))
-
-    def isLocked(self):
-        return self.locked
-    is_locked = isLocked
-
-
-@interface.implementer(IRecordableContainer)
-class RecordableContainerMixin(RecordableMixin):
-
-    child_order_locked = False
-
-    def __init__(self, *args, **kwargs):
-        super(RecordableContainerMixin, self).__init__(*args, **kwargs)
-
-    def child_order_lock(self, event=True, **kwargs):
-        self.child_order_locked = True
-        if event:
-            notify(ObjectChildOrderLockedEvent(self))
-    childOrderLock = child_order_lock
-
-    def child_order_unlock(self, event=True, **kwargs):
-        self.child_order_locked = False
-        if event:
-            notify(ObjectChildOrderUnlockedEvent(self))
-    childOrderUnlock = child_order_unlock
-
-    def is_child_order_locked(self):
-        return self.child_order_locked
-    isChildOrderLocked = is_child_order_locked
+zope.deferredimport.deprecated(
+    "Import from nti.recorder.mixins instead",
+    RecordableMixin='nti.recorder.mixins:RecordableMixin',
+    RecordableContainerMixin='nti.recorder.mixins:RecordableContainerMixin')
 
 
 @interface.implementer(IPublishable)
