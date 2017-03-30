@@ -28,16 +28,12 @@ from nti.base.interfaces import ILastModified
 from nti.base.mixins import CreatedAndModifiedTimeMixin
 
 from nti.coremetadata.interfaces import IContained
-from nti.coremetadata.interfaces import IRecordable
 from nti.coremetadata.interfaces import IZContained
 from nti.coremetadata.interfaces import IDefaultPublished
 from nti.coremetadata.interfaces import ICalendarPublishable
-from nti.coremetadata.interfaces import IRecordableContainer
 
 from nti.coremetadata.mixins import ContainedMixin
-from nti.coremetadata.mixins import RecordableMixin
 from nti.coremetadata.mixins import CalendarPublishableMixin
-from nti.coremetadata.mixins import RecordableContainerMixin
 
 from nti.coremetadata.tests import SharedConfiguringTestLayer
 
@@ -60,28 +56,6 @@ class TestMixins(unittest.TestCase):
 
         c.updateLastModIfGreater(100)
         assert_that(c, has_property('lastModified', is_(t)))
-
-    def test_recordable(self):
-        c = RecordableMixin()
-        assert_that(c, has_property('locked', is_(False)))
-        assert_that(c, validly_provides(IRecordable))
-        assert_that(c, verifiably_provides(IRecordable))
-        c.lock()
-        assert_that(c, has_property('locked', is_(True)))
-        assert_that(c.is_locked(), is_(True))
-        c.unlock()
-        assert_that(c, has_property('locked', is_(False)))
-
-    def test_recordable_container(self):
-        c = RecordableContainerMixin()
-        assert_that(c, has_property('child_order_locked', is_(False)))
-        assert_that(c, validly_provides(IRecordableContainer))
-        assert_that(c, verifiably_provides(IRecordableContainer))
-        c.child_order_lock()
-        assert_that(c, has_property('child_order_locked', is_(True)))
-        assert_that(c.is_child_order_locked(), is_(True))
-        c.child_order_unlock()
-        assert_that(c, has_property('child_order_locked', is_(False)))
 
     def test_plublishable(self):
         c = CalendarPublishableMixin()
