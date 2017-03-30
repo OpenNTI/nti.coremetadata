@@ -17,15 +17,10 @@ does_not = is_not
 from nti.testing.matchers import validly_provides
 from nti.testing.matchers import verifiably_provides
 
-import time
 import unittest
 
 from datetime import datetime
 from datetime import timedelta
-
-from nti.base.interfaces import ICreatedTime
-from nti.base.interfaces import ILastModified
-from nti.base.mixins import CreatedAndModifiedTimeMixin
 
 from nti.coremetadata.interfaces import IContained
 from nti.coremetadata.interfaces import IZContained
@@ -43,19 +38,6 @@ from nti.testing.time import time_monotonically_increases
 class TestMixins(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer
-
-    def test_plus_extend(self):
-        c = CreatedAndModifiedTimeMixin()
-        for iface in (ICreatedTime, ILastModified):
-            assert_that(c, validly_provides(iface))
-            assert_that(c, verifiably_provides(iface))
-
-        t = time.time() + 100
-        c.updateLastMod(t)
-        assert_that(c, has_property('lastModified', is_(t)))
-
-        c.updateLastModIfGreater(100)
-        assert_that(c, has_property('lastModified', is_(t)))
 
     def test_plublishable(self):
         c = CalendarPublishableMixin()
