@@ -50,6 +50,7 @@ from nti.coremetadata import MessageFactory as _
 from nti.schema.field import Bool
 from nti.schema.field import Number
 from nti.schema.field import Object
+from nti.schema.field import TextLine
 from nti.schema.field import ValidTextLine
 from nti.schema.field import ValidDatetime
 from nti.schema.field import UniqueIterable
@@ -661,10 +662,9 @@ class ICreatedUsername(interface.Interface):
     Something created by an identified entity, expressed
     as a (globally unique) username.
     """
-    creator_username = DecodingValidTextLine(
-        title=u'The username',
-        constraint=valid_entity_username,
-        readonly=True)
+    creator_username = DecodingValidTextLine(title=u'The username',
+                                             constraint=valid_entity_username,
+                                             readonly=True)
 
 
 class IEntity(IIdentity, IZContained, IAnnotatable, IShouldHaveTraversablePath,
@@ -789,12 +789,11 @@ class IDynamicSharingTargetFriendsList(IDynamicSharingTarget,
     A type of :class:`IDynamicSharingTarget` that is a list of members.
     """
 
-    About = ValidTextLine(
-        title='About',
-        description="A short description of a grouo",
-        max_length=500,
-        required=False,
-        constraint=checkCannotBeBlank)
+    About = ValidTextLine(title='About',
+                          description="A short description of a grouo",
+                          max_length=500,
+                          required=False,
+                          constraint=checkCannotBeBlank)
 
     Locked = Bool(title='Locked flag. No group code, no removal',
                   required=False,
@@ -906,10 +905,10 @@ class IVersioned(interface.Interface):
     against overwrites when editing an object.
     """
 
-    version = ValidTextLine(
+    version = TextLine(
         title="The structural version of this object.",
         description="""An artificial string signifying the 'structural version'
-                of this object.""",
+                       of this object.""",
         required=False)
 
     def update_version(version=None):
