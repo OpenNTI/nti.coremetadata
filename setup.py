@@ -22,6 +22,7 @@ def _read(fname):
     with codecs.open(fname, encoding='utf-8') as f:
         return f.read()
 
+
 setup(
     name='nti.coremetadata',
     version=_read('version.txt').strip(),
@@ -48,6 +49,10 @@ setup(
     tests_require=TESTS_REQUIRE,
     install_requires=[
         'setuptools',
+        'nti.base',
+        'nti.contentfragments',
+        'nti.property',
+        'nti.schema',
         'zope.annotation',
         'zope.component',
         'zope.container',
@@ -61,10 +66,6 @@ setup(
         'zope.mimetype',
         'zope.schema',
         'zope.security',
-        'nti.base',
-        'nti.contentfragments',
-        'nti.property',
-        'nti.schema'
     ],
     extras_require={
         'test': TESTS_REQUIRE,
