@@ -204,15 +204,15 @@ class IPublishable(interface.Interface):
 class ICalendarPublishableMixin(interface.Interface):
 
     publishBeginning = ValidDatetime(
-        title="This object is not available before this time",
-        description="""When present, this specifies the time instant at which
-                       this obj is to be available.""",
+        title=u"This object is not available before this time",
+        description=u"When present, this specifies the time instant at which "
+                     "this obj is to be available.",
         required=False)
 
     publishEnding = ValidDatetime(
-        title="This object is not available after this time",
-        description="""When present, this specifies the last instance at which
-                       this obj is to be available.""",
+        title=u"This object is not available after this time",
+        description=u"When present, this specifies the last instance at which "
+                    "this obj is to be available.",
         required=False)
 
 
@@ -230,8 +230,7 @@ class ICalendarPublishableModifiedEvent(IObjectModifiedEvent, ICalendarPublishab
 class CalendarPublishableModifiedEvent(ObjectModifiedEvent):
 
     def __init__(self, obj, publishBeginning=None, publishEnding=None, *descriptions):
-        super(CalendarPublishableModifiedEvent, self).__init__(
-            obj, *descriptions)
+        super(CalendarPublishableModifiedEvent, self).__init__(obj, *descriptions)
         self.publishEnding = publishEnding
         self.publishBeginning = publishBeginning
 
@@ -275,7 +274,6 @@ class ICalendarPublishablePredicate(interface.Interface):
 def get_publishable_predicate(publishable, interface=None):
     interface = IPublishablePredicate if interface is None else interface
     predicates = list(component.subscribers((publishable,), interface))
-
     def uber_filter(publishable, *args, **kwargs):
         return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
     return uber_filter
@@ -284,7 +282,6 @@ def get_publishable_predicate(publishable, interface=None):
 def get_calendar_publishable_predicate(publishable, interface=None):
     interface = ICalendarPublishablePredicate if interface is None else interface
     predicates = list(component.subscribers((publishable,), interface))
-
     def uber_filter(publishable, *args, **kwargs):
         return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
     return uber_filter
@@ -343,12 +340,12 @@ class IContained(IZContained):
 
     # For BWC, these are not required
     containerId = DecodingValidTextLine(
-        title="The ID (name) of the container to which this object belongs. "
+        title=u"The ID (name) of the container to which this object belongs. "
         "Should match the __parent__.__name__",
         required=False)
 
     id = DecodingValidTextLine(
-        title="The locally unique ID (name) of this object in the container "
+        title=u"The locally unique ID (name) of this object in the container "
         "it belongs. Should match the __name__",
         required=False)
 
@@ -428,7 +425,7 @@ class IModeledContentBody(interface.Interface):
     Marker interface for objects that have a iterable `body` attrbute
     with content
     """
-    body = Iterable(title="Content elements")
+    body = Iterable(title=u"Content elements")
 
 
 class ITitledContent(ITitled):
@@ -444,8 +441,8 @@ class ITaggedContent(interface.Interface):
     Something that can contain tags.
     """
 
-    tags = TupleFromObject(title="Applied Tags",
-                           value_type=Tag(min_length=1, title="A single tag",
+    tags = TupleFromObject(title=u"Applied Tags",
+                           value_type=Tag(min_length=1, title=u"A single tag",
                                           description=Tag.__doc__, __name__='tags'),
                            unique=True,
                            default=())
@@ -487,25 +484,25 @@ class IReadableShared(interface.Interface):
         """
 
     sharingTargets = UniqueIterable(
-        title="A set of entities this object is directly shared with (non-recursive, non-flattened)",
-        value_type=Object(IIdentity, title="An entity shared with"),
+        title=u"A set of entities this object is directly shared with (non-recursive, non-flattened)",
+        value_type=Object(IIdentity, title=u"An entity shared with"),
         required=False,
         default=(),
         readonly=True)
 
     flattenedSharingTargets = UniqueIterable(
-        title="A set of entities this object is directly or indirectly shared with (recursive, flattened)",
-        value_type=Object(IIdentity, title="An entity shared with"),
+        title=u"A set of entities this object is directly or indirectly shared with (recursive, flattened)",
+        value_type=Object(IIdentity, title=u"An entity shared with"),
         required=False,
         default=(),
         readonly=True)
 
     flattenedSharingTargetNames = UniqueIterable(
-        title="The ids of all the entities (e.g. communities, etc) this obj is shared with.",
-        description=" This is a convenience property for reporting the ids of all "
+        title=u"The ids of all the entities (e.g. communities, etc) this obj is shared with.",
+        description=u"This is a convenience property for reporting the ids of all "
         " entities this object is shared with, directly or indirectly. Note that the ids reported "
         " here are not necessarily globally unique and may not be resolvable as such.",
-        value_type=DecodingValidTextLine(title="The entity identifier"),
+        value_type=DecodingValidTextLine(title=u"The entity identifier"),
         required=False,
         default=frozenset(),
         readonly=True)
@@ -558,9 +555,9 @@ class IShareableModeledContent(IWritableShared, IModeledContent):
     """
 
     sharedWith = UniqueIterable(
-        title="The ids of the entities we are shared directly with, "
+        title=u"The ids of the entities we are shared directly with, "
               "taking externalization of local ids into account",
-        value_type=DecodingValidTextLine(title="The username or NTIID"),
+        value_type=DecodingValidTextLine(title=u"The username or NTIID"),
         required=False,
         default=frozenset())
 
@@ -575,7 +572,7 @@ class IModeledContentFile(IFile,
                           INamed,
                           ILastModified,
                           IShareableModeledContent):
-    name = ValidTextLine(title="Identifier for the file",
+    name = ValidTextLine(title=u"Identifier for the file",
                          required=False,
                          default=None)
 IContentFile = IModeledContentFile  # BWC
@@ -789,13 +786,13 @@ class IDynamicSharingTargetFriendsList(IDynamicSharingTarget,
     A type of :class:`IDynamicSharingTarget` that is a list of members.
     """
 
-    About = ValidTextLine(title='About',
-                          description="A short description of a grouo",
+    About = ValidTextLine(title=u'About',
+                          description=u"A short description of a group",
                           max_length=500,
                           required=False,
                           constraint=checkCannotBeBlank)
 
-    Locked = Bool(title='Locked flag. No group code, no removal',
+    Locked = Bool(title=u'Locked flag. No group code, no removal',
                   required=False,
                   default=False)
 
@@ -822,7 +819,7 @@ class IContainerContext(interface.Interface):
     """
     An object that represents the context of the given container.
     """
-    context_id = ValidTextLine(title="The ntiid of the context.", default='')
+    context_id = ValidTextLine(title=u"The ntiid of the context.", default='')
 
 
 class IContextAnnotatable(IAttributeAnnotatable):
@@ -906,9 +903,9 @@ class IVersioned(interface.Interface):
     """
 
     version = TextLine(
-        title="The structural version of this object.",
-        description="""An artificial string signifying the 'structural version'
-                       of this object.""",
+        title=u"The structural version of this object.",
+        description=u"An artificial string signifying the 'structural version' "
+                     "of this object.",
         required=False)
 
     def update_version(version=None):
