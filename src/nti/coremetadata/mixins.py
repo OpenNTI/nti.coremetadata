@@ -42,17 +42,28 @@ from nti.schema.fieldproperty import UnicodeConvertingFieldProperty
 import zope.deferredimport
 zope.deferredimport.initialize()
 
+# base
+
 zope.deferredimport.deprecated(
     "Import from nti.base.mixins instead",
     CreatedTimeMixin='nti.base.mixins:CreatedTimeMixin',
     ModifiedTimeMixin='nti.base.mixins:ModifiedTimeMixin',
     CreatedAndModifiedTimeMixin='nti.base.mixins:ModifiedTimeMixin',)
 
+# recordables
+
 zope.deferredimport.deprecated(
     "Import from nti.recorder.mixins instead",
     RecordableMixin='nti.recorder.mixins:RecordableMixin',
     RecordableContainerMixin='nti.recorder.mixins:RecordableContainerMixin')
 
+
+# publishing
+
+# zope.deferredimport.deprecated(
+#     "Import from nti.publishing.mixins instead",
+#     PublishableMixin='nti.publishing.mixins:PublishableMixin',
+#     CalendarPublishableMixin='nti.publishing.mixins:CalendarPublishableMixin')
 
 @interface.implementer(IPublishable)
 class PublishableMixin(object):

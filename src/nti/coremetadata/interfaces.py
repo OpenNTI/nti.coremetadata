@@ -142,6 +142,32 @@ zope.deferredimport.deprecated(
 
 # published objects
 
+# zope.deferredimport.deprecated(
+#     "Import from nti.publishing.interfaces instead",
+#     IDefaultPublished='nti.publishing.interfaces:IDefaultPublished',
+#     ObjectPublishedEvent='nti.publishing.interfaces:ObjectPublishedEvent',
+#     IObjectPublishedEvent='nti.publishing.interfaces:IObjectPublishedEvent',
+#     ObjectUnpublishedEvent='nti.publishing.interfaces:ObjectUnpublishedEvent',
+#     IObjectUnpublishedEvent='nti.publishing.interfaces:IObjectUnpublishedEvent',)
+# 
+# zope.deferredimport.deprecated(
+#     "Import from nti.publishing.interfaces instead",
+#     IPublishable='nti.publishing.interfaces:IPublishable',
+#     ICalendarPublishable='nti.publishing.interfaces:ICalendarPublishable',
+#     ICalendarPublishableMixin='nti.publishing.interfaces:ICalendarPublishableMixin',
+#     CalendarPublishableModifiedEvent='nti.publishing.interfaces:CalendarPublishableModifiedEvent',
+#     ICalendarPublishableModifiedEvent='nti.publishing.interfaces:ICalendarPublishableModifiedEvent')
+# 
+# zope.deferredimport.deprecated(
+#     "Import from nti.publishing.interfaces instead",
+#     INoPublishLink='nti.publishing.interfaces:INoPublishLink',
+#     IPublishablePredicate='nti.publishing.interfaces:IPublishablePredicate',
+#     ICalendarPublishablePredicate='nti.publishing.interfaces:ICalendarPublishableMixin')
+# 
+# zope.deferredimport.deprecated(
+#     "Import from nti.publishing.interfaces instead",
+#     get_publishable_predicate='nti.publishing.interfaces:get_publishable_predicate',
+#     get_calendar_publishable_predicate='nti.publishing.interfaces:get_calendar_publishable_predicate')
 
 class IDefaultPublished(interface.Interface):
     """
