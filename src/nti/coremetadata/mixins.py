@@ -18,22 +18,10 @@ from zope import interface
 
 from zope.container.contained import Contained
 
-from zope.event import notify
-
 from nti.base._compat import unicode_
 
 from nti.coremetadata.interfaces import IContained
 from nti.coremetadata.interfaces import IVersioned
-from nti.coremetadata.interfaces import IPublishable
-from nti.coremetadata.interfaces import IDefaultPublished
-from nti.coremetadata.interfaces import ICalendarPublishable
-
-from nti.coremetadata.interfaces import ObjectPublishedEvent
-from nti.coremetadata.interfaces import ObjectUnpublishedEvent
-from nti.coremetadata.interfaces import CalendarPublishableModifiedEvent
-
-from nti.coremetadata.utils import is_published
-from nti.coremetadata.utils import is_calendar_published
 
 from nti.property.property import alias
 
@@ -42,7 +30,9 @@ from nti.schema.fieldproperty import UnicodeConvertingFieldProperty
 import zope.deferredimport
 zope.deferredimport.initialize()
 
+
 # base
+
 
 zope.deferredimport.deprecated(
     "Import from nti.base.mixins instead",
@@ -52,6 +42,7 @@ zope.deferredimport.deprecated(
 
 # recordables
 
+
 zope.deferredimport.deprecated(
     "Import from nti.recorder.mixins instead",
     RecordableMixin='nti.recorder.mixins:RecordableMixin',
@@ -60,88 +51,14 @@ zope.deferredimport.deprecated(
 
 # publishing
 
-# zope.deferredimport.deprecated(
-#     "Import from nti.publishing.mixins instead",
-#     PublishableMixin='nti.publishing.mixins:PublishableMixin',
-#     CalendarPublishableMixin='nti.publishing.mixins:CalendarPublishableMixin')
 
-@interface.implementer(IPublishable)
-class PublishableMixin(object):
-
-    publishLastModified = None
-
-    __publication_predicate_interface__ = None
-
-    def __init__(self, *args, **kwargs):
-        super(PublishableMixin, self).__init__(*args, **kwargs)
-
-    def update_publish_last_mod(self):
-        """
-        Update the publish last modification time.
-        """
-        self.publishLastModified = time.time()
-    updatePublishLastModified = _update_publish_last_mod = update_publish_last_mod
-
-    def do_publish(self, event=True, **kwargs):
-        interface.alsoProvides(self, IDefaultPublished)
-        if event:
-            notify(ObjectPublishedEvent(self))
-        self.update_publish_last_mod()
-
-    def publish(self, *args, **kwargs):
-        if not self.is_published():
-            self.do_publish(**kwargs)
-
-    def do_unpublish(self, event=True, **kwargs):
-        interface.noLongerProvides(self, IDefaultPublished)
-        if event:
-            notify(ObjectUnpublishedEvent(self))
-        self.update_publish_last_mod()
-
-    def unpublish(self, *args, **kwargs):
-        if self.is_published():
-            self.do_unpublish(**kwargs)
-
-    def is_published(self, *args, **kwargs):
-        interface =  kwargs.get('interface', None) \
-            or getattr(self, '__publication_predicate_interface__', None)
-        if interface is not None:
-            kwargs['interface'] = interface
-        return is_published(self, *args, **kwargs)
-    isPublished = is_published
+zope.deferredimport.deprecated(
+    "Import from nti.publishing.mixins instead",
+    PublishableMixin='nti.publishing.mixins:PublishableMixin',
+    CalendarPublishableMixin='nti.publishing.mixins:CalendarPublishableMixin')
 
 
-@interface.implementer(ICalendarPublishable)
-class CalendarPublishableMixin(PublishableMixin):
-
-    publishEnding = None
-    publishBeginning = None
-
-    def publish(self, start=None, end=None, **kwargs):
-        if start is None:
-            # Explicit publish, reset any dates we have.
-            # The user may publish but specify just an end date.
-            self.do_publish(**kwargs)
-        else:
-            notify(CalendarPublishableModifiedEvent(self, start, end))
-            interface.noLongerProvides(self, IDefaultPublished)
-            # Update mod time and notify our object is changing.
-            self.update_publish_last_mod()
-        self.publishEnding = end
-        self.publishBeginning = start
-
-    def unpublish(self, *args, **kwargs):
-        self.do_unpublish(**kwargs)
-        self.publishEnding = None
-        self.publishBeginning = None
-
-    def is_published(self, *args, **kwargs):
-        interface = kwargs.get('interface', None) \
-                 or getattr(self, '__publication_predicate_interface__', None)
-        if interface is not None:
-            kwargs['interface'] = interface
-        return is_calendar_published(self, *args, **kwargs)
-    isPublished = is_published
+# contained
 
 
 @interface.implementer(IContained)
@@ -171,6 +88,9 @@ class ContainedMixin(Contained):
         if containedId is not None:
             self.id = containedId
 _ContainedMixin = ZContainedMixin = ContainedMixin
+
+
+# Versioning
 
 
 @interface.implementer(IVersioned)

@@ -17,8 +17,6 @@ from zope.security.management import getInteraction
 from zope.security.management import system_user
 
 from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
-from nti.coremetadata.interfaces import get_publishable_predicate
-from nti.coremetadata.interfaces import get_calendar_publishable_predicate
 
 
 def current_principal(system=True):
@@ -37,25 +35,15 @@ def make_schema(schema, user=None, maker=IObjectJsonSchemaMaker, name=u''):
     return result
 
 
-def is_published(self, interface=None, *args, **kwargs):
-    kwargs['principal'] = kwargs.get('principal') or current_principal()
-    predicate = get_publishable_predicate(self, interface)
-    return predicate(self, *args, **kwargs)
-isPublished = is_published
+# deprecations
 
 
-def is_calendar_published(self, interface=None, *args, **kwargs):
-    kwargs['principal'] = kwargs.get('principal') or current_principal()
-    predicate = get_calendar_publishable_predicate(self, interface)
-    return predicate(self, *args, **kwargs)
-isCalendarPublished = is_calendar_published
+import zope.deferredimport
+zope.deferredimport.initialize()
 
-# import zope.deferredimport
-# zope.deferredimport.initialize()
-# 
-# zope.deferredimport.deprecated(
-#     "Import from nti.publishing.utils instead",
-#     isPublished='nti.publishing.utils:is_published',
-#     is_published='nti.publishing.utils:is_published',
-#     isCalendarPublished='nti.publishing.utils:is_calendar_published',
-#     is_calendar_published='nti.publishing.utils:is_calendar_published')
+zope.deferredimport.deprecated(
+    "Import from nti.publishing.utils instead",
+    isPublished='nti.publishing.utils:is_published',
+    is_published='nti.publishing.utils:is_published',
+    isCalendarPublished='nti.publishing.utils:is_calendar_published',
+    is_calendar_published='nti.publishing.utils:is_calendar_published')
