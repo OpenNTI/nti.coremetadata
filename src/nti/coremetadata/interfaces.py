@@ -7,7 +7,6 @@
 from __future__ import print_function, unicode_literals, absolute_import, division
 __docformat__ = "restructuredtext en"
 
-from zope import component
 from zope import interface
 
 from zope.annotation.interfaces import IAnnotatable
@@ -17,13 +16,6 @@ from zope.container.interfaces import IContainer as IZContainer
 from zope.container.interfaces import IContainerNamesContainer as IZContainerNamesContainer
 
 from zope.i18n import translate
-
-from zope.interface.interfaces import ObjectEvent
-from zope.interface.interfaces import IObjectEvent
-
-from zope.lifecycleevent import ObjectModifiedEvent
-
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from zope.location.interfaces import IContained as IZContained
 
@@ -48,11 +40,9 @@ from nti.contentfragments.schema import Title
 from nti.coremetadata import MessageFactory as _
 
 from nti.schema.field import Bool
-from nti.schema.field import Number
 from nti.schema.field import Object
 from nti.schema.field import TextLine
 from nti.schema.field import ValidTextLine
-from nti.schema.field import ValidDatetime
 from nti.schema.field import UniqueIterable
 from nti.schema.field import TupleFromObject
 from nti.schema.field import DecodingValidTextLine
