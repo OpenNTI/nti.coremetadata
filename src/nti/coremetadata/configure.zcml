@@ -10,12 +10,6 @@
 	<include package="zope.security" />
 	
 	<include package="nti.base" />
-	
-	<subscriber	factory=".predicates.DefaultPublishablePredicate"
-				provides=".interfaces.IPublishablePredicate"/>
-	
-	<subscriber	factory=".predicates.DefaultCalendarPublishablePredicate"
-				provides=".interfaces.ICalendarPublishablePredicate"/>
 
 	<utility factory=".jsonschema.DefaultObjectJsonSchemaMaker" />
 
