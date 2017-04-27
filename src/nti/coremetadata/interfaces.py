@@ -83,6 +83,8 @@ class InvalidData(InvalidValue):
         if self.i18n_message:
             return self.i18n_message
         return self.__class__.__doc__
+
+
 _InvalidData = InvalidData
 
 
@@ -113,6 +115,7 @@ class ISystemUserPrincipal(IPrincipal):
 
 # recordables
 
+
 zope.deferredimport.deprecated(
     "Import from nti.recorder.interfaces instead",
     IRecordable='nti.recorder.interfaces:IRecordable',
@@ -139,7 +142,7 @@ zope.deferredimport.deprecated(
     IObjectPublishedEvent='nti.publishing.interfaces:IObjectPublishedEvent',
     ObjectUnpublishedEvent='nti.publishing.interfaces:ObjectUnpublishedEvent',
     IObjectUnpublishedEvent='nti.publishing.interfaces:IObjectUnpublishedEvent',)
- 
+
 zope.deferredimport.deprecated(
     "Import from nti.publishing.interfaces instead",
     IPublishable='nti.publishing.interfaces:IPublishable',
@@ -147,13 +150,13 @@ zope.deferredimport.deprecated(
     ICalendarPublishableMixin='nti.publishing.interfaces:ICalendarPublishableMixin',
     CalendarPublishableModifiedEvent='nti.publishing.interfaces:CalendarPublishableModifiedEvent',
     ICalendarPublishableModifiedEvent='nti.publishing.interfaces:ICalendarPublishableModifiedEvent')
- 
+
 zope.deferredimport.deprecated(
     "Import from nti.publishing.interfaces instead",
     INoPublishLink='nti.publishing.interfaces:INoPublishLink',
     IPublishablePredicate='nti.publishing.interfaces:IPublishablePredicate',
     ICalendarPublishablePredicate='nti.publishing.interfaces:ICalendarPublishableMixin')
- 
+
 zope.deferredimport.deprecated(
     "Import from nti.publishing.interfaces instead",
     get_publishable_predicate='nti.publishing.interfaces:get_publishable_predicate',
@@ -247,6 +250,7 @@ class IHomogeneousTypeContainer(IContainer):
         of this type associated as tagged data on the type at :data:IHTC_NEW_FACTORY
         """)
 
+
 IHTC_NEW_FACTORY = 'nti.dataserver.interfaces.IHTCNewFactory'  # BWC
 
 
@@ -328,6 +332,7 @@ class IIdentity(interface.Interface):
     """
     Base interface for Identity base objects
     """
+
 
 zope.deferredimport.deprecated(
     "Import from nti.threadable.interfaces instead",
@@ -449,6 +454,8 @@ class IModeledContentFile(IFile,
     name = ValidTextLine(title=u"Identifier for the file",
                          required=False,
                          default=None)
+
+
 IContentFile = IModeledContentFile  # BWC
 
 # media types
@@ -507,6 +514,7 @@ class IEmbeddedAudio(IEmbeddedMedia):
     """
 
 # entity
+
 
 ME_USER_ID = 'me'
 EVERYONE_GROUP_NAME = 'system.Everyone'
@@ -779,7 +787,7 @@ class IVersioned(interface.Interface):
     version = TextLine(
         title=u"The structural version of this object.",
         description=u"An artificial string signifying the 'structural version' "
-                     "of this object.",
+        "of this object.",
         required=False)
 
     def update_version(version=None):
@@ -788,6 +796,74 @@ class IVersioned(interface.Interface):
         default algorithm will be used.
         """
 
+
 IVersioned['version'].setTaggedValue(TAG_HIDDEN_IN_UI, True)
 IVersioned['version'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IVersioned['version'].setTaggedValue(TAG_READONLY_IN_UI, True)
+
+
+# ACLs
+
+
+class IACE(interface.Interface):
+    """
+    An Access Control Entry (one item in an ACL).
+
+    An ACE is an iterable holding three items: the
+    *action*, the *actor*, and the *permissions*. (Typically,
+    it is implemented as a three-tuple).
+
+    The *action* is either :const:`ACE_ACT_ALLOW` or :const:`ACE_ACT_DENY`. The former
+    specifically grants the actor the permission. The latter specifically denies
+    it (useful in a hierarchy of ACLs or actors [groups]). The *actor* is the
+    :class:`IPrincipal` that the ACE refers to. Finally, the *permissions* is one (or
+    a list of) :class:`IPermission`, or the special value :const:`ALL_PERMISSIONS`
+    """
+
+    def __iter__():
+        """
+        Returns three items.
+        """
+
+
+class IACL(interface.Interface):
+    """
+    Something that can iterate across :class:`IACE` objects.
+    """
+
+    def __iter__():
+        """
+        Iterates across :class:`IACE` objects.
+        """
+
+
+class IACLProvider(interface.Interface):
+    """
+    Something that can provide an ACL for itself.
+    """
+
+    __acl__ = interface.Attribute("An :class:`IACL`")
+
+
+class ISupplementalACLProvider(interface.Interface):
+    """
+    Some that that can provide a supplemental ACL to the
+    primary :class:`IACLProvider` of an object.
+    """
+
+    __acl__ = interface.Attribute("An :class:`IACL`")
+
+
+class IACLProviderCacheable(interface.Interface):
+    """
+    A marker interface (usually added through configuration) that states
+    that the results of adapting an object to an :class:`IACLProvider` can
+    be cached on the object itself, making it its own provider.
+
+    Do not do this for persistent objects or objects who's ACL provider
+    may differ in various sites due to configuration, or which makes decisions
+    to produce a partial ACL based on the current user (or anything else that
+    could be considered "current" such as a current request). In summary, it is
+    generally only safe to do when the ACL information comes from external sources
+    such as files or strings.
+    """
