@@ -678,6 +678,30 @@ class IDynamicSharingTargetFriendsList(IDynamicSharingTarget,
                   required=False,
                   default=False)
 
+
+class IObjectSharingModifiedEvent(IObjectModifiedEvent):
+    """
+    An event broadcast when we know that the sharing settings of
+    an object have been changed.
+    """
+
+    oldSharingTargets = UniqueIterable(
+        title=u"A set of entities this object is directly shared with, before the "
+               "change (non-recursive, non-flattened)",
+        value_type=Object(IEntity, title="An entity shared with"),
+        required=False,
+        default=(),
+        readonly=True)
+
+
+@interface.implementer(IObjectSharingModifiedEvent)
+class ObjectSharingModifiedEvent(ObjectModifiedEvent):
+
+    def __init__(self, obj, *descriptions, **kwargs):
+        super(ObjectSharingModifiedEvent, self).__init__(obj, *descriptions)
+        self.oldSharingTargets = kwargs.pop('oldSharingTargets', ())
+
+
 # schema maker
 
 
