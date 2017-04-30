@@ -17,6 +17,9 @@ from zope.container.interfaces import IContainerNamesContainer as IZContainerNam
 
 from zope.i18n import translate
 
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+
 from zope.location.interfaces import IContained as IZContained
 
 from zope.mimetype.interfaces import IContentTypeAware
