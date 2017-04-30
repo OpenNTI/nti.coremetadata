@@ -111,10 +111,12 @@ def checkCannotBeBlank(value):
 
 # principals
 
+
 class ISystemUserPrincipal(IPrincipal):
     """
     Marker for a system user principal
     """
+
 
 # recordables
 
@@ -137,6 +139,7 @@ zope.deferredimport.deprecated(
 
 
 # published objects
+
 
 zope.deferredimport.deprecated(
     "Import from nti.publishing.interfaces instead",

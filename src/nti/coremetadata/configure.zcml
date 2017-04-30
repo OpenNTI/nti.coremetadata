@@ -13,7 +13,7 @@
 
 	<utility factory=".jsonschema.DefaultObjectJsonSchemaMaker" />
 
-	 <class class="zope.security.management.system_user">
+	<class class="zope.security.management.system_user">
 		<implements interface=".interfaces.ISystemUserPrincipal" />
 	</class>
 	
