@@ -9,6 +9,8 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+import six
+
 from zope.schema.fieldproperty import FieldProperty
 
 from zope.schema.interfaces import InvalidURI
@@ -69,7 +71,7 @@ class BodyFieldProperty(AbstractFieldProperty):
     def _adapt(self, value):
         # Allow ascii strings for old app tests
         value = [x.decode('utf-8') if isinstance(x, str) else x for x in value]
-        value = tuple((self._field.value_type.fromObject(x) for x in value))
+        value = tuple(self._field.value_type.fromObject(x) for x in value)
         return value
 NoteBodyFieldProperty = BodyFieldProperty
 
@@ -81,7 +83,7 @@ class MessageInfoBodyFieldProperty(AbstractFieldProperty):
         if isinstance(value, str):
             value = value.decode('utf-8')
         # Wrap single strings automatically
-        if isinstance(value, unicode):
+        if isinstance(value, six.text_type):
             value = (value,)
         # Make immutable
         if value and isinstance(value, (set, list)):
@@ -91,17 +93,17 @@ class MessageInfoBodyFieldProperty(AbstractFieldProperty):
 
 def legacyModeledContentBodyTypes():
     return [SanitizedHTMLContentFragment(min_length=1,
-                                         description="HTML content that is sanitized and non-empty"),
+                                         description=u"HTML content that is sanitized and non-empty"),
             PlainText(min_length=1, 
-                      description="Plain text that is sanitized and non-empty"),
-            Object(ICanvas, description="A :class:`.ICanvas`"),
-            Object(IMedia, description="A :class:`.IMedia`")]
+                      description=u"Plain text that is sanitized and non-empty"),
+            Object(ICanvas, description=u"A :class:`.ICanvas`"),
+            Object(IMedia, description=u"A :class:`.IMedia`")]
 
 
 def bodySchemaField(fields, required=False):
-    value_type = Variant(fields=fields, title="A body part", __name__='body')
-    return ListOrTupleFromObject(title="The body of this object",
-                                 description="""
+    value_type = Variant(fields=fields, title=u"A body part", __name__='body')
+    return ListOrTupleFromObject(title=u"The body of this object",
+                                 description=u"""
                                  An ordered sequence of body parts
                                  (:class:`nti.contentfragments.interfaces.IUnicodeContentFragment`
                                  or some kinds of :class:`.IModeledContent` such as :class:`.ICanvas`.)
@@ -123,5 +125,5 @@ def CompoundModeledContentBody(required=False, fields=()):
 
 def ExtendedCompoundModeledContentBody(required=False):
     fields = legacyModeledContentBodyTypes()
-    fields.append(Object(INamed, description="A :class:`.INamed`"))
+    fields.append(Object(INamed, description=u"A :class:`.INamed`"))
     return bodySchemaField(fields, required)

@@ -38,8 +38,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
@@ -53,6 +51,7 @@ setup(
         'nti.contentfragments',
         'nti.property',
         'nti.schema',
+        'six',
         'zope.annotation',
         'zope.component',
         'zope.container',
