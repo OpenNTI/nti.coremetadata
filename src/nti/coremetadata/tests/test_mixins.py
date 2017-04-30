@@ -8,6 +8,7 @@ __docformat__ = "restructuredtext en"
 # pylint: disable=W0212,R0904
 
 from hamcrest import is_
+from hamcrest import none
 from hamcrest import is_not
 from hamcrest import assert_that
 from hamcrest import has_property
@@ -19,9 +20,11 @@ from nti.testing.matchers import verifiably_provides
 import unittest
 
 from nti.coremetadata.interfaces import IContained
+from nti.coremetadata.interfaces import IVersioned
 from nti.coremetadata.interfaces import IZContained
 
 from nti.coremetadata.mixins import ContainedMixin
+from nti.coremetadata.mixins import VersionedMixin
 
 from nti.coremetadata.tests import SharedConfiguringTestLayer
 
@@ -37,3 +40,13 @@ class TestMixins(unittest.TestCase):
         assert_that(c, verifiably_provides(IZContained))
         assert_that(c, has_property('containerId', is_("100")))
         assert_that(c, has_property('id', is_("200")))
+        
+    def test_versioned(self):
+        c = VersionedMixin()
+        assert_that(c, validly_provides(IVersioned))
+        assert_that(c, verifiably_provides(IVersioned))
+        c.update_version("100")
+        assert_that(c, has_property('Version', is_("100")))
+        c.update_version()
+        assert_that(c, has_property('version', is_not(none())))
+        assert_that(c, has_property('version', is_not("100")))

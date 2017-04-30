@@ -70,17 +70,19 @@ class BodyFieldProperty(AbstractFieldProperty):
 
     def _adapt(self, value):
         # Allow ascii strings for old app tests
-        value = [x.decode('utf-8') if isinstance(x, str) else x for x in value]
+        value = [
+            x.decode('utf-8') if isinstance(x, six.binary_type) else x for x in value
+        ]
         value = tuple(self._field.value_type.fromObject(x) for x in value)
         return value
-NoteBodyFieldProperty = BodyFieldProperty
+NoteBodyFieldProperty = BodyFieldProperty # BWC
 
 
 class MessageInfoBodyFieldProperty(AbstractFieldProperty):
 
     def _to_tuple(self, value):
         # Turn bytes into text
-        if isinstance(value, str):
+        if isinstance(value, six.binary_type):
             value = value.decode('utf-8')
         # Wrap single strings automatically
         if isinstance(value, six.text_type):
