@@ -5,6 +5,7 @@
 """
 
 from __future__ import print_function, unicode_literals, absolute_import, division
+
 __docformat__ = "restructuredtext en"
 
 from zope import interface
@@ -16,6 +17,9 @@ from zope.container.interfaces import IContainer as IZContainer
 from zope.container.interfaces import IContainerNamesContainer as IZContainerNamesContainer
 
 from zope.i18n import translate
+
+from zope.interface.interfaces import ObjectEvent
+from zope.interface.interfaces import IObjectEvent
 
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
@@ -41,6 +45,8 @@ from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import Title
 
 from nti.coremetadata import MessageFactory as _
+
+from nti.property.property import alias
 
 from nti.schema.field import Bool
 from nti.schema.field import Object
@@ -665,6 +671,27 @@ class IUseNTIIDAsExternalUsername(interface.Interface):
     by their 'username'; instead, everywhere we would write out
     a username we must instead write the NTIID.
     """
+
+
+class IUserEvent(IObjectEvent):
+    """
+    An object event where the object is a user.
+    """
+    object = Object(IUser,
+                    title=u"The User (an alias for user). You can add event listeners "
+                           "based on the interfaces of this object.")
+    user = Object(IUser,
+                  title=u"The User (an alias for object). You can add event listeners "
+                         "based on the interfaces of this object.")
+
+
+@interface.implementer(IUserEvent)
+class UserEvent(ObjectEvent):
+
+    def __init__(self, user):
+        ObjectEvent.__init__(self, user)
+
+    user = alias('object')
 
 
 class IDynamicSharingTargetFriendsList(IDynamicSharingTarget,
