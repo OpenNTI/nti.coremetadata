@@ -72,6 +72,7 @@ zope.deferredimport.deprecated(
     ILastViewed='nti.base.interfaces:ILastViewed',
     ICreatedTime='nti.base.interfaces:ICreatedTime',)
 
+
 # pylint: disable=E0213,E0211
 
 
@@ -280,6 +281,7 @@ class IContainerIterable(interface.Interface):
         """
     itercontainers = iter_containers
 
+
 # content
 
 
@@ -335,6 +337,7 @@ class ITaggedContent(interface.Interface):
                                           description=Tag.__doc__, __name__='tags'),
                            unique=True,
                            default=())
+
 
 # content types
 
@@ -468,6 +471,7 @@ class IModeledContentFile(IFile,
 
 
 IContentFile = IModeledContentFile  # BWC
+
 
 # media types
 
@@ -732,6 +736,48 @@ class ObjectSharingModifiedEvent(ObjectModifiedEvent):
     def __init__(self, obj, *descriptions, **kwargs):
         super(ObjectSharingModifiedEvent, self).__init__(obj, *descriptions)
         self.oldSharingTargets = kwargs.pop('oldSharingTargets', ())
+
+
+class IEntityUsernameIterable(interface.Interface):
+    """
+    A specific way to iterate across usernames.
+    """
+
+    def iter_usernames():
+        """
+        Return an iterable across the usernames
+        of this object.
+        """
+
+
+class IEntityIterable(interface.Interface):
+    """
+    Something that can iterate across entities (usually but not always :class:`IUser`), typically
+    entities somehow contained in or stored in this object (or its context).
+    """
+
+    def __iter__():
+        """
+        Return iterator across entity objects.
+        """
+
+
+class ISharingTargetEntityIterable(IEntityIterable):
+    """
+    Something that can iterate across entities that should be expanded
+    for sharing purposes.
+    """
+
+
+class IEntityContainer(interface.Interface):
+    """
+    Something that can report whether an entity "belongs" to it.
+    """
+
+    def __contains__(entity):
+        """
+        Is the entity a member of this container?
+        """
 
 
 # schema maker
