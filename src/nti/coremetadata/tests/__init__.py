@@ -9,7 +9,6 @@ __docformat__ = "restructuredtext en"
 
 from zope.component.hooks import setHooks
 
-from nti.testing.layers import find_test
 from nti.testing.layers import GCLayerMixin
 from nti.testing.layers import ZopeComponentLayer
 from nti.testing.layers import ConfiguringLayerMixin

@@ -43,9 +43,9 @@ class TestMixins(unittest.TestCase):
         
     def test_versioned(self):
         c = VersionedMixin()
+        c.update_version("100")
         assert_that(c, validly_provides(IVersioned))
         assert_that(c, verifiably_provides(IVersioned))
-        c.update_version("100")
         assert_that(c, has_property('Version', is_("100")))
         c.update_version()
         assert_that(c, has_property('version', is_not(none())))
