@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 from zope import interface
@@ -92,14 +92,12 @@ class InvalidData(InvalidValue):
         if self.i18n_message:
             return self.i18n_message
         return self.__class__.__doc__
-
-
 _InvalidData = InvalidData
 
 
 class FieldCannotBeOnlyWhitespace(InvalidData):
 
-    i18n_message = _("The field cannot be blank.")
+    i18n_message = _(u"The field cannot be blank.")
 
     def __init__(self, field_name, value, field_external=None):
         external = field_external or (field_name and field_name.capitalize())
@@ -230,12 +228,12 @@ class IContained(IZContained):
     # For BWC, these are not required
     containerId = DecodingValidTextLine(
         title=u"The ID (name) of the container to which this object belongs. "
-        "Should match the __parent__.__name__",
+        u"Should match the __parent__.__name__",
         required=False)
 
     id = DecodingValidTextLine(
         title=u"The locally unique ID (name) of this object in the container "
-        "it belongs. Should match the __name__",
+        u"it belongs. Should match the __name__",
         required=False)
 
 
@@ -333,8 +331,9 @@ class ITaggedContent(interface.Interface):
     """
 
     tags = TupleFromObject(title=u"Applied Tags",
-                           value_type=Tag(min_length=1, title=u"A single tag",
-                                          description=Tag.__doc__, __name__='tags'),
+                           value_type=Tag(min_length=1, 
+                                          title=u"A single tag",
+                                          description=Tag.__doc__, __name__=u'tags'),
                            unique=True,
                            default=())
 
@@ -393,8 +392,8 @@ class IReadableShared(interface.Interface):
     flattenedSharingTargetNames = UniqueIterable(
         title=u"The ids of all the entities (e.g. communities, etc) this obj is shared with.",
         description=u"This is a convenience property for reporting the ids of all "
-        " entities this object is shared with, directly or indirectly. Note that the ids reported "
-        " here are not necessarily globally unique and may not be resolvable as such.",
+        u" entities this object is shared with, directly or indirectly. Note that the ids reported "
+        u" here are not necessarily globally unique and may not be resolvable as such.",
         value_type=DecodingValidTextLine(title=u"The entity identifier"),
         required=False,
         default=frozenset(),
@@ -449,7 +448,7 @@ class IShareableModeledContent(IWritableShared, IModeledContent):
 
     sharedWith = UniqueIterable(
         title=u"The ids of the entities we are shared directly with, "
-              "taking externalization of local ids into account",
+              u"taking externalization of local ids into account",
         value_type=DecodingValidTextLine(title=u"The username or NTIID"),
         required=False,
         default=frozenset())
@@ -682,10 +681,10 @@ class IUserEvent(IObjectEvent):
     """
     object = Object(IUser,
                     title=u"The User (an alias for user). You can add event listeners "
-                           "based on the interfaces of this object.")
+                           u"based on the interfaces of this object.")
     user = Object(IUser,
                   title=u"The User (an alias for object). You can add event listeners "
-                         "based on the interfaces of this object.")
+                         u"based on the interfaces of this object.")
 
 
 @interface.implementer(IUserEvent)
@@ -723,8 +722,8 @@ class IObjectSharingModifiedEvent(IObjectModifiedEvent):
 
     oldSharingTargets = UniqueIterable(
         title=u"A set of entities this object is directly shared with, before the "
-               "change (non-recursive, non-flattened)",
-        value_type=Object(IEntity, title="An entity shared with"),
+              u"change (non-recursive, non-flattened)",
+        value_type=Object(IEntity, title=u"An entity shared with"),
         required=False,
         default=(),
         readonly=True)
@@ -803,7 +802,8 @@ class IContainerContext(interface.Interface):
     """
     An object that represents the context of the given container.
     """
-    context_id = ValidTextLine(title=u"The ntiid of the context.", default='')
+    context_id = ValidTextLine(title=u"The ntiid of the context.",
+                               default=u'')
 
 
 class IContextAnnotatable(IAttributeAnnotatable):
@@ -889,7 +889,7 @@ class IVersioned(interface.Interface):
     version = TextLine(
         title=u"The structural version of this object.",
         description=u"An artificial string signifying the 'structural version' "
-        "of this object.",
+        u"of this object.",
         required=False)
 
     def update_version(version=None):
@@ -897,8 +897,6 @@ class IVersioned(interface.Interface):
         Update the version for this object. If no arg given, the
         default algorithm will be used.
         """
-
-
 IVersioned['version'].setTaggedValue(TAG_HIDDEN_IN_UI, True)
 IVersioned['version'].setTaggedValue(TAG_REQUIRED_IN_UI, False)
 IVersioned['version'].setTaggedValue(TAG_READONLY_IN_UI, True)

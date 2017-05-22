@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -34,7 +34,7 @@ class TestMixins(unittest.TestCase):
     layer = SharedConfiguringTestLayer
 
     def test_contained(self):
-        c = ContainedMixin(containerId="100", containedId="200")
+        c = ContainedMixin(containerId=u"100", containedId=u"200")
         assert_that(c, validly_provides(IContained))
         assert_that(c, verifiably_provides(IContained))
         assert_that(c, verifiably_provides(IZContained))
@@ -43,7 +43,7 @@ class TestMixins(unittest.TestCase):
         
     def test_versioned(self):
         c = VersionedMixin()
-        c.update_version("100")
+        c.update_version(u"100")
         assert_that(c, validly_provides(IVersioned))
         assert_that(c, verifiably_provides(IVersioned))
         assert_that(c, has_property('Version', is_("100")))
