@@ -33,8 +33,6 @@ from zope.security.interfaces import IPrincipal
 
 from zope.security.management import system_user
 
-from zope.securitypolicy.interfaces import IPrincipalRoleManager
-
 from nti.base.interfaces import IFile
 from nti.base.interfaces import INamed
 from nti.base.interfaces import ITitled
@@ -968,17 +966,4 @@ class IACLProviderCacheable(interface.Interface):
     could be considered "current" such as a current request). In summary, it is
     generally only safe to do when the ACL information comes from external sources
     such as files or strings.
-    """
-
-# site roles
-
-class ISiteRoleManager(IPrincipalRoleManager):
-    """
-    An IPrincipalRoleManager that can be used to grant
-    roles to principals on a site by site basis.  To grant
-    a role to a principal in a specific site, register an
-    instance of SIteRoleManager as a utility in a registerIn block
-    for this interface.  With the utilty registered, the
-    siteGrant zcml directive can be used to assign
-    roles to a principals within the context of that site.
     """
