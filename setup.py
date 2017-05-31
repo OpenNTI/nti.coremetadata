@@ -65,6 +65,7 @@ setup(
         'zope.mimetype',
         'zope.schema',
         'zope.security',
+        'zope.securitypolicy',
     ],
     extras_require={
         'test': TESTS_REQUIRE,
