@@ -15,12 +15,15 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container.interfaces import IContainer as IZContainer
 from zope.container.interfaces import IContainerNamesContainer as IZContainerNamesContainer
 
+from zope.dublincore.interfaces import IDCDescriptiveProperties
+
 from zope.i18n import translate
 
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
 from zope.lifecycleevent import ObjectModifiedEvent
+
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from zope.location.interfaces import IContained as IZContained
@@ -38,10 +41,12 @@ from nti.base.interfaces import INamed
 from nti.base.interfaces import ITitled
 from nti.base.interfaces import ICreated
 from nti.base.interfaces import ILastModified
+from nti.base.interfaces import ITitledDescribed
 from nti.base.interfaces import IContentTypeMarker
 
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import Title
+from nti.contentfragments.schema import PlainText
 
 from nti.coremetadata import MessageFactory as _
 
@@ -323,6 +328,16 @@ class ITitledContent(ITitled):
     automatically generated. (This differs from, say, a person's honorrific title.
     """
     title = Title()
+
+
+class ITitledDescribedContent(ITitledContent, ITitledDescribed, IDCDescriptiveProperties):
+    """
+    Extend this class to add the ``title`` and ``description`` properties.
+    This class overrides the :mod:`zope.dublincore` properties with more specific
+    versions.
+    """
+
+    description = PlainText(title=u"The human-readable description of this object.")
 
 
 class ITaggedContent(interface.Interface):

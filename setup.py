@@ -8,13 +8,11 @@ entry_points = {
     ],
 }
 
+
 TESTS_REQUIRE = [
-    'nose',
-    'nose-timer',
-    'nose-pudb',
-    'nose-progressive',
-    'nose2[coverage_plugin]',
-    'pyhamcrest'
+    'pyhamcrest',
+    'nti.testing',
+    'zope.testrunner',
 ]
 
 
@@ -38,8 +36,10 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy'
+        'Programming Language :: Python :: Implementation :: PyPy',
     ],
     packages=find_packages('src'),
     package_dir={'': 'src'},
@@ -55,6 +55,7 @@ setup(
         'zope.annotation',
         'zope.component',
         'zope.container',
+        'zope.dublincore',
         'zope.deferredimport',
         'zope.event',
         'zope.i18n',
