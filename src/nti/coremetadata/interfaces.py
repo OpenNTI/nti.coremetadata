@@ -661,9 +661,10 @@ class IAnonymousUser(IUser):
 @interface.implementer(IAnonymousUser)
 class AnonymousUser(UnauthenticatedPrincipal):
 
+    username = __name__ = alias('id')
+
     def __init__(self, parent=None):
         self.__parent__  = parent
-        self.__name__ = UNAUTHENTICATED_PRINCIPAL_NAME
 
     def __reduce_ex__(self, protocol):
         raise TypeError(u"Not allowed to pickle %s" % self.__class__)
