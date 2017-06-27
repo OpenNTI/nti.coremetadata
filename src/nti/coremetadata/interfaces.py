@@ -483,8 +483,6 @@ class IModeledContentFile(IFile,
     name = ValidTextLine(title=u"Identifier for the file",
                          required=False,
                          default=None)
-
-
 IContentFile = IModeledContentFile  # BWC
 
 
@@ -557,12 +555,15 @@ RESERVED_USER_IDS = (SYSTEM_USER_ID, SYSTEM_USER_NAME, EVERYONE_GROUP_NAME,
 LOWER_RESERVED_USER_IDS = tuple((x.lower() for x in RESERVED_USER_IDS))
 
 
-@interface.provider(IPrincipal)
+class IUnauthenticatedPrincipal(IPrincipal):
+    pass
+
+
+@interface.provider(IUnauthenticatedPrincipal)
 class unauthenticated_user(object):
     id = UNAUTHENTICATED_PRINCIPAL_NAME
     title = UNAUTHENTICATED_PRINCIPAL_NAME
     description = UNAUTHENTICATED_PRINCIPAL_NAME
-UNAUTHENTICATED_PRINCIPAL = unauthenticated_user()
 
 
 def username_is_reserved(username):
