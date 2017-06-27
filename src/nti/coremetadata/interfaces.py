@@ -662,6 +662,8 @@ class AnonymousUser(UnauthenticatedPrincipal):
 
     username = __name__ = alias('id')
 
+    lastModified = createdTime = 0
+    
     def __init__(self, parent=None):
         self.__parent__  = parent
 
