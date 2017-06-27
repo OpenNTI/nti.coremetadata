@@ -5,7 +5,6 @@
 """
 
 from __future__ import print_function, absolute_import, division
-from nti.externalization.persistence import NoPickle
 __docformat__ = "restructuredtext en"
 
 from zope import interface
