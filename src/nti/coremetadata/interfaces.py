@@ -97,7 +97,7 @@ class InvalidData(InvalidValue):
         if self.i18n_message:
             return self.i18n_message
         return self.__class__.__doc__
-_InvalidData = InvalidData
+_InvalidData = InvalidData # BWC
 
 
 class FieldCannotBeOnlyWhitespace(InvalidData):
@@ -346,9 +346,10 @@ class ITaggedContent(interface.Interface):
     """
 
     tags = TupleFromObject(title=u"Applied Tags",
-                           value_type=Tag(min_length=1, 
+                           value_type=Tag(min_length=1,
                                           title=u"A single tag",
-                                          description=Tag.__doc__, __name__=u'tags'),
+                                          description=Tag.__doc__, 
+                                          __name__=u'tags'),
                            unique=True,
                            default=())
 
@@ -556,6 +557,14 @@ RESERVED_USER_IDS = (SYSTEM_USER_ID, SYSTEM_USER_NAME, EVERYONE_GROUP_NAME,
 LOWER_RESERVED_USER_IDS = tuple((x.lower() for x in RESERVED_USER_IDS))
 
 
+@interface.provider(IPrincipal)
+class unauthenticated_user(object):
+    id = UNAUTHENTICATED_PRINCIPAL_NAME
+    title = UNAUTHENTICATED_PRINCIPAL_NAME
+    description = UNAUTHENTICATED_PRINCIPAL_NAME
+UNAUTHENTICATED_PRINCIPAL = unauthenticated_user()
+
+
 def username_is_reserved(username):
     return username and (username.lower() in LOWER_RESERVED_USER_IDS
                          or username.lower().startswith('system.'))
@@ -696,10 +705,10 @@ class IUserEvent(IObjectEvent):
     """
     object = Object(IUser,
                     title=u"The User (an alias for user). You can add event listeners "
-                           u"based on the interfaces of this object.")
+                    u"based on the interfaces of this object.")
     user = Object(IUser,
                   title=u"The User (an alias for object). You can add event listeners "
-                         u"based on the interfaces of this object.")
+                  u"based on the interfaces of this object.")
 
 
 @interface.implementer(IUserEvent)
