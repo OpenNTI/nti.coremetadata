@@ -5,6 +5,7 @@
 """
 
 from __future__ import print_function, absolute_import, division
+from nti.externalization.persistence import NoPickle
 __docformat__ = "restructuredtext en"
 
 from zope import interface
@@ -560,7 +561,7 @@ class IUnauthenticatedPrincipal(IPrincipal):
 
 
 @interface.provider(IUnauthenticatedPrincipal)
-class unauthenticated_user(object):
+class UnauthenticatedPrincipal(object):
     id = UNAUTHENTICATED_PRINCIPAL_NAME
     title = UNAUTHENTICATED_PRINCIPAL_NAME
     description = UNAUTHENTICATED_PRINCIPAL_NAME
@@ -650,6 +651,26 @@ class IUser(IEntity, IContainerIterable):
     # Note: z3c.password provides a PasswordField we could use here
     # when we're sure what it does and that validation works out
     password = interface.Attribute("The password")
+
+
+class IAnonymousUser(IUser):
+    """
+    The anonymous user, which is not persistent.
+    """
+
+@interface.implementer(IAnonymousUser)
+class AnonymousUser(UnauthenticatedPrincipal):
+
+    def __init__(self, parent=None):
+        self.__parent__  = parent
+        self.__name__ = UNAUTHENTICATED_PRINCIPAL_NAME
+
+    def __reduce_ex__(self, protocol):
+        raise TypeError(u"Not allowed to pickle %s" % self.__class__)
+
+    def __reduce__(self):
+        return self.__reduce_ex__(0)
+UnauthenticatedUser = AnonymousUser # alias
 
 
 class IUsernameSubstitutionPolicy(interface.Interface):
