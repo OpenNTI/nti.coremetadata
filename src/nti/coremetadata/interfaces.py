@@ -544,10 +544,10 @@ class IEmbeddedAudio(IEmbeddedMedia):
 # entity
 
 
-ME_USER_ID = 'me'
-EVERYONE_GROUP_NAME = 'system.Everyone'
-AUTHENTICATED_GROUP_NAME = 'system.Authenticated'
-UNAUTHENTICATED_PRINCIPAL_NAME = 'system.Unknown'
+ME_USER_ID = u'me'
+EVERYONE_GROUP_NAME = u'system.Everyone'
+AUTHENTICATED_GROUP_NAME = u'system.Authenticated'
+UNAUTHENTICATED_PRINCIPAL_NAME = u'system.Unknown'
 
 RESERVED_USER_IDS = (SYSTEM_USER_ID, SYSTEM_USER_NAME, EVERYONE_GROUP_NAME,
                      AUTHENTICATED_GROUP_NAME, ME_USER_ID)
@@ -559,7 +559,7 @@ class IUnauthenticatedPrincipal(IPrincipal):
     pass
 
 
-@interface.provider(IUnauthenticatedPrincipal)
+@interface.implementer(IUnauthenticatedPrincipal)
 class UnauthenticatedPrincipal(object):
     id = UNAUTHENTICATED_PRINCIPAL_NAME
     title = UNAUTHENTICATED_PRINCIPAL_NAME
@@ -652,6 +652,9 @@ class IUser(IEntity, IContainerIterable):
     password = interface.Attribute("The password")
 
 
+ANONYMOUS_USER_NAME = UNAUTHENTICATED_PRINCIPAL_NAME
+
+
 class IAnonymousUser(IUser):
     """
     The anonymous user, which is not persistent.
@@ -662,11 +665,20 @@ class AnonymousUser(UnauthenticatedPrincipal):
 
     username = __name__ = alias('id')
 
+    password = None
     lastModified = createdTime = 0
     
     def __init__(self, parent=None):
         self.__parent__  = parent
 
+    @property
+    def password(self):
+        return None
+
+    def iter_containers(self):
+        return ()
+    itercontainers = iter_containers
+    
     def __reduce_ex__(self, protocol):
         raise TypeError(u"Not allowed to pickle %s" % self.__class__)
 
