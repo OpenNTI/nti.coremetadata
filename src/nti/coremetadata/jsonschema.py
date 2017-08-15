@@ -108,7 +108,7 @@ class DefaultObjectJsonSchemaMaker(object):
 
     maker = CoreJsonSchemafier
 
-    def make_schema(self, schema, user=None):
+    def make_schema(self, schema, unused_user=None):
         result = dict()
         maker = self.maker(schema)
         result[FIELDS] = maker.make_schema()

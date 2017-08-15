@@ -31,7 +31,7 @@ currentPrincipal = current_principal
 def make_schema(schema, user=None, maker=IObjectJsonSchemaMaker, name=u''):
     name = schema.queryTaggedValue('_ext_jsonschema') or name
     schemafier = component.getUtility(maker, name=name)
-    result = schemafier.make_schema(schema=schema, user=user)
+    result = schemafier.make_schema(schema, user)
     return result
 
 
