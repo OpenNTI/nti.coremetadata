@@ -1,8 +1,6 @@
 import codecs
 from setuptools import setup, find_packages
 
-VERSION = '0.0.0'
-
 entry_points = {
     'console_scripts': [
     ],
@@ -10,7 +8,6 @@ entry_points = {
 
 
 TESTS_REQUIRE = [
-    'pyhamcrest',
     'nti.testing',
     'zope.testrunner',
 ]
@@ -27,8 +24,8 @@ setup(
     author='Jason Madden',
     author_email='jason@nextthought.com',
     description="NTI Core Properties",
-    long_description=codecs.open('README.rst', encoding='utf-8').read(),
-    license='Proprietary',
+    long_description=(_read('README.rst') + '\n\n' + _read("CHANGES.rst")),
+    license='Apache',
     keywords='Metadata Properties',
     classifiers=[
         'Intended Audience :: Developers',
@@ -41,8 +38,11 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
+    url="https://github.com/NextThought/nti.coremetadata",
+    zip_safe=True,
     packages=find_packages('src'),
     package_dir={'': 'src'},
+    include_package_data=True,
     namespace_packages=['nti'],
     tests_require=TESTS_REQUIRE,
     install_requires=[
@@ -70,6 +70,5 @@ setup(
     extras_require={
         'test': TESTS_REQUIRE,
     },
-    dependency_links=[],
-    entry_points=entry_points
+    entry_points=entry_points,
 )
