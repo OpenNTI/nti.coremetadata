@@ -348,7 +348,6 @@ class ITaggedContent(interface.Interface):
     tags = TupleFromObject(title=u"Applied Tags",
                            value_type=Tag(min_length=1,
                                           title=u"A single tag",
-                                          description=Tag.__doc__, 
                                           __name__=u'tags'),
                            unique=True,
                            default=())
