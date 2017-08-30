@@ -36,10 +36,9 @@ from zope.security.interfaces import IPrincipal
 
 from zope.security.management import system_user
 
-from nti.base.interfaces import IFile
-from nti.base.interfaces import INamed
 from nti.base.interfaces import ITitled
 from nti.base.interfaces import ICreated
+from nti.base.interfaces import INamedFile
 from nti.base.interfaces import ILastModified
 from nti.base.interfaces import ITitledDescribed
 from nti.base.interfaces import IContentTypeMarker
@@ -475,8 +474,7 @@ class IUserGeneratedData(ICreated):
     """
 
 
-class IModeledContentFile(IFile,
-                          INamed,
+class IModeledContentFile(INamedFile,
                           ILastModified,
                           IShareableModeledContent):
     name = ValidTextLine(title=u"Identifier for the file",
