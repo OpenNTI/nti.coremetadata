@@ -125,7 +125,7 @@ def CompoundModeledContentBody(required=False, fields=()):
     return bodySchemaField(fields, required)
 
 
-def ExtendedCompoundModeledContentBody(required=False):
-    fields = legacyModeledContentBodyTypes()
+def ExtendedCompoundModeledContentBody(required=False, fields=()):
+    fields = legacyModeledContentBodyTypes() if not fields else fields
     fields.append(Object(INamed, description=u"A :class:`.INamed`"))
     return bodySchemaField(fields, required)
