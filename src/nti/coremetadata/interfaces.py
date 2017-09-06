@@ -514,6 +514,8 @@ class ICanvasURLShape(ICanvasShape):
     """
     url = interface.Attribute("Shape url")
 
+    file = interface.Attribute("Shape url file")
+    file.setTaggedValue('_ext_excluded_out', True)
 
 class IMedia(IShareableModeledContent):
     """
