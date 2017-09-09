@@ -19,9 +19,10 @@ from nti.testing.matchers import verifiably_provides
 
 import unittest
 
+from zope.location.interfaces import IContained as IZContained
+
 from nti.coremetadata.interfaces import IContained
 from nti.coremetadata.interfaces import IVersioned
-from nti.coremetadata.interfaces import IZContained
 
 from nti.coremetadata.mixins import ContainedMixin
 from nti.coremetadata.mixins import VersionedMixin
