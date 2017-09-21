@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import six
 
@@ -30,6 +29,8 @@ from nti.schema.field import Object
 from nti.schema.field import Variant
 from nti.schema.field import ListOrTupleFromObject
 from nti.schema.field import ValidURI as _ValidURI
+
+logger = __import__('logging').getLogger(__name__)
 
 
 class DataURI(_ValidURI, ProDataURI):  # order matters

@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import time
 import isodate
@@ -15,6 +14,7 @@ import isodate
 from datetime import datetime
 
 from zope import interface
+from zope import deferredimport
 
 from zope.container.contained import Contained
 
@@ -27,14 +27,13 @@ from nti.property.property import alias
 
 from nti.schema.fieldproperty import UnicodeConvertingFieldProperty
 
-import zope.deferredimport
-zope.deferredimport.initialize()
+logger = __import__('logging').getLogger(__name__)
 
 
 # base
 
-
-zope.deferredimport.deprecated(
+deferredimport.initialize()
+deferredimport.deprecated(
     "Import from nti.base.mixins instead",
     CreatedTimeMixin='nti.base.mixins:CreatedTimeMixin',
     ModifiedTimeMixin='nti.base.mixins:ModifiedTimeMixin',
@@ -44,7 +43,7 @@ zope.deferredimport.deprecated(
 # recordables
 
 
-zope.deferredimport.deprecated(
+deferredimport.deprecated(
     "Import from nti.recorder.mixins instead",
     RecordableMixin='nti.recorder.mixins:RecordableMixin',
     RecordableContainerMixin='nti.recorder.mixins:RecordableContainerMixin')
@@ -53,7 +52,7 @@ zope.deferredimport.deprecated(
 # publishing
 
 
-zope.deferredimport.deprecated(
+deferredimport.deprecated(
     "Import from nti.publishing.mixins instead",
     PublishableMixin='nti.publishing.mixins:PublishableMixin',
     CalendarPublishableMixin='nti.publishing.mixins:CalendarPublishableMixin')

@@ -4,10 +4,12 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import interface
+from zope import deferredimport
 
 from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -68,10 +70,8 @@ from nti.schema.jsonschema import TAG_READONLY_IN_UI
 SYSTEM_USER_ID = system_user.id
 SYSTEM_USER_NAME = getattr(system_user, 'title').lower()
 
-import zope.deferredimport
-zope.deferredimport.initialize()
-
-zope.deferredimport.deprecated(
+deferredimport.initialize()
+deferredimport.deprecated(
     "Import from nti.base.interfaces instead",
     ILastViewed='nti.base.interfaces:ILastViewed',
     ICreatedTime='nti.base.interfaces:ICreatedTime',)
@@ -129,12 +129,12 @@ class ISystemUserPrincipal(IPrincipal):
 # recordables
 
 
-zope.deferredimport.deprecated(
+deferredimport.deprecated(
     "Import from nti.recorder.interfaces instead",
     IRecordable='nti.recorder.interfaces:IRecordable',
     IRecordableContainer='nti.recorder.interfaces:IRecordableContainer')
 
-zope.deferredimport.deprecated(
+deferredimport.deprecated(
     "Import from nti.recorder.interfaces instead",
     ObjectLockedEvent='nti.recorder.interfaces:ObjectLockedEvent',
     IObjectLockedEvent='nti.recorder.interfaces:IObjectLockedEvent',
@@ -149,7 +149,7 @@ zope.deferredimport.deprecated(
 # published objects
 
 
-zope.deferredimport.deprecated(
+deferredimport.deprecated(
     "Import from nti.publishing.interfaces instead",
     IDefaultPublished='nti.publishing.interfaces:IDefaultPublished',
     ObjectPublishedEvent='nti.publishing.interfaces:ObjectPublishedEvent',
@@ -157,7 +157,7 @@ zope.deferredimport.deprecated(
     ObjectUnpublishedEvent='nti.publishing.interfaces:ObjectUnpublishedEvent',
     IObjectUnpublishedEvent='nti.publishing.interfaces:IObjectUnpublishedEvent',)
 
-zope.deferredimport.deprecated(
+deferredimport.deprecated(
     "Import from nti.publishing.interfaces instead",
     IPublishable='nti.publishing.interfaces:IPublishable',
     ICalendarPublishable='nti.publishing.interfaces:ICalendarPublishable',
@@ -165,13 +165,13 @@ zope.deferredimport.deprecated(
     CalendarPublishableModifiedEvent='nti.publishing.interfaces:CalendarPublishableModifiedEvent',
     ICalendarPublishableModifiedEvent='nti.publishing.interfaces:ICalendarPublishableModifiedEvent')
 
-zope.deferredimport.deprecated(
+deferredimport.deprecated(
     "Import from nti.publishing.interfaces instead",
     INoPublishLink='nti.publishing.interfaces:INoPublishLink',
     IPublishablePredicate='nti.publishing.interfaces:IPublishablePredicate',
     ICalendarPublishablePredicate='nti.publishing.interfaces:ICalendarPublishableMixin')
 
-zope.deferredimport.deprecated(
+deferredimport.deprecated(
     "Import from nti.publishing.interfaces instead",
     get_publishable_predicate='nti.publishing.interfaces:get_publishable_predicate',
     get_calendar_publishable_predicate='nti.publishing.interfaces:get_calendar_publishable_predicate')
@@ -361,7 +361,7 @@ class IIdentity(interface.Interface):
     """
 
 
-zope.deferredimport.deprecated(
+deferredimport.deprecated(
     "Import from nti.threadable.interfaces instead",
     IThreadable='nti.threadable.interfaces:IThreadable',
     IWeakThreadable='nti.threadable.interfaces:IWeakThreadable',

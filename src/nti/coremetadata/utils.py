@@ -4,12 +4,12 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import component
+from zope import deferredimport
 
 from zope.security.interfaces import NoInteraction
 from zope.security.management import getInteraction
@@ -17,6 +17,8 @@ from zope.security.management import getInteraction
 from zope.security.management import system_user
 
 from nti.coremetadata.interfaces import IObjectJsonSchemaMaker
+
+logger = __import__('logging').getLogger(__name__)
 
 
 def current_principal(system=True):
@@ -38,10 +40,8 @@ def make_schema(schema, user=None, maker=IObjectJsonSchemaMaker, name=u''):
 # deprecations
 
 
-import zope.deferredimport
-zope.deferredimport.initialize()
-
-zope.deferredimport.deprecated(
+deferredimport.initialize()
+deferredimport.deprecated(
     "Import from nti.publishing.utils instead",
     isPublished='nti.publishing.utils:is_published',
     is_published='nti.publishing.utils:is_published',
