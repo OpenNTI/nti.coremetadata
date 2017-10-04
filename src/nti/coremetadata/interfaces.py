@@ -693,7 +693,9 @@ class IUsernameSubstitutionPolicy(interface.Interface):
     """
 
     def replace(username):
-        pass
+        """
+        return a substituted name for the specifed username
+        """
 
 
 class IFriendsList(IModeledContent, IEntity,
@@ -738,6 +740,7 @@ class IUserEvent(IObjectEvent):
     """
     An object event where the object is a user.
     """
+
     object = Object(IUser,
                     title=u"The User (an alias for user). You can add event listeners "
                     u"based on the interfaces of this object.")
@@ -748,10 +751,6 @@ class IUserEvent(IObjectEvent):
 
 @interface.implementer(IUserEvent)
 class UserEvent(ObjectEvent):
-
-    def __init__(self, user):
-        ObjectEvent.__init__(self, user)
-
     user = alias('object')
 
 
