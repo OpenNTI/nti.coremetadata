@@ -10,7 +10,8 @@
 	<include package="zope.security" />
 	
 	<include package="nti.base" />
-
+	<include package="nti.contentfragments" />
+	
 	<utility factory=".jsonschema.DefaultObjectJsonSchemaMaker" />
 
 	<class class="zope.security.management.system_user">
