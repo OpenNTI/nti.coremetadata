@@ -12,7 +12,6 @@ import six
 
 from zope.schema.fieldproperty import FieldProperty
 
-from zope.schema.interfaces import InvalidURI
 from zope.schema.interfaces import ValidationError
 
 from nti.base.interfaces import INamed
@@ -37,10 +36,6 @@ class DataURI(_ValidURI, ProDataURI):  # order matters
 
     def _validate(self, value):
         super(DataURI, self)._validate(value)
-        if not self.is_valid_data_uri(value):
-            self._reraise_validation_error(InvalidURI(value),
-                                           value,
-                                           _raise=True)
 
 
 class AbstractFieldProperty(FieldProperty):
