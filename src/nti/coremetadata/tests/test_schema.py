@@ -28,10 +28,10 @@ from nti.coremetadata.schema import CompoundModeledContentBody
 from nti.coremetadata.schema import MessageInfoBodyFieldProperty
 from nti.coremetadata.schema import ExtendedCompoundModeledContentBody
 
+from nti.coremetadata.tests import SharedConfiguringTestLayer
+
 from nti.schema.field import Number
 from nti.schema.field import ListOrTupleFromObject
-
-from nti.coremetadata.tests import SharedConfiguringTestLayer
 
 
 class TestSchema(unittest.TestCase):
