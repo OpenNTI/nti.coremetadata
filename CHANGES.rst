@@ -6,5 +6,5 @@
 1.0.0 (unreleased)
 ==================
 
-- First PyPI release.
+- 100% coverage
 - Add support for Python 3.
