@@ -99,6 +99,7 @@ class VersionedMixin(object):
     version = None  # Default to None
     Version = alias('version')
 
+    # pylint: disable=useless-super-delegation
     def __init__(self, *args, **kwargs):
         super(VersionedMixin, self).__init__(*args, **kwargs)
 

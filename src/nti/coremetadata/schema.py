@@ -34,6 +34,7 @@ logger = __import__('logging').getLogger(__name__)
 
 class DataURI(_ValidURI, ProDataURI):  # order matters
 
+    # pylint: disable=useless-super-delegation
     def _validate(self, value):
         super(DataURI, self)._validate(value)
 

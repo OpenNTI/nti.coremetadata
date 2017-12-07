@@ -8,6 +8,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+# pylint: disable=inherit-non-class
+
 from zope import interface
 from zope import deferredimport
 
@@ -274,7 +276,7 @@ class IContainerIterable(interface.Interface):
     it contains.
     """
 
-    # FIXME: This is ill-defined. One would expect it to be all containers,
+    # This is ill-defined. One would expect it to be all containers,
     # but the only implementation (users.User) actually limits it to named
     # containers
     def iter_containers():
