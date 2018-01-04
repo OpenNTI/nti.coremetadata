@@ -56,6 +56,7 @@ setup(
         'isodate',
         'nti.base',
         'nti.contentfragments',
+        'nti.contenttypes.reports',
         'nti.property',
         'nti.schema',
         'six',

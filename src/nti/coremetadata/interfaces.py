@@ -51,6 +51,8 @@ from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import Title
 from nti.contentfragments.schema import PlainText
 
+from nti.contenttypes.reports.interfaces import IReportContext
+
 from nti.coremetadata import MessageFactory as _
 
 from nti.property.property import alias
@@ -640,7 +642,7 @@ class IUnscopedGlobalCommunity(ICommunity):
     """
 
 
-class IUser(IEntity, IContainerIterable):
+class IUser(IEntity, IContainerIterable, IReportContext):
     """
     A user of the system. Notice this is not an IPrincipal.
     This interface needs finished and fleshed out.
@@ -668,7 +670,7 @@ class AnonymousUser(UnauthenticatedPrincipal):
 
     password = None
     lastModified = createdTime = 0
-    
+
     def __init__(self, parent=None):
         self.__parent__  = parent
 
@@ -679,7 +681,7 @@ class AnonymousUser(UnauthenticatedPrincipal):
     def iter_containers(self):
         return ()
     itercontainers = iter_containers
-    
+
     def __reduce_ex__(self, protocol):
         raise TypeError(u"Not allowed to pickle %s" % self.__class__)
 
