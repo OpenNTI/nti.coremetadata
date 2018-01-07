@@ -8,7 +8,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-# pylint: disable=inherit-non-class
+# pylint: disable=inherit-non-class,inconsistent-mro
 
 from zope import interface
 from zope import deferredimport
@@ -109,10 +109,8 @@ class FieldCannotBeOnlyWhitespace(InvalidData):
 
     def __init__(self, field_name, value, field_external=None):
         external = field_external or (field_name and field_name.capitalize())
-        super(FieldCannotBeOnlyWhitespace, self).__init__(self.i18n_message,
-                                                          external,
-                                                          value,
-                                                          value=value)
+        super(FieldCannotBeOnlyWhitespace, self).__init__(self.i18n_message, external,
+                                                          value, value=value)
 
 
 def checkCannotBeBlank(value):
@@ -668,7 +666,6 @@ class AnonymousUser(UnauthenticatedPrincipal):
 
     username = __name__ = alias('id')
 
-    password = None
     lastModified = createdTime = 0
 
     def __init__(self, parent=None):
