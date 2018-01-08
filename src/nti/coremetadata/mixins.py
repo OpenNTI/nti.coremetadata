@@ -8,6 +8,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+import six
 import time
 import isodate
 
@@ -17,8 +18,6 @@ from zope import interface
 from zope import deferredimport
 
 from zope.container.contained import Contained
-
-from nti.base._compat import text_
 
 from nti.coremetadata.interfaces import IContained
 from nti.coremetadata.interfaces import IVersioned
@@ -105,7 +104,7 @@ class VersionedMixin(object):
 
     def _get_version_timestamp(self):
         value = datetime.fromtimestamp(time.time())
-        return text_(isodate.datetime_isoformat(value))
+        return six.text_type(isodate.datetime_isoformat(value))
 
     def update_version(self, version=None):
         self.version = version if version else self._get_version_timestamp()
