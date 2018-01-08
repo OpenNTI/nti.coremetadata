@@ -11,6 +11,7 @@
 	
 	<include package="nti.base" />
 	<include package="nti.contentfragments" />
+	<include package="nti.contenttypes.reports" />
 	
 	<utility factory=".jsonschema.DefaultObjectJsonSchemaMaker" />
 
