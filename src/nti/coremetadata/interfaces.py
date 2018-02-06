@@ -640,6 +640,12 @@ class IUnscopedGlobalCommunity(ICommunity):
     """
 
 
+class ISiteCommunity(ICommunity):
+    """
+    A :class:`ICommunity` that is associated with a site.
+    """
+
+
 class IUser(IEntity, IContainerIterable, IReportContext):
     """
     A user of the system. Notice this is not an IPrincipal.
