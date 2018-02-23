@@ -100,7 +100,7 @@ class InvalidData(InvalidValue):
         if self.i18n_message:
             return self.i18n_message
         return self.__class__.__doc__
-_InvalidData = InvalidData # BWC
+_InvalidData = InvalidData  # BWC
 
 
 class FieldCannotBeOnlyWhitespace(InvalidData):
@@ -338,7 +338,9 @@ class ITitledDescribedContent(ITitledContent, ITitledDescribed, IDCDescriptivePr
     versions.
     """
 
-    description = PlainText(title=u"The human-readable description of this object.")
+    description = PlainText(
+        title=u"The human-readable description of this object."
+    )
 
 
 class ITaggedContent(interface.Interface):
@@ -519,6 +521,7 @@ class ICanvasURLShape(ICanvasShape):
     file = interface.Attribute("Shape url file")
     file.setTaggedValue('_ext_excluded_out', True)
 
+
 class IMedia(IShareableModeledContent):
     """
     A media object
@@ -667,6 +670,7 @@ class IAnonymousUser(IUser):
     The anonymous user, which is not persistent.
     """
 
+
 @interface.implementer(IAnonymousUser)
 class AnonymousUser(UnauthenticatedPrincipal):
 
@@ -675,7 +679,7 @@ class AnonymousUser(UnauthenticatedPrincipal):
     lastModified = createdTime = 0
 
     def __init__(self, parent=None):
-        self.__parent__  = parent
+        self.__parent__ = parent
 
     @property
     def password(self):
@@ -690,7 +694,7 @@ class AnonymousUser(UnauthenticatedPrincipal):
 
     def __reduce__(self):
         return self.__reduce_ex__(0)
-UnauthenticatedUser = AnonymousUser # alias
+UnauthenticatedUser = AnonymousUser  # alias
 
 
 class IUsernameSubstitutionPolicy(interface.Interface):
