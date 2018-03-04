@@ -603,6 +603,12 @@ class IMissingEntity(IEntity):
     """
 
 
+class IMissingUser(IMissingEntity):
+    """
+    A proxy object for a missing user.
+    """
+
+
 class IDynamicSharingTarget(IEntity):
     """
     These objects reverse the normal sharing; instead of being
@@ -765,7 +771,6 @@ class UserEvent(ObjectEvent):
     user = alias('object')
 
 
-
 class IEntityFollowingEvent(interface.interfaces.IObjectEvent):
     """
     Fired when an entity begins following another entity.
@@ -814,7 +819,7 @@ class IStopFollowingEvent(interface.interfaces.IObjectEvent):
     The ``object`` is the entity that is no longer follows the other entity.
     """
     object = Object(IEntity,
-                     title=u"The entity not longer following the other entity")
+                    title=u"The entity not longer following the other entity")
 
     not_following = Object(IEntity,
                            title=u"The entity that is no longer being followed by the object.")
@@ -863,11 +868,6 @@ class StopDynamicMembershipEvent(ObjectEvent):
         ObjectEvent.__init__(self, entity)
         self.target = target
 
-
-class IMissingUser(IMissingEntity):
-    """
-    A proxy object for a missing user.
-    """
 
 class IDynamicSharingTargetFriendsList(IDynamicSharingTarget,
                                        IFriendsList,
