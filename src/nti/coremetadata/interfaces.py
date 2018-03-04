@@ -603,6 +603,12 @@ class IMissingEntity(IEntity):
     """
 
 
+class IMissingUser(IMissingEntity):
+    """
+    A proxy object for a missing user.
+    """
+
+
 class IDynamicSharingTarget(IEntity):
     """
     These objects reverse the normal sharing; instead of being
@@ -765,6 +771,104 @@ class UserEvent(ObjectEvent):
     user = alias('object')
 
 
+class IEntityFollowingEvent(interface.interfaces.IObjectEvent):
+    """
+    Fired when an entity begins following another entity.
+    The ``object`` is the entity that is now following the other entity.
+    """
+
+    object = Object(IEntity,
+                    title=u"The entity now following the other entity")
+
+    now_following = Object(IEntity,
+                           title=u"The entity that is now being followed by the object.")
+
+
+class IFollowerAddedEvent(interface.interfaces.IObjectEvent):
+    """
+    Fired when an entity is followed by another entity.
+
+    The ``object`` is the entity that is now being followed.
+    """
+
+    object = Object(IEntity, title=u"The entity now being followed.")
+
+    followed_by = Object(IEntity,
+                         title=u"The entity that is now following the object.")
+
+
+@interface.implementer(IEntityFollowingEvent)
+class EntityFollowingEvent(ObjectEvent):
+
+    def __init__(self, entity, now_following):
+        ObjectEvent.__init__(self, entity)
+        self.now_following = now_following
+
+
+@interface.implementer(IFollowerAddedEvent)
+class FollowerAddedEvent(ObjectEvent):
+
+    def __init__(self, entity, followed_by):
+        ObjectEvent.__init__(self, entity)
+        self.followed_by = followed_by
+
+
+class IStopFollowingEvent(interface.interfaces.IObjectEvent):
+    """
+    Fired when an entity stop following another entity.
+    The ``object`` is the entity that is no longer follows the other entity.
+    """
+    object = Object(IEntity,
+                    title=u"The entity not longer following the other entity")
+
+    not_following = Object(IEntity,
+                           title=u"The entity that is no longer being followed by the object.")
+
+
+@interface.implementer(IStopFollowingEvent)
+class StopFollowingEvent(ObjectEvent):
+
+    def __init__(self, entity, not_following):
+        ObjectEvent.__init__(self, entity)
+        self.not_following = not_following
+
+
+class IStartDynamicMembershipEvent(interface.interfaces.IObjectEvent):
+    """
+    Fired when an dynamic membershis (i.e. join a community is recorded)
+    The ``object`` is the entity that is is recording the membership.
+    """
+    object = Object(IEntity, title=u"The entity joining the dynamic target")
+    target = Object(IDynamicSharingTarget, title=u"The dynamic target to join")
+
+
+@interface.implementer(IStartDynamicMembershipEvent)
+class StartDynamicMembershipEvent(ObjectEvent):
+
+    def __init__(self, entity, target):
+        ObjectEvent.__init__(self, entity)
+        self.target = target
+
+
+class IStopDynamicMembershipEvent(interface.interfaces.IObjectEvent):
+    """
+    Fired when an dynamic membershis (i.e. unjoin a community) is removed
+    The ``object`` is the entity that is is leaving the membership.
+    """
+    object = Object(IEntity, title=u"The entity unjoining the dynamic target")
+
+    target = Object(IDynamicSharingTarget,
+                    title=u"The dynamic target to be leaving")
+
+
+@interface.implementer(IStopDynamicMembershipEvent)
+class StopDynamicMembershipEvent(ObjectEvent):
+
+    def __init__(self, entity, target):
+        ObjectEvent.__init__(self, entity)
+        self.target = target
+
+
 class IDynamicSharingTargetFriendsList(IDynamicSharingTarget,
                                        IFriendsList,
                                        IUseNTIIDAsExternalUsername):
@@ -804,6 +908,37 @@ class ObjectSharingModifiedEvent(ObjectModifiedEvent):
     def __init__(self, obj, *descriptions, **kwargs):
         super(ObjectSharingModifiedEvent, self).__init__(obj, *descriptions)
         self.oldSharingTargets = kwargs.pop('oldSharingTargets', ())
+
+
+class IUsernameIterable(interface.Interface):
+    """
+    Something that can iterate across usernames belonging to system :class:`IUser`, typically
+    usernames somehow contained in or stored in this object (or its context).
+    """
+
+    def __iter__():
+        """
+        Return iterator across username strings. The usernames may refer to users
+        that have already been deleted.
+        """
+
+
+class IIntIdIterable(interface.Interface):
+    """
+    Something that can iterate across intids.
+    Typically this will be used as a mixin interface,
+    with the containing object defining what sort of
+    reference the intid will be to.
+
+    In general, the caller cannot assume that the intids
+    are entirely valid, and should use ``queryObject``
+    instead of ``getObject``.
+    """
+
+    def iter_intids():
+        """
+        Return an iterable across intids.
+        """
 
 
 class IEntityUsernameIterable(interface.Interface):
