@@ -28,8 +28,13 @@ from nti.coremetadata.interfaces import IAnonymousUser
 
 from nti.coremetadata.interfaces import InvalidData
 from nti.coremetadata.interfaces import AnonymousUser
+from nti.coremetadata.interfaces import FollowerAddedEvent
+from nti.coremetadata.interfaces import StopFollowingEvent
+from nti.coremetadata.interfaces import EntityFollowingEvent
 from nti.coremetadata.interfaces import ObjectSharingModifiedEvent
+from nti.coremetadata.interfaces import StopDynamicMembershipEvent
 from nti.coremetadata.interfaces import FieldCannotBeOnlyWhitespace
+from nti.coremetadata.interfaces import StartDynamicMembershipEvent
 
 from nti.coremetadata.interfaces import checkCannotBeBlank
 from nti.coremetadata.interfaces import valid_entity_username
@@ -75,6 +80,24 @@ class TestInterfaces(unittest.TestCase):
         with self.assertRaises(TypeError):
             user.__reduce__()
 
-    def test_event(self):
+    def test_events(self):
         m = ObjectSharingModifiedEvent(object(), oldSharingTargets=['a'])
         assert_that(m, has_property('oldSharingTargets', is_(['a'])))
+
+        m = EntityFollowingEvent(object(), 'a')
+        assert_that(m, has_property('now_following', is_('a')))
+
+        m = FollowerAddedEvent(object(), 'a')
+        assert_that(m, has_property('followed_by', is_('a')))
+
+        m = StopFollowingEvent(object(), 'a')
+        assert_that(m, has_property('not_following', is_('a')))
+
+        m = StopFollowingEvent(object(), 'a')
+        assert_that(m, has_property('not_following', is_('a')))
+
+        m = StartDynamicMembershipEvent(object(), 'a')
+        assert_that(m, has_property('target', is_('a')))
+
+        m = StopDynamicMembershipEvent(object(), 'a')
+        assert_that(m, has_property('target', is_('a')))
