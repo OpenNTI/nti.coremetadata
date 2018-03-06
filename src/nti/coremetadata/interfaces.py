@@ -45,7 +45,6 @@ from nti.base.interfaces import ICreated
 from nti.base.interfaces import INamedFile
 from nti.base.interfaces import ILastModified
 from nti.base.interfaces import ITitledDescribed
-from nti.base.interfaces import IContentTypeMarker
 
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import Title
@@ -54,6 +53,8 @@ from nti.contentfragments.schema import PlainText
 from nti.contenttypes.reports.interfaces import IReportContext
 
 from nti.coremetadata import MessageFactory as _
+
+from nti.mimetype.interfaces import IContentTypeMarker
 
 from nti.property.property import alias
 
