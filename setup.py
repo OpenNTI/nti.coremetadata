@@ -58,6 +58,7 @@ setup(
         'nti.base',
         'nti.contentfragments',
         'nti.contenttypes.reports',
+        'nti.mimetype',
         'nti.property',
         'nti.schema',
         'six',
