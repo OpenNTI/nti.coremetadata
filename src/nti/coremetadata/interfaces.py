@@ -665,7 +665,7 @@ class IAnonymousUser(IUser):
     """
 
 
-@interface.implementer(IAnonymousUser)
+@interface.implementer(IAnonymousUser, IAttributeAnnotatable)
 class AnonymousUser(UnauthenticatedPrincipal):
 
     username = __name__ = alias('id')
