@@ -10,6 +10,8 @@ from __future__ import absolute_import
 
 # pylint: disable=inherit-non-class,inconsistent-mro
 
+import time
+
 from zope import interface
 from zope import deferredimport
 
@@ -759,7 +761,24 @@ class UserEvent(ObjectEvent):
     user = alias('object')
 
 
-class IEntityFollowingEvent(interface.interfaces.IObjectEvent):
+class IUserLastSeenEvent(IObjectEvent):
+    """
+    Fired after a user has been last seen.
+    """
+    timestamp = interface.Attribute(u"Timestamp")
+    request = interface.Attribute(u"Request")
+
+
+@interface.implementer(IUserLastSeenEvent)
+class UserLastSeenEvent(ObjectEvent):
+
+    def __init__(self, obj, timestamp=None, request=None):
+        super(UserLastSeenEvent, self).__init__(obj)
+        self.request = request
+        self.timestamp = timestamp or time.time()
+
+
+class IEntityFollowingEvent(IObjectEvent):
     """
     Fired when an entity begins following another entity.
     The ``object`` is the entity that is now following the other entity.
@@ -772,7 +791,7 @@ class IEntityFollowingEvent(interface.interfaces.IObjectEvent):
                            title=u"The entity that is now being followed by the object.")
 
 
-class IFollowerAddedEvent(interface.interfaces.IObjectEvent):
+class IFollowerAddedEvent(IObjectEvent):
     """
     Fired when an entity is followed by another entity.
 
@@ -801,7 +820,7 @@ class FollowerAddedEvent(ObjectEvent):
         self.followed_by = followed_by
 
 
-class IStopFollowingEvent(interface.interfaces.IObjectEvent):
+class IStopFollowingEvent(IObjectEvent):
     """
     Fired when an entity stop following another entity.
     The ``object`` is the entity that is no longer follows the other entity.
@@ -821,7 +840,7 @@ class StopFollowingEvent(ObjectEvent):
         self.not_following = not_following
 
 
-class IStartDynamicMembershipEvent(interface.interfaces.IObjectEvent):
+class IStartDynamicMembershipEvent(IObjectEvent):
     """
     Fired when an dynamic membershis (i.e. join a community is recorded)
     The ``object`` is the entity that is is recording the membership.
@@ -838,7 +857,7 @@ class StartDynamicMembershipEvent(ObjectEvent):
         self.target = target
 
 
-class IStopDynamicMembershipEvent(interface.interfaces.IObjectEvent):
+class IStopDynamicMembershipEvent(IObjectEvent):
     """
     Fired when an dynamic membershis (i.e. unjoin a community) is removed
     The ``object`` is the entity that is is leaving the membership.
