@@ -990,6 +990,31 @@ class IEntityContainer(interface.Interface):
         """
 
 
+# entity index
+
+#: The name of the utility that the Zope Catalog
+#: for users should be registered under
+ENTITY_CATALOG_NAME = 'nti.dataserver.++etc++entity-catalog'
+
+
+IX_SITE = 'site'
+IX_ALIAS = 'alias'
+IX_EMAIL = 'email'
+IX_TOPICS = 'topics'
+IX_MIMETYPE = 'mimeType'
+IX_REALNAME = 'realname'
+IX_DISPLAYNAME = 'displayname'
+IX_CONTACT_EMAIL = 'contact_email'
+IX_REALNAME_PARTS = 'realname_parts'
+IX_LASTSEEN = IX_LASTSEEN_TIME = 'lastSeenTime'
+IX_CONTACT_EMAIL_RECOVERY_HASH = 'contact_email_recovery_hash'
+IX_PASSWORD_RECOVERY_EMAIL_HASH = 'password_recovery_email_hash'
+
+IX_IS_COMMUNITY = 'is_community'
+IX_EMAIL_VERIFIED = 'email_verified'
+IX_OPT_IN_EMAIL_COMMUNICATION = 'opt_in_email_communication'
+
+
 # schema maker
 
 
