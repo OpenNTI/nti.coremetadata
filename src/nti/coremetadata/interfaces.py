@@ -656,6 +656,10 @@ class IUser(IEntity, IContainerIterable, IReportContext):
     # Note: z3c.password provides a PasswordField we could use here
     # when we're sure what it does and that validation works out
     password = interface.Attribute("The password")
+    
+    lastLoginTime = interface.Attribute("The last login time")
+     
+    lastSeenTime = interface.Attribute("The last seen time")
 
 
 ANONYMOUS_USER_NAME = UNAUTHENTICATED_PRINCIPAL_NAME
