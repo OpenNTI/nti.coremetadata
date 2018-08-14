@@ -771,8 +771,8 @@ class IUserLastSeenEvent(IObjectEvent):
     """
     Fired after a user has been last seen.
     """
-    timestamp = interface.Attribute(u"Timestamp")
     request = interface.Attribute(u"Request")
+    timestamp = interface.Attribute(u"Timestamp")
 
 
 @interface.implementer(IUserLastSeenEvent)
@@ -781,6 +781,25 @@ class UserLastSeenEvent(ObjectEvent):
     def __init__(self, obj, timestamp=None, request=None):
         super(UserLastSeenEvent, self).__init__(obj)
         self.request = request
+        self.timestamp = timestamp or time.time()
+
+
+class IUserContextLastSeenEvent(IObjectEvent):
+    """
+    Fired after a user has seen[visted] a context.
+    """
+    request = interface.Attribute(u"Request")
+    timestamp = interface.Attribute(u"Timestamp")
+    context_ids = interface.Attribute(u"Context [nti]ids")
+
+
+@interface.implementer(IUserContextLastSeenEvent)
+class UserContextLastSeenEvent(ObjectEvent):
+
+    def __init__(self, obj, context_ids, timestamp=None, request=None):
+        super(UserContextLastSeenEvent, self).__init__(obj)
+        self.request = request
+        self.context_ids = context_ids
         self.timestamp = timestamp or time.time()
 
 
