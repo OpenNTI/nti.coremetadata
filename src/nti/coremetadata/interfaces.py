@@ -25,6 +25,8 @@ from zope.dublincore.interfaces import IDCDescriptiveProperties
 
 from zope.i18n import translate
 
+from zope.interface.common.mapping import IEnumerableMapping
+
 from zope.interface.interfaces import ObjectEvent
 from zope.interface.interfaces import IObjectEvent
 
@@ -1017,6 +1019,36 @@ IX_PASSWORD_RECOVERY_EMAIL_HASH = 'password_recovery_email_hash'
 IX_IS_COMMUNITY = 'is_community'
 IX_EMAIL_VERIFIED = 'email_verified'
 IX_OPT_IN_EMAIL_COMMUNICATION = 'opt_in_email_communication'
+
+
+# last seen context
+
+
+class IContextLastSeenContainer(IEnumerableMapping):
+    """
+    Something that is an unordered bag of context ntiid and
+    the last timestamp they were visited (seen)
+    """
+
+    def append(item, timestamp=None):
+        """
+        Add an item to this container
+        """
+
+    def extend(items, timestamp=None):
+        """
+        Add the specified items to this container
+        """
+
+    def contexts():
+        """
+        return an iterable with all context ntiids in this container
+        """
+
+    def pop(k, default):
+        """
+        remove specified key and return the corresponding value
+        """
 
 
 # schema maker
