@@ -660,8 +660,10 @@ class IUser(IEntity, IContainerIterable, IReportContext):
     password = interface.Attribute("The password")
     
     lastLoginTime = interface.Attribute("The last login time")
+    lastLoginTime.setTaggedValue(TAG_READONLY_IN_UI, True)
      
     lastSeenTime = interface.Attribute("The last seen time")
+    lastSeenTime.setTaggedValue(TAG_READONLY_IN_UI, True)
 
 
 ANONYMOUS_USER_NAME = UNAUTHENTICATED_PRINCIPAL_NAME
