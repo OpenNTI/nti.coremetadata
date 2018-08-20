@@ -658,10 +658,10 @@ class IUser(IEntity, IContainerIterable, IReportContext):
     # Note: z3c.password provides a PasswordField we could use here
     # when we're sure what it does and that validation works out
     password = interface.Attribute("The password")
-    
+
     lastLoginTime = interface.Attribute("The last login time")
     lastLoginTime.setTaggedValue(TAG_READONLY_IN_UI, True)
-     
+
     lastSeenTime = interface.Attribute("The last seen time")
     lastSeenTime.setTaggedValue(TAG_READONLY_IN_UI, True)
 
@@ -680,7 +680,7 @@ class AnonymousUser(UnauthenticatedPrincipal):
 
     username = __name__ = alias('id')
 
-    lastModified = createdTime = 0
+    lastModified = createdTime = lastSeenTime = lastLoginTime = 0
 
     def __init__(self, parent=None):
         self.__parent__ = parent
