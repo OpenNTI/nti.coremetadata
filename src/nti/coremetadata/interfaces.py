@@ -1260,3 +1260,8 @@ class IACLProviderCacheable(interface.Interface):
     generally only safe to do when the ACL information comes from external sources
     such as files or strings.
     """
+
+class ILastSeenProvider(interface.Interface):
+    """
+    Something that can provide a last seem time for a specific user on course/book etc.
+    """
