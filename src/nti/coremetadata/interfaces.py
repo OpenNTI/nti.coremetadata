@@ -41,6 +41,7 @@ from zope.mimetype.interfaces import IContentTypeAware
 from zope.schema import Iterable
 
 from zope.security.interfaces import IPrincipal
+from zope.security.interfaces import ISystemPrincipal
 
 from zope.security.management import system_user
 
@@ -127,12 +128,8 @@ def checkCannotBeBlank(value):
 
 # principals
 
-
-class ISystemUserPrincipal(IPrincipal):
-    """
-    Marker for a system user principal
-    """
-interface.alsoProvides(system_user, ISystemUserPrincipal)
+#: Alias for principal that represents the system (application) itself.
+ISystemUserPrincipal = ISystemPrincipal # BWC
 
 # recordables
 
