@@ -63,6 +63,7 @@ from nti.mimetype.interfaces import IContentTypeMarker
 from nti.property.property import alias
 
 from nti.schema.field import Bool
+from nti.schema.field import DateTime
 from nti.schema.field import Object
 from nti.schema.field import TextLine
 from nti.schema.field import ValidTextLine
@@ -1265,3 +1266,6 @@ class ILastSeenProvider(interface.Interface):
     """
     Something that can provide a last seem time for a specific user on course/book etc.
     """
+    lastSeenTime = DateTime(title=u"The latest date when a user accessed to something",
+                            required=True,
+                            default=None)
