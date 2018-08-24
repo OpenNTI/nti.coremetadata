@@ -132,7 +132,7 @@ class ISystemUserPrincipal(IPrincipal):
     """
     Marker for a system user principal
     """
-
+interface.alsoProvides(system_user, ISystemUserPrincipal)
 
 # recordables
 
