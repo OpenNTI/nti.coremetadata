@@ -1082,6 +1082,10 @@ class IContextLastSeenContainer(IEnumerableMapping):
         remove specified key and return the corresponding value
         """
 
+    def get_timestamp(item):
+        """
+        Return the timestamp for the specified key
+        """
 
 # schema maker
 
