@@ -64,9 +64,10 @@ from nti.mimetype.interfaces import IContentTypeMarker
 from nti.property.property import alias
 
 from nti.schema.field import Bool
-from nti.schema.field import DateTime
+from nti.schema.field import Number
 from nti.schema.field import Object
 from nti.schema.field import TextLine
+from nti.schema.field import DateTime
 from nti.schema.field import ValidTextLine
 from nti.schema.field import UniqueIterable
 from nti.schema.field import TupleFromObject
@@ -1042,6 +1043,17 @@ IX_OPT_IN_EMAIL_COMMUNICATION = 'opt_in_email_communication'
 
 
 # last seen context
+
+
+class IContextLastSeenRecord(interface.Interface):
+    
+    username = DecodingValidTextLine(title=u"The username.",
+                                     required=True)
+    
+    context = DecodingValidTextLine(title=u"The context id.",
+                                    required=True)
+    
+    timestamp = Number(title=u"The timestamp", required=True)
 
 
 class IContextLastSeenContainer(IEnumerableMapping):
