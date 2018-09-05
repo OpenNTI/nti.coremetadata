@@ -1048,7 +1048,8 @@ IX_OPT_IN_EMAIL_COMMUNICATION = 'opt_in_email_communication'
 class IContextLastSeenRecord(interface.Interface):
     
     username = DecodingValidTextLine(title=u"The username.",
-                                     required=True)
+                                     required=False,
+                                     readonly=True)
     
     context = DecodingValidTextLine(title=u"The context id.",
                                     required=True)
