@@ -101,9 +101,10 @@ class CoreJsonSchemafier(JsonSchemafier):
                 ui_base_type = self.process_variant(field.value_type, ui_type)
             elif IFromUnicode.providedBy(field.value_type):
                 ui_base_type = 'string'
-            if ui_type == 'Sequence':
-                ui_type = 'List'
+            # check for Sequence
+            ui_type = 'List' if ui_type == 'Sequence' else ui_type
             ui_type = ui_type or 'List'
+            ui_type = ui_type.title()
         # handle objects
         elif IObject.providedBy(field) and not ui_base_type:
             ui_base_type = self.process_object(field)
