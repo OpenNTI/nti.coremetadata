@@ -13,6 +13,7 @@ from zope import interface
 from zope.schema.interfaces import IList
 from zope.schema.interfaces import IChoice
 from zope.schema.interfaces import IObject
+from zope.schema.interfaces import ISequence
 from zope.schema.interfaces import IFromUnicode
 
 from nti.base.interfaces import ICreated
@@ -87,7 +88,9 @@ class CoreJsonSchemafier(JsonSchemafier):
         if IVariant.providedBy(field) and not ui_base_type:
             ui_base_type = self.process_variant(field, ui_type)
         # handle list types
-        elif   (IListOrTuple.providedBy(field) or IList.providedBy(field)) \
+        elif   (   IListOrTuple.providedBy(field) 
+                or IList.providedBy(field) 
+                or ISequence.providedBy(field)) \
             and not ui_base_type:
             if IObject.providedBy(field.value_type):
                 ui_base_type = self.process_object(field.value_type)
@@ -98,6 +101,8 @@ class CoreJsonSchemafier(JsonSchemafier):
                 ui_base_type = self.process_variant(field.value_type, ui_type)
             elif IFromUnicode.providedBy(field.value_type):
                 ui_base_type = 'string'
+            if ui_type == 'Sequence':
+                ui_type = 'List'
             ui_type = ui_type or 'List'
         # handle objects
         elif IObject.providedBy(field) and not ui_base_type:
