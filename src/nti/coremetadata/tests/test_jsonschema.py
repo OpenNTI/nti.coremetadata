@@ -129,4 +129,4 @@ class TestJsonSchema(unittest.TestCase):
             obj = ListOrTuple(Variant((Object(interface.Interface),)))
         schemafier = CoreJsonSchemafier(I4)
         assert_that(schemafier.get_ui_types_from_field(I4['obj']),
-                    is_(('List', None)))
+                    is_(('List', 'list')))
