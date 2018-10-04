@@ -32,6 +32,8 @@ from nti.coremetadata.tests import SharedConfiguringTestLayer
 from nti.schema.field import Number
 from nti.schema.field import ListOrTupleFromObject
 
+from nti.schema.interfaces import VariantValidationError
+
 
 class TestSchema(unittest.TestCase):
 
@@ -70,5 +72,5 @@ class TestSchema(unittest.TestCase):
             m.abs = object()
         with self.assertRaises(ValidationError):
             m.abs = []
-        with self.assertRaises(TypeError):
+        with self.assertRaises(VariantValidationError):
             m.abs = [()]
