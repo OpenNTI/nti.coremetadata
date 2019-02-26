@@ -1039,7 +1039,6 @@ IX_PASSWORD_RECOVERY_EMAIL_HASH = 'password_recovery_email_hash'
 
 IX_IS_COMMUNITY = 'is_community'
 IX_EMAIL_VERIFIED = 'email_verified'
-IX_VALID_EMAIL = 'valid_email'
 IX_OPT_IN_EMAIL_COMMUNICATION = 'opt_in_email_communication'
 
 
