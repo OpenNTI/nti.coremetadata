@@ -68,6 +68,7 @@ from nti.schema.field import Number
 from nti.schema.field import Object
 from nti.schema.field import TextLine
 from nti.schema.field import DateTime
+from nti.schema.field import ListOrTuple
 from nti.schema.field import ValidTextLine
 from nti.schema.field import UniqueIterable
 from nti.schema.field import TupleFromObject
@@ -1047,13 +1048,13 @@ IX_INVALID_EMAIL = 'invalid_email'
 
 
 class IContextLastSeenRecord(interface.Interface):
-    
+
     username = DecodingValidTextLine(title=u"The username.",
                                      required=False)
-    
+
     context = DecodingValidTextLine(title=u"The context id.",
                                     required=True)
-    
+
     timestamp = Number(title=u"The timestamp", required=True)
 
 
@@ -1284,3 +1285,12 @@ class ILastSeenProvider(interface.Interface):
     lastSeenTime = DateTime(title=u"The latest date when a user accessed to something",
                             required=True,
                             default=None)
+
+
+class IUserDefinedOrderedContent(interface.Interface):
+    """
+    An object that allows it's underlying order to be defined by users.
+    """
+
+    ordered_keys = ListOrTuple(value_type=ValidTextLine(title=u"object id"),
+                               title=u"ordered keys", required=True)
