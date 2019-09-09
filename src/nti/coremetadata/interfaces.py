@@ -1040,6 +1040,7 @@ IX_PASSWORD_RECOVERY_EMAIL_HASH = 'password_recovery_email_hash'
 
 IX_IS_COMMUNITY = 'is_community'
 IX_EMAIL_VERIFIED = 'email_verified'
+IX_IS_DEACTIVATED = 'is_deactivated'
 IX_OPT_IN_EMAIL_COMMUNICATION = 'opt_in_email_communication'
 IX_INVALID_EMAIL = 'invalid_email'
 
@@ -1125,7 +1126,31 @@ class IContextAnnotatable(IAttributeAnnotatable):
 # deleted objects
 
 
-class IDeletedObjectPlaceholder(interface.Interface):
+class IDeactivatedObject(interface.Interface):
+    """
+    The base marker interface for a deactivated object.
+    """
+
+
+class IDeactivatedEntity(IDeactivatedObject):
+    """
+    The base marker interface for a deactivated entity.
+    """
+
+
+class IDeactivatedUser(IDeactivatedEntity):
+    """
+    The marker interface for a deactivated user.
+    """
+
+
+class IDeactivatedCommunity(IDeactivatedEntity):
+    """
+    The marker interface for a deactivated community.
+    """
+
+
+class IDeletedObjectPlaceholder(IDeactivatedObject):
     """
     Marker interface to be applied to things that have actually
     been deleted, but, for whatever reason, some trace object
