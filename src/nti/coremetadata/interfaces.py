@@ -1157,6 +1157,50 @@ class IDeletedObjectPlaceholder(IDeactivatedObject):
     has to be left behind. These will typically be rendered specially.
     """
 
+
+class IDeactivatedObjectEvent(IObjectEvent):
+    """
+    Fired when an entity is deactivated
+    """
+
+
+class IDeactivatedEntityEvent(IDeactivatedObjectEvent):
+    """
+    Fired when an object is deactivated
+    """
+
+
+class IDeactivatedUserEvent(IDeactivatedEntityEvent):
+    """
+    Fired when a user is deactivated
+    """
+
+
+class IDeactivatedCommunityEvent(IDeactivatedEntityEvent):
+    """
+    Fired when a community is deactivated
+    """
+
+@interface.implementer(IDeactivatedObjectEvent)
+class DeactivatedObjectEvent(ObjectEvent):
+    pass
+
+
+@interface.implementer(IDeactivatedEntityEvent)
+class DeactivatedEntityEvent(DeactivatedObjectEvent):
+    pass
+
+
+@interface.implementer(IDeactivatedUserEvent)
+class DeactivatedUserEvent(DeactivatedEntityEvent):
+    pass
+
+
+@interface.implementer(IDeactivatedCommunityEvent)
+class DeactivatedCommunityEvent(DeactivatedEntityEvent):
+    pass
+
+
 # aux interfaces
 
 
