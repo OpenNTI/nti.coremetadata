@@ -1201,6 +1201,49 @@ class DeactivatedCommunityEvent(DeactivatedEntityEvent):
     pass
 
 
+class IReactivatedObjectEvent(IObjectEvent):
+    """
+    Fired when an entity is reactivated
+    """
+
+
+class IReactivatedEntityEvent(IReactivatedObjectEvent):
+    """
+    Fired when an object is reactivated
+    """
+
+
+class IReactivatedUserEvent(IReactivatedEntityEvent):
+    """
+    Fired when a user is reactivated
+    """
+
+
+class IReactivatedCommunityEvent(IReactivatedEntityEvent):
+    """
+    Fired when a community is reactivated
+    """
+
+@interface.implementer(IReactivatedObjectEvent)
+class ReactivatedObjectEvent(ObjectEvent):
+    pass
+
+
+@interface.implementer(IReactivatedEntityEvent)
+class ReactivatedEntityEvent(ReactivatedObjectEvent):
+    pass
+
+
+@interface.implementer(IReactivatedUserEvent)
+class ReactivatedUserEvent(ReactivatedEntityEvent):
+    pass
+
+
+@interface.implementer(IReactivatedCommunityEvent)
+class ReactivatedCommunityEvent(ReactivatedEntityEvent):
+    pass
+
+
 # aux interfaces
 
 
