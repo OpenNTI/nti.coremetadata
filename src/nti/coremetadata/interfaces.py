@@ -612,6 +612,17 @@ class IDynamicSharingTarget(IEntity):
     """
 
 
+class IAutoSubscribeMembershipPredicate(ICreated, ILastModified):
+    """
+    Handles auto-subscription logic for a membership entity (e.g. ICommunity).
+    """
+
+    def accept_user(user):
+        """
+        Returns a bool whether or not this user should be accepted.
+        """
+
+
 class ICommunity(IDynamicSharingTarget):
 
     public = Bool(title=u'Public flag', required=False, default=True)
@@ -620,6 +631,10 @@ class ICommunity(IDynamicSharingTarget):
 
     username = DecodingValidTextLine(title=u'The username',
                                      constraint=valid_entity_username)
+
+    auto_subscribe = Object(IAutoSubscribeMembershipPredicate,
+                            title=u"The auto-subscribe object for this community.",
+                            required=False)
 
     def iter_members():
         """
