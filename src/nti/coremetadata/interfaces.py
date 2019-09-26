@@ -1140,6 +1140,21 @@ class IContextAnnotatable(IAttributeAnnotatable):
 
 # deleted objects
 
+class IDeleteLockedEntity(interface.Interface):
+    """
+    A marker interface that prevents an entity from being being deleted
+    or deactivated. This is used to keep high-value entity objects from
+    being deleted unintentionally.
+    """
+
+
+class IDeleteLockedCommunity(interface.Interface):
+    """
+    A marker interface that prevents a community from being being deleted
+    or deactivated. This is used to keep high-value entity objects from
+    being deleted unintentionally.
+    """
+
 
 class IDeactivatedObject(interface.Interface):
     """
