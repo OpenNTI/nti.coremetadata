@@ -44,9 +44,14 @@ class TestUtils(unittest.TestCase):
             def make_schema(self, unused_schema, unused_user=None):
                 return marker
         schema_maker = FakeMaker()
-        component.getGlobalSiteManager().registerUtility(schema_maker,
-                                                         IObjectJsonSchemaMaker)
-        result = make_schema(interface.Interface)
-        assert_that(result, is_(marker))
-        component.getGlobalSiteManager().unregisterUtility(schema_maker,
-                                                           IObjectJsonSchemaMaker)
+        old_maker = component.getGlobalSiteManager().queryUtility(IObjectJsonSchemaMaker)
+        try:
+            component.getGlobalSiteManager().registerUtility(schema_maker,
+                                                             IObjectJsonSchemaMaker)
+            result = make_schema(interface.Interface)
+            assert_that(result, is_(marker))
+        finally:
+            component.getGlobalSiteManager().unregisterUtility(schema_maker,
+                                                               IObjectJsonSchemaMaker)
+            component.getGlobalSiteManager().registerUtility(old_maker,
+                                                             IObjectJsonSchemaMaker)
