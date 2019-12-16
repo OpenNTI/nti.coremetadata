@@ -1174,6 +1174,12 @@ class IDeactivatedUser(IDeactivatedEntity):
     """
 
 
+class IDeactivatedDynamicSharingTargetFriendsList(IDeactivatedEntity):
+    """
+    The marker interface for a deactivated DFL.
+    """
+
+
 class IDeactivatedCommunity(IDeactivatedEntity):
     """
     The marker interface for a deactivated community.
@@ -1228,6 +1234,11 @@ class DeactivatedUserEvent(DeactivatedEntityEvent):
 
 @interface.implementer(IDeactivatedCommunityEvent)
 class DeactivatedCommunityEvent(DeactivatedEntityEvent):
+    pass
+
+
+@interface.implementer(IDeactivatedCommunityEvent)
+class DeactivatedDynamicSharingTargetFriendsListEvent(DeactivatedEntityEvent):
     pass
 
 
