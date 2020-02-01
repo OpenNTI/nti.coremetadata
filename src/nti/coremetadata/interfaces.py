@@ -690,6 +690,14 @@ class IAnonymousUser(IUser):
     """
 
 
+class IExemptUsernameUser(interface.Interface):
+    """
+    A marker interface indicating a user is exempt from
+    username restrictions. This does not apply to system
+    usernames.
+    """
+
+
 @interface.implementer(IAnonymousUser, IAttributeAnnotatable)
 class AnonymousUser(UnauthenticatedPrincipal):
 
