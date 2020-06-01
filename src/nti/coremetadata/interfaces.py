@@ -1251,6 +1251,14 @@ class DeactivatedDynamicSharingTargetFriendsListEvent(DeactivatedEntityEvent):
     pass
 
 
+class IMarkedForDeletion(interface.Interface):
+    """
+    Marker interface for instances that will be deleted within a request. Thus,
+    this marker state should not end up persisted in the database on any object.
+    """
+IMarkedForDeletion.setTaggedValue('_ext_is_marker_interface', True)
+
+
 class IReactivatedObjectEvent(IObjectEvent):
     """
     Fired when an entity is reactivated
