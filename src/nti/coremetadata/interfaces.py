@@ -51,6 +51,8 @@ from nti.base.interfaces import INamedFile
 from nti.base.interfaces import ILastModified
 from nti.base.interfaces import ITitledDescribed
 
+from nti.coremetadata.mentions.schema import Mention
+
 from nti.contentfragments.schema import Tag
 from nti.contentfragments.schema import Title
 from nti.contentfragments.schema import PlainText
@@ -347,6 +349,24 @@ class ITaggedContent(interface.Interface):
                            unique=True,
                            default=())
 
+
+class IMentionable(interface.Interface):
+    """
+    Something that can contain mentions.
+    """
+
+    mentions = TupleFromObject(title=u"Mentioned entities",
+                               value_type=Mention(min_length=1,
+                                                  title=u"A single mention",
+                                                  __name__=u'mentions'),
+                               unique=True,
+                               default=())
+
+    def isMentionedDirectly(user):
+        """
+        Is the entity given mentioned directly in this object
+        :return:
+        """
 
 # content types
 
