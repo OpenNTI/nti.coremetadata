@@ -364,7 +364,8 @@ class IMentionable(interface.Interface):
 
     def isMentionedDirectly(user):
         """
-        Is the entity given mentioned directly in this object
+        Is the username (or username of the entity) given mentioned
+        directly in this object
         :return:
         """
 
