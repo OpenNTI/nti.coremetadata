@@ -27,4 +27,5 @@ class Mention(PlainTextLine):
         return super(Mention, self).fromUnicode(value.lower())
 
     def constraint(self, value):
-        return super(Mention, self).constraint(value) and ' ' not in value
+        return (super(Mention, self).constraint(value)
+                and len(value.split()) == 1)
