@@ -19,7 +19,7 @@ from zope import deferredimport
 
 from zope.container.contained import Contained
 
-from zope.schema.fieldproperty import FieldProperty
+from zope.schema.fieldproperty import FieldPropertyStoredThroughField
 
 from nti.coremetadata.interfaces import IContained
 from nti.coremetadata.interfaces import IVersioned
@@ -117,7 +117,7 @@ class VersionedMixin(object):
 @interface.implementer(IMentionable)
 class MentionableMixin(object):
 
-    mentions = FieldProperty(IMentionable['mentions'])
+    mentions = FieldPropertyStoredThroughField(IMentionable['mentions'])
 
     def isMentionedDirectly(self, user):
         if self.mentions is None:
