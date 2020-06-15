@@ -19,8 +19,11 @@ from zope import deferredimport
 
 from zope.container.contained import Contained
 
+from zope.schema.fieldproperty import FieldProperty
+
 from nti.coremetadata.interfaces import IContained
 from nti.coremetadata.interfaces import IVersioned
+from nti.coremetadata.interfaces import IMentionable
 
 from nti.property.property import alias
 
@@ -109,3 +112,16 @@ class VersionedMixin(object):
     def update_version(self, version=None):
         self.version = version if version else self._get_version_timestamp()
         return self.version
+
+
+@interface.implementer(IMentionable)
+class MentionableMixin(object):
+
+    mentions = FieldProperty(IMentionable['mentions'])
+
+    def isMentionedDirectly(self, user):
+        if self.mentions is None:
+            return False
+
+        username = getattr(user, "username", user)
+        return username in self.mentions
