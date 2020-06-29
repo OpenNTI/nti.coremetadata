@@ -120,7 +120,7 @@ class MentionableMixin(object):
     mentions = FieldPropertyStoredThroughField(IMentionable['mentions'])
 
     def isMentionedDirectly(self, user):
-        if self.mentions is None:
+        if not self.mentions:
             return False
 
         username = getattr(user, "username", user)

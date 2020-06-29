@@ -6,12 +6,27 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 # pylint: disable=protected-access,too-many-public-methods
-
+import fudge
+from hamcrest import calling
+from hamcrest import contains
+from hamcrest import has_item
+from hamcrest import has_length
+from hamcrest import instance_of
 from hamcrest import is_
 from hamcrest import none
 from hamcrest import is_not
 from hamcrest import assert_that
 from hamcrest import has_property
+from hamcrest import raises
+from hamcrest.core.core import isinstanceof
+from nti.coremetadata.interfaces import IMentionable
+from nti.coremetadata.mentions.schema import Mention
+from nti.coremetadata.mixins import MentionableMixin
+
+from nti.contentfragments.interfaces import PlainTextContentFragment
+from zope.schema._bootstrapinterfaces import ConstraintNotSatisfied
+from zope.schema._bootstrapinterfaces import WrongContainedType
+
 does_not = is_not
 
 from nti.testing.matchers import validly_provides
@@ -51,3 +66,41 @@ class TestMixins(unittest.TestCase):
         c.update_version()
         assert_that(c, has_property('version', is_not(none())))
         assert_that(c, has_property('version', is_not("100")))
+
+
+class TestMentionableMixin(unittest.TestCase):
+    layer = SharedConfiguringTestLayer
+
+    def test_mentions(self):
+        m = MentionableMixin()
+        m.mentions = (PlainTextContentFragment(u"user1"),)
+
+        assert_that(m, validly_provides(IMentionable))
+        assert_that(m, verifiably_provides(IMentionable))
+        assert_that(m, has_property('mentions', is_((u"user1",))))
+
+        assert_that(calling(setattr).with_args(m,
+                                               "mentions",
+                                               (PlainTextContentFragment(u"user 1"),)),
+                    raises(WrongContainedType, "user 1.*mentions"))
+
+        m.mentions = IMentionable["mentions"].fromObject((u"USER1",))
+        assert_that(m, has_property('mentions', is_((u"user1",))))
+
+    def test_mentioned(self):
+        m = MentionableMixin()
+        robert = fudge.Fake("User").has_attr(username="robert")
+        tony = fudge.Fake("User").has_attr(username="tony")
+
+        # No mentions
+        assert_that(m.isMentionedDirectly(robert), is_(False))
+
+        # Usernames should work as well
+        assert_that(m.isMentionedDirectly(robert.username), is_(False))
+
+        m.mentions = (PlainTextContentFragment(u"robert"),)
+        assert_that(m.isMentionedDirectly(robert), is_(True))
+        assert_that(m.isMentionedDirectly(robert.username), is_(True))
+        assert_that(m.isMentionedDirectly(tony), is_(False))
+        assert_that(m.isMentionedDirectly(tony.username), is_(False))
+
