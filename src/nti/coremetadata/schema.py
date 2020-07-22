@@ -21,6 +21,7 @@ from nti.contentfragments.schema import SanitizedHTMLContentFragment
 
 from nti.coremetadata.interfaces import IMedia
 from nti.coremetadata.interfaces import ICanvas
+from nti.coremetadata.interfaces import IEmbeddedLink
 
 from nti.property.schema import DataURI as ProDataURI
 
@@ -125,4 +126,5 @@ def CompoundModeledContentBody(required=False, fields=()):
 def ExtendedCompoundModeledContentBody(required=False, fields=()):
     fields = legacyModeledContentBodyTypes() if not fields else fields
     fields.append(Object(INamed, description=u"A :class:`.INamed`"))
+    fields.append(Object(IEmbeddedLink, description=u"A :class:`.IEmbeddedLink`"),)
     return bodySchemaField(fields, required)

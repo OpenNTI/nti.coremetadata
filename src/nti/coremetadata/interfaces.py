@@ -535,6 +535,10 @@ class ICanvasURLShape(ICanvasShape):
     file.setTaggedValue('_ext_excluded_out', True)
 
 
+class IEmbeddedLink(IShareableModeledContent):
+    embedURL = ValidTextLine(title=u'link URL', required=True)
+
+
 class IMedia(IShareableModeledContent):
     """
     A media object
