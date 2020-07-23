@@ -37,6 +37,7 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.location.interfaces import IContained as IZContained
 
 from zope.mimetype.interfaces import IContentTypeAware
+from zope.mimetype.interfaces import mimeTypeConstraint
 
 from zope.schema import Iterable
 
@@ -535,8 +536,15 @@ class ICanvasURLShape(ICanvasShape):
     file.setTaggedValue('_ext_excluded_out', True)
 
 
-class IEmbeddedLink(IShareableModeledContent):
+class IEmbeddedLink(IShareableModeledContent, ITitledDescribedContent):
+
     embedURL = ValidTextLine(title=u'link URL', required=True)
+
+    imageURL = ValidTextLine(title=u'image URL', required=False)
+
+    contentMimeType = TextLine(title=u"The Mime Type of the content",
+                               constraint=mimeTypeConstraint,
+                               required=False)
 
 
 class IMedia(IShareableModeledContent):
