@@ -842,6 +842,17 @@ class UserLastSeenEvent(ObjectEvent):
         self.timestamp = timestamp or time.time()
 
 
+class IUserLastSeenUpdatedEvent(IObjectEvent):
+    """
+    Fired after a user's last seen time has been updated.
+    """
+
+
+@interface.implementer(IUserLastSeenEvent)
+class UserLastSeenUpdatedEvent(ObjectEvent):
+    pass
+
+
 class IUserProcessedContextsEvent(IObjectEvent):
     """
     Fired after a user has seen[visted] a context.
