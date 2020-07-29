@@ -848,7 +848,7 @@ class IUserLastSeenUpdatedEvent(IObjectEvent):
     """
 
 
-@interface.implementer(IUserLastSeenEvent)
+@interface.implementer(IUserLastSeenUpdatedEvent)
 class UserLastSeenUpdatedEvent(ObjectEvent):
     pass
 
