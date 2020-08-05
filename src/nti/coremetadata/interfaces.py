@@ -1114,9 +1114,9 @@ IX_INVALID_EMAIL = 'invalid_email'
 
 
 # last seen context
+from nti.zope_catalog.interfaces import INoAutoIndexEver
 
-
-class IContextLastSeenRecord(interface.Interface):
+class IContextLastSeenRecord(INoAutoIndexEver):
 
     username = DecodingValidTextLine(title=u"The username.",
                                      required=False)
@@ -1127,7 +1127,7 @@ class IContextLastSeenRecord(interface.Interface):
     timestamp = Number(title=u"The timestamp", required=True)
 
 
-class IContextLastSeenContainer(IEnumerableMapping):
+class IContextLastSeenContainer(IEnumerableMapping, INoAutoIndexEver):
     """
     Something that is an unordered bag of context ntiid and
     the last timestamp they were visited (seen)
