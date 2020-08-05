@@ -1116,6 +1116,7 @@ IX_INVALID_EMAIL = 'invalid_email'
 # last seen context
 from nti.zope_catalog.interfaces import INoAutoIndexEver
 
+#: Temporarily do not index these since they are not used.
 class IContextLastSeenRecord(INoAutoIndexEver):
 
     username = DecodingValidTextLine(title=u"The username.",
