@@ -61,6 +61,7 @@ setup(
         'nti.mimetype',
         'nti.property',
         'nti.schema',
+        'nti.zope_catalog',
         'six',
         'zope.annotation',
         'zope.component',
