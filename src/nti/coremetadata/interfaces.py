@@ -493,7 +493,6 @@ class IUserGeneratedData(ICreated):
 
 
 class IModeledContentFile(INamedFile,
-                          ILastModified,
                           IShareableModeledContent):
     name = ValidTextLine(title=u"Identifier for the file",
                          required=False,
